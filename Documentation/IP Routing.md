@@ -181,10 +181,10 @@ Can split prefixes in the routing table to provide differential routing for a si
 Can operate in monitor-only mode to collect information that helps network administrators determine the benefit of implementing PfR. 
  
 Device Roles 
-**Master Controller (MC)**
+**Master Controller (MC)** 
 Configured using the oer master command, this device is the decision maker in the cluster of PfR routers. Learns information from the border routers and makes configuration decisions for the network based on this information. 
  
-**Border Router (BR)**
+**Border Router (BR)** 
 Configured with the oer border command. Provides information to the master and accepts commands from the MC. 
  
 *NOTE: It's possible for a single router to act as both the MC and the BR.*
