@@ -47,7 +47,7 @@ This example defines the router on IP address 172.16.15.4 as the default route:
 
 ```Router(config)# ip default-gateway 172.16.15.4```
  
-## Method 2: ip default-network** 
+## Method 2: ip default-network 
 
 Unlike the ip default-gateway command, you can use ip default-network when ip routing is enabled on the Cisco router. When you configure ip default-network the router considers routes to that network for installation as the gateway of last resort on the router.  
  
@@ -55,7 +55,7 @@ This example defines the router on IP address 172.16.24.0 as the default route:
 
 ```Router(config)# ip default-network 171.70.24.0 ```
  
-## Method 3: ip route 0.0.0.0/0**
+## Method 3: ip route 0.0.0.0/0
 
 Creating a static route to network 0.0.0.0 0.0.0.0 is another way to set the gateway of last resort on a router. As with the ip default-network command, using the static route to 0.0.0.0 is not dependent on any routing protocols. However, ip routing must be enabled on the router.  
  
