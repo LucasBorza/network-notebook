@@ -3,7 +3,7 @@
  - [Default Routing](#default-routing)
  - [Switching Paths](#switching-paths)
  - [Layer 2 Resolution](#layer-2-resolution)
- - [OER - Cisco Optimized Edge Routing](#oer---cisco-optimized-edge-routing))
+ - [OER Cisco Optimized Edge Routing](#oer-cisco-optimized-edge-routing)
 
   OER (Cisco Optimized Edge Routing) 
 
@@ -134,7 +134,7 @@ Using operators you can specify what host you are searching for within the ARP t
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## OER (Cisco Optimized Edge Routing) 
+## OER Cisco Optimized Edge Routing 
 
 Optimized Edge Routing was created to extend the capability of routers to more optimal route traffic than routing protocols can provide on their own.   
  
@@ -157,4 +157,128 @@ OER and PfR influence traffic by collecting information and then injecting new r
  
 *NOTE: OER was the original technology added to enhance routing decisions and further enhanced and renamed to PfR, continue to Performance Routing (PfR) subpage for additional concepts and  configuration.*
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+PfR Requirements 
+CEF (Cisco Express Forwarding) must be enabled. 
+IGP/BGP routing must be configured and working. 
+PfR does not support Multiprotocol Label Switching Provider Edge - Customer (MPLS PE-CE) or any traffic within the MPLS network, because PfR does not recognize MPLS headers. 
+PfR uses redistribution of static routes into the routing table, with a tag to facilitate control.  
+ 
+Background Information  
+PfR extends beyond OER's original capability by providing  routing optimization based on traffic type, through application awareness. PfR lets a router select the best path across a network based on the application traffic requirements. For example, voice traffic requires low latency, low jitter, and low error rates. 
+ 
+Attributes of PfR 
+Optimizes traffic path based on application type, performance requirements, and network performance. 
+Can perform passive monitoring using the Cisco IOS NetFlow feature. 
+Can perform active monitoring using the Cisco IP IOS IP SLA feature. 
+Can perform active and passive monitoring simultaneously . 
+Performs dynamic load balancing 
+Performs automatic path optimization 
+Offers "good" mode: finds an alternative route when a defined threshold is exceeded. 
+Offers "best" mode: always switches traffic to the route with the best performance. 
+Can reroute traffic in as little as 3 seconds 
+Supports robust reporting for traffic analysis and path assessment and troubleshooting purposes. 
+Can split prefixes in the routing table to provide differential routing for a single host or a subnet of hosts compared to the prefixes in the original routing table. 
+Can operate in monitor-only mode to collect information that helps network administrators determine the benefit of implementing PfR. 
+ 
+Device Roles 
+**Master Controller (MC)**
+Configured using the oer master command, this device is the decision maker in the cluster of PfR routers. Learns information from the border routers and makes configuration decisions for the network based on this information. 
+ 
+**Border Router (BR)**
+Configured with the oer border command. Provides information to the master and accepts commands from the MC. 
+ 
+*NOTE: It's possible for a single router to act as both the MC and the BR.*
+ 
+**High Availability and Failure Considerations** 
+BR and MC routers maintain communication using keepalives. If keepalives from the MC stops the BR will remove PfR configuration and return to its pre PfR state. More than one MC can be used for failover purposes. PfR traffic classes can be defined by IP address, protocol, port numbers or even DSCP markings. 
+ 
+**Active Mode**: PfR uses the IP SLA feature. BRs source probes to the MC for delay, jitter, reachability , or mean opinion source (MOS). A MOS is calculated using voice-like packets generated using the IP SLA feature to measure jitter, latency, and packet loss. 
+ 
+**Passive Mode**: PfR uses NetFlow information based on traffic classes to make decisions. 
+ 
+Performance Routing (PfR) Configuration 
+![performanceroutingconfiguration.png](/Images/performanceroutingconfiguration.jpg)
+ 
+**Create key chain on the Master Controller (MC) - R1**
+The key is used for communications between the MC and BR. 
+```
+R1(config)# key chain cisco 
+R1(config-keychain)# key 1 
+R1(config-keychain-key)# key-string cisco
+```
+ 
+**Master Controller (MC) Initial Configuration** 
+```
+R1(config)#oer master 
+Enables device as Master Controller (MC) 
+R1(config-oer-mc)#logging 
+Enables logging 
+R1(config-oer-mc)#border 136.1.12.2 key-chain cisco 
+Specifies IP address of BR with a key-chain for authentication 
+R1(config-oer-mc-br)#interface Tunnel1 external 
+R1(config-oer-mc-br-if)#interface Tunnel2 external 
+Tunnel 1 and 2 are specified as the possible external paths on the BR. 
+R1(config-oer-mc-br-if)#interface FastEthernet0/0 internal 
+Interface connecting the MC and the BR (internal) 
+R1(config-oer-mc-learn)# exit
+ ```
+
+**Master Controller (MC) Learning Configuration**  
+Specifies for the controller to learn prefixes based on throughput and delay.  Time periods are set regarding learning and specify the prefix lengths to learn. In this case /32 routes will be learned and monitored. 
+```
+R1(config-oer-mc)#learn 
+R1(config-oer-mc-learn)#throughput 
+R1(config-oer-mc-learn)#delay 
+R1(config-oer-mc-learn)#periodic-interval 1 
+R1(config-oer-mc-learn)#monitor-period 2 
+R1(config-oer-mc-learn)#expire after time 30 
+R1(config-oer-mc-learn)#aggregation-type prefix-length 32 
+Default /24 (class C) 
+R1(config-oer-mc-learn)# exit
+```
+
+**Master Controller (MC) Additional Properties**
+```
+R1(config-oer-mc)#backoff 180 360 
+Specifies how often to make prefix decisions 
+R1(config-oer-mc)#mode route control 
+Allows PfR to put routes into the routing table  
+R1(config-oer-mc)#mode select-exit best 
+Specifies "best" exit interface mode - view OER notes regarding modes. 
+R1(config-oer-mc)#periodic 90 
+Specifies how often to make policy decisions 
+R1(config-oer-mc)#resolve loss priority 1 variance 1 
+R1(config-oer-mc)#resolve delay priority 2 variance 1 
+R1(config-oer-mc)#resolve utilization priority 3 variance 1 
+R1(config-oer-mc)#resolve range priority 4 
+Specifies item policy importance regarding making policy decisions.  (Highest 1 to 10 Lowest) 
+```
+
+**Border Router (BR) Configuration** 
+Define key chain for authentication and specify the outgoing interface and IP address to reach the MC.  Additionally an interface can be specified to use for when sending an active probe, in the event the MC requests one.  Active probes are one method (from many available in PfR) to determine delay. 
+``` 
+R2(config)# key chain cisco 
+R2(config-keychain)#  key 1 
+R2(config-keychain-key)#  key-string cisco 
+! 
+R2(config)#oer border 
+R2(config-oer-br)#local FastEthernet0/0 
+R2(config-oer-br)#master 136.1.12.1 key-chain cisco 
+R2(config-oer-br)#active-probe address source interface Loopback0
+```
+
+*NOTE: PfR has a direct relationship with IP SLA in order to analyze network related information and make path selection decisions.  However, this section strictly covers only PfR configuration.  Reference IP Services for IP SLA configuration.*
+ 
+Troubleshooting/Verification 
+
+```Router# show oer master```
+
+Displays output to confirm configuration on MC and connectivity to BRs. 
+ 
+```Router# show oer border```
+
+Displays MC/BR border address and state as well as exit points (internal & external) depending on what's configured on the MC. 
+ 
+```Router# show ip route```
+
+Displays routing table, any redistributed routes will be shown as static.  
