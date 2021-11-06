@@ -97,3 +97,25 @@ NetFlow evolved as a caching technique. To speed up network flows (source IP, so
 Enable Netflow Switching ```Router(config)# ip route-cache flow```
  
 *NOTE: NetFlow Switching in this section is purely for speed purposes, data collection is covered in-depth under "IP Services".*
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Layer 2 Resolution
+Network devices often times will have either a logical address (IP) or a physical address (MAC) and will need to determine each other in order to communicate.   
+ 
+Address Resolution Protocol (ARP), a network layer protocol used to convert an IP address into a physical address, such as a MAC address. A host wishing to obtain a physical address broadcasts an ARP request onto the TCP/IP network. The host on the network that has the IP address in the request then replies with its physical hardware address. 
+ 
+Reverse ARP (RARP) which can be used by a host to discover its IP address. In this case, the host broadcasts its physical address and a RARP server replies with the host's IP address.  
+ 
+Display ARP Mappings 
+
+```Router# show ip arp```
+
+Displays entire ARP table, including the IP to MAC address mapping, age, and outgoing interface. 
+ 
+```Router# show ip arp [ip-address] [host-name] [mac-address] [interface type/number]```
+
+Using operators you can specify what host you are searching for within the ARP table. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
