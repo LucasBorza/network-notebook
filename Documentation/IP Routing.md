@@ -3,7 +3,7 @@
  - [Default Routing](#default-routing)
  - [Switching Paths](#switching-paths)
  - [Layer 2 Resolution](#layer-2-resolution)
- - [OER (Cisco Optimized Edge Routing)](#oer-(cisco-optimized-edge-routing))
+ - [OER - Cisco Optimized Edge Routing](#oer---cisco-optimized-edge-routing))
 
   OER (Cisco Optimized Edge Routing) 
 
