@@ -131,3 +131,27 @@ Using operators you can specify what host you are searching for within the ARP t
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+## OER (Cisco Optimized Edge Routing) 
+
+Optimized Edge Routing was created to extend the capability of routers to more optimal route traffic than routing protocols can provide on their own.   
+ 
+OER uses the following information in order to better calculate the best path 
+ - Packet loss 
+ - Response time 
+ - Path availability 
+ - Traffic load distribution 
+ 
+By adding this information into the routing decision process, OER can influence routing to avoid links with unacceptable latency, packet loss, or network problems serve enough to cause serious application performance problems, but not severe enough to trigger routing changes by the routing protocols in use.  Furthermore, taking into account that many modern networks use multiple service provider circuits and typically do little  or no load balancing between them. OER performs these functions automatically, but also allows for network administrators to manually configure them in a highly granular way if desired.  
+ 
+Five-phase OER operational model 
+**Profile** - Learn the flows of traffic that have high latency or high throughput. 
+**Measure** - Passively/actively collect traffic performance metrics. 
+**Apply Policy** - Create low and high thresholds to define in-policy and out-of-policy (OOP) performance categories. 
+**Control** - Influence traffic by manipulating routing or by routing in conjunction with PBR. 
+**Verify** - Measure OOP event performance and adjust policy to bring performance in-policy. 
+ 
+OER and PfR influence traffic by collecting information and then injecting new routes into the routing table with the appropriate routing information, tags and other attributes (for BGP routes) to steer traffic in a desired direction.  The new routes are redistributed into the IGP. As conditions change, these new routes may be removed, or more may be added. To provide for the required level of granularity, OER and PfR can split up subnets or extract part of a subnet or prefix from the remainder of that prefix by injecting a longer match into the routing table.  Because the longest match is the first criteria in a Cisco router's decision-making process about where to send traffic. OER and PfR don't require any deep changes in how routers make decisions.  You can think of this feature set as providing more information to the router to help it make better routing decisions, on a flow-by-flow basis. 
+ 
+*NOTE: OER was the original technology added to enhance routing decisions and further enhanced and renamed to PfR, continue to Performance Routing (PfR) subpage for additional concepts and  configuration.*
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
