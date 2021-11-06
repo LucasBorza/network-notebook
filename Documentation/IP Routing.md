@@ -4,6 +4,7 @@
  - [Switching Paths](#switching-paths)
  - [Layer 2 Resolution](#layer-2-resolution)
  - [OER Cisco Optimized Edge Routing](#oer-cisco-optimized-edge-routing)
+ - [PFR Performance Routing](#pfr-performance-routing)
 
   OER (Cisco Optimized Edge Routing) 
 
@@ -157,28 +158,32 @@ OER and PfR influence traffic by collecting information and then injecting new r
  
 *NOTE: OER was the original technology added to enhance routing decisions and further enhanced and renamed to PfR, continue to Performance Routing (PfR) subpage for additional concepts and  configuration.*
 
+## PFR Performance Routing
+
+PfR official standards for performance routing, but it's also known as protocol-independent routing optimization, or PIRO.  PfR learns about network performance using IP SLA (Service Level Agreement) and Netflow features (one or both).
+
 PfR Requirements 
-CEF (Cisco Express Forwarding) must be enabled. 
-IGP/BGP routing must be configured and working. 
-PfR does not support Multiprotocol Label Switching Provider Edge - Customer (MPLS PE-CE) or any traffic within the MPLS network, because PfR does not recognize MPLS headers. 
-PfR uses redistribution of static routes into the routing table, with a tag to facilitate control.  
+ - CEF (Cisco Express Forwarding) must be enabled. 
+ - IGP/BGP routing must be configured and working. 
+ - PfR does not support Multiprotocol Label Switching Provider Edge - Customer (MPLS PE-CE) or any traffic within the MPLS network, because PfR does not recognize MPLS headers. 
+ - PfR uses redistribution of static routes into the routing table, with a tag to facilitate control.  
  
 Background Information  
 PfR extends beyond OER's original capability by providing  routing optimization based on traffic type, through application awareness. PfR lets a router select the best path across a network based on the application traffic requirements. For example, voice traffic requires low latency, low jitter, and low error rates. 
  
 Attributes of PfR 
-Optimizes traffic path based on application type, performance requirements, and network performance. 
-Can perform passive monitoring using the Cisco IOS NetFlow feature. 
-Can perform active monitoring using the Cisco IP IOS IP SLA feature. 
-Can perform active and passive monitoring simultaneously . 
-Performs dynamic load balancing 
-Performs automatic path optimization 
-Offers "good" mode: finds an alternative route when a defined threshold is exceeded. 
-Offers "best" mode: always switches traffic to the route with the best performance. 
-Can reroute traffic in as little as 3 seconds 
-Supports robust reporting for traffic analysis and path assessment and troubleshooting purposes. 
-Can split prefixes in the routing table to provide differential routing for a single host or a subnet of hosts compared to the prefixes in the original routing table. 
-Can operate in monitor-only mode to collect information that helps network administrators determine the benefit of implementing PfR. 
+ - Optimizes traffic path based on application type, performance requirements, and network performance. 
+ - Can perform passive monitoring using the Cisco IOS NetFlow feature. 
+ - Can perform active monitoring using the Cisco IP IOS IP SLA feature. 
+ - Can perform active and passive monitoring simultaneously . 
+ - Performs dynamic load balancing 
+ - Performs automatic path optimization 
+ - Offers "good" mode: finds an alternative route when a defined threshold is exceeded. 
+ - Offers "best" mode: always switches traffic to the route with the best performance. 
+ - Can reroute traffic in as little as 3 seconds 
+ - Supports robust reporting for traffic analysis and path assessment and troubleshooting purposes. 
+ - Can split prefixes in the routing table to provide differential routing for a single host or a subnet of hosts compared to the prefixes in the original routing table. 
+ - Can operate in monitor-only mode to collect information that helps network administrators determine the benefit of implementing PfR. 
  
 Device Roles 
 **Master Controller (MC)** 
