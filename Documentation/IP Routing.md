@@ -86,7 +86,7 @@ When CEF mode is enabled, the CEF FIB and adjacency tables reside on the RP, and
  
 Enable CEF Switching ```Router(config)# ip cef```
  
-## dCEF Switching** 
+## dCEF Switching
 In distributed switching, the switching process occurs on VIP and other interface cards that support switching. When dCEF is enabled, line cards, such as VIP line cards or GSR line cards, maintain an identical copy of the FIB and adjacency tables. The line cards perform the express forwarding between port adapters, relieving the RSP of involvement in the switching operation. dCEF uses an Inter Process Communication (IPC) mechanism to ensure synchronization of FIBs and adjacency tables on the RP and line cards.  
   
 Enable dCEF Switching ```Router(config)# ip cef distributed``` 
