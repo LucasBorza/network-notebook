@@ -77,8 +77,7 @@ In process switching the first packet is copied to the system buffer. The router
 
 When packets are fast switched, the first packet is copied to packet memory and the destination network or host is found in the fast-switching cache. The frame is rewritten and sent to the outgoing interface that services the destination. Subsequent packets for the same destination use the same switching path. The interface processor computes the CRC. 
  
-Enable Fast Switching 
-Router(config)# ip route-cache 
+Enable Fast Switching ```Router(config)# ip route-cache``` 
  
 ## CEF Switching
 
