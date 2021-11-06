@@ -1,16 +1,14 @@
 # Ethernet Technologies Index
-- [Overview](#overview)
-- [Cable Types](#cable-types)
+- [Ethernet Technologies Overview](#ethernet-technologies)
     - [Switchport](#switchport)
         - [Trunk](#trunk)
             - [Dot1q Tunneling](#dot1q-tunneling)
 
 
-## Overview
+## Ethernet Technologies
 Ethernet is a family of frame-based computer networking technologies for local area networks (LANs). The name came from the physical concept of the ether. It defines a number of wiring and signaling standards for the Physical Layer of the OSI networking model as well as a common addressing format and Media Access Control at the Data Link Layer.
- 
-Ethernet is standardized as IEEE 802.3. The combination of the twisted pair versions of Ethernet for connecting end systems to the network, along with the fiber optic versions for site backbones, is the most widespread wired LAN technology. 
 
+Ethernet is standardized as IEEE 802.3. The combination of the twisted pair versions of Ethernet for connecting end systems to the network, along with the fiber optic versions for site backbones, is the most widespread wired LAN technology. 
 
 ## Cable Types
 Straight-though - Used to connect unlike devices (router to switch, computer to switch) 
