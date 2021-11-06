@@ -44,14 +44,16 @@ There are three effective configuration methods to specify a default route.  The
 For instance, if the router is a host in the IP world, you can use this command to define a default gateway for it. You might also use this command when your low end Cisco router is in boot mode in order to TFTP a Cisco IOS® Software image to the router. In boot mode, the router does not have ip routing enabled. 
  
 This example defines the router on IP address 172.16.15.4 as the default route: 
-Router(config)# ip default-gateway 172.16.15.4 
+
+```Router(config)# ip default-gateway 172.16.15.4```
  
 ## Method 2: ip default-network** 
 
 Unlike the ip default-gateway command, you can use ip default-network when ip routing is enabled on the Cisco router. When you configure ip default-network the router considers routes to that network for installation as the gateway of last resort on the router.  
  
 This example defines the router on IP address 172.16.24.0 as the default route: 
-Router(config)# ip default-network 171.70.24.0 
+
+```Router(config)# ip default-network 171.70.24.0 ```
  
 ## Method 3: ip route 0.0.0.0/0**
 
@@ -60,7 +62,8 @@ Creating a static route to network 0.0.0.0 0.0.0.0 is another way to set the gat
 *NOTE:  Using a static route will typically not propagate into a routing process.  Manual redistribution or default-information originate will be required.*  
  
 This is an example of configuring a gateway of last resort using the ip route 0.0.0.0 0.0.0.0 command and designating 170.170.3.4 as the default route:  
-Router(config)#ip route 0.0.0.0 0.0.0.0 170.170.3.4 
+
+```Router(config)#ip route 0.0.0.0 0.0.0.0 170.170.3.4```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
