@@ -20,7 +20,7 @@ OSPF | 110 | 240 | 192.020125 | 172.16.1.1
 EIGRP | 90 | 33789 | 192.0.2.0/24 | 172.16.2.1
 RIP | 120 | 6 | 192.0.264/26 | 172.16.3.1
  
-```Based on this routing table, the next hop of 172.16.3.1 would be chosen because it has the longest match (prefix length).  Even if a directly connected route or a link with a 100Gb connection is in the routing table.  The route with the longest match will always be preferred.```
+Based on this routing table, the next hop of 172.16.3.1 would be chosen because it has the longest match (prefix length).  Even if a directly connected route or a link with a 100Gb connection is in the routing table.  The route with the longest match will always be preferred.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
