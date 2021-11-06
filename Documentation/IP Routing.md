@@ -25,6 +25,7 @@ RIP | 120 | 6 | 192.0.264/26 | 172.16.3.1
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Default Routing
+
 A default route, also known as the gateway of last resort, is the network route used by a router when no other known route exists for a given IP packet's destination address. All the packets for destinations not known by the router's routing table are sent to the default route. This route generally leads to another router, which treats the packet the same way: If the route is known, the packet will get forwarded to the known route. If not, the packet is forwarded to the default-route of that router which generally leads to another router. And so on. Each router traversal adds a one-hop distance to the route. 
  
 The default route in IPv4 (in CIDR notation) is 0.0.0.0/0, often called the quad-zero route. Since the subnet mask given is /0, it effectively specifies no network, and is the "shortest" match possible. A route lookup that doesn't match anything will naturally fall back onto this route. Similarly, in IPv6 the default address is given by ::/0. 
@@ -34,21 +35,25 @@ Routers in an organization generally point the default route towards the router 
 Host devices in an organization generally refer to the default route as a default gateway which can be, and usually is, a filtration device such as a firewall or Proxy server. 
  
 ## Default Route Configuration 
+
 There are three effective configuration methods to specify a default route.  The ip default-gateway command is used when IP routing is disabled on the router. However, ip default-network and ip route 0.0.0.0/0 are effective when IP routing is enabled on the router and they are used to route any packets which do not have an exact route match in the routing table. 
  
 **Method 1: ip default-gateway**
+
 For instance, if the router is a host in the IP world, you can use this command to define a default gateway for it. You might also use this command when your low end Cisco router is in boot mode in order to TFTP a Cisco IOS® Software image to the router. In boot mode, the router does not have ip routing enabled. 
  
 This example defines the router on IP address 172.16.15.4 as the default route: 
 Router(config)# ip default-gateway 172.16.15.4 
  
 **Method 2: ip default-network** 
+
 Unlike the ip default-gateway command, you can use ip default-network when ip routing is enabled on the Cisco router. When you configure ip default-network the router considers routes to that network for installation as the gateway of last resort on the router.  
  
 This example defines the router on IP address 172.16.24.0 as the default route: 
 Router(config)# ip default-network 171.70.24.0 
  
 **Method 3: ip route 0.0.0.0/0**
+
 Creating a static route to network 0.0.0.0 0.0.0.0 is another way to set the gateway of last resort on a router. As with the ip default-network command, using the static route to 0.0.0.0 is not dependent on any routing protocols. However, ip routing must be enabled on the router.  
  
 NOTE:  Using a static route will typically not propagate into a routing process.  Manual redistribution or default-information originate will be required.  
@@ -64,15 +69,18 @@ The routing process assesses the source and destination of traffic based on know
 Routing is more processing intensive and has higher latency than switching as it determines path and next hop considerations. The first packet routed requires a lookup in the routing table to determine the route. The route cache is populated after the first packet is routed by the route-table lookup. Subsequent traffic for the same destination is switched using the routing information stored in the route cache.  
  
 **Process Switching**
+
 In process switching the first packet is copied to the system buffer. The router looks up the Layer 3 network address in the routing table and initializes the fast-switch cache. The frame is rewritten with the destination address and sent to the outgoing interface that services that destination. Subsequent packets for that destination are sent by the same switching path. The route processor computes the cyclical redundancy check (CRC). Process switching is the default operation. 
  
 **Fast Switching**
+
 When packets are fast switched, the first packet is copied to packet memory and the destination network or host is found in the fast-switching cache. The frame is rewritten and sent to the outgoing interface that services the destination. Subsequent packets for the same destination use the same switching path. The interface processor computes the CRC. 
  
 Enable Fast Switching 
 Router(config)# ip route-cache 
  
 **CEF Switching**
+
 When CEF mode is enabled, the CEF FIB and adjacency tables reside on the RP, and the RP performs the express forwarding. You can use CEF mode when line cards are not available for CEF switching or when you need to use features not compatible with dCEF switching.  Further CEF configuration options can be found here. 
  
 Enable CEF Switching
@@ -87,6 +95,7 @@ Enable dCEF Switching
 ```Router(config)# ip cef distributed``` 
  
 **Netflow Switching**
+
 NetFlow evolved as a caching technique. To speed up network flows (source IP, source port, destination IP, destination port) and Layer 3 switching in the presence of access lists, the Cisco router and switch caches were re-organized based on the flow information. As this code became more efficient, a side benefit was the collection of useful flow statistics, without too severe a performance penalty. Even with CEF (Cisco Express Forwarding) for rapid Layer 3 switching, NetFlow caching can apparently still enhance performance of longer access lists (more than 10 to 25 entries or so), Policy Routing, and perhaps other features ("NetFlow feature acceleration"). But there is also real benefit to the reporting data it provides. Two reasons you might be using NetFlow: to speed certain access list uses up, or to collect data. 
  
 Enable Netflow Switching 
