@@ -2,6 +2,7 @@
  - [Routing Decisions](#routing-decisions)
  - [Default Routing](#default-routing)
  - [Switching Paths](#switching-paths)
+  - [Layer 2 Resolution](#layer-2-resolution)
 
 ## Routing Decisions 
 Understanding how routing decisions are made by a router is crucial for understanding the concepts of routing protocols as well as for design and troubleshooting purposes. 
@@ -77,24 +78,32 @@ In process switching the first packet is copied to the system buffer. The router
 
 When packets are fast switched, the first packet is copied to packet memory and the destination network or host is found in the fast-switching cache. The frame is rewritten and sent to the outgoing interface that services the destination. Subsequent packets for the same destination use the same switching path. The interface processor computes the CRC. 
  
-Enable Fast Switching ```Router(config)# ip route-cache``` 
+Enable Fast Switching 
+
+```Router(config)# ip route-cache``` 
  
 ## CEF Switching
 
 When CEF mode is enabled, the CEF FIB and adjacency tables reside on the RP, and the RP performs the express forwarding. You can use CEF mode when line cards are not available for CEF switching or when you need to use features not compatible with dCEF switching.  Further CEF configuration options can be found here. 
  
-Enable CEF Switching ```Router(config)# ip cef```
+Enable CEF Switching 
+
+```Router(config)# ip cef```
  
 ## dCEF Switching
 In distributed switching, the switching process occurs on VIP and other interface cards that support switching. When dCEF is enabled, line cards, such as VIP line cards or GSR line cards, maintain an identical copy of the FIB and adjacency tables. The line cards perform the express forwarding between port adapters, relieving the RSP of involvement in the switching operation. dCEF uses an Inter Process Communication (IPC) mechanism to ensure synchronization of FIBs and adjacency tables on the RP and line cards.  
   
-Enable dCEF Switching ```Router(config)# ip cef distributed``` 
+Enable dCEF Switching 
+
+```Router(config)# ip cef distributed``` 
  
 ## Netflow Switching
 
 NetFlow evolved as a caching technique. To speed up network flows (source IP, source port, destination IP, destination port) and Layer 3 switching in the presence of access lists, the Cisco router and switch caches were re-organized based on the flow information. As this code became more efficient, a side benefit was the collection of useful flow statistics, without too severe a performance penalty. Even with CEF (Cisco Express Forwarding) for rapid Layer 3 switching, NetFlow caching can apparently still enhance performance of longer access lists (more than 10 to 25 entries or so), Policy Routing, and perhaps other features ("NetFlow feature acceleration"). But there is also real benefit to the reporting data it provides. Two reasons you might be using NetFlow: to speed certain access list uses up, or to collect data. 
  
-Enable Netflow Switching ```Router(config)# ip route-cache flow```
+Enable Netflow Switching 
+
+```Router(config)# ip route-cache flow```
  
 *NOTE: NetFlow Switching in this section is purely for speed purposes, data collection is covered in-depth under "IP Services".*
 
@@ -107,7 +116,9 @@ Address Resolution Protocol (ARP), a network layer protocol used to convert an I
  
 Reverse ARP (RARP) which can be used by a host to discover its IP address. In this case, the host broadcasts its physical address and a RARP server replies with the host's IP address.  
  
-Display ARP Mappings ```Router# show ip arp```
+Display ARP Mappings 
+
+```Router# show ip arp```
 
 Displays entire ARP table, including the IP to MAC address mapping, age, and outgoing interface. 
 
