@@ -2,7 +2,10 @@
  - [Routing Decisions](#routing-decisions)
  - [Default Routing](#default-routing)
  - [Switching Paths](#switching-paths)
-  - [Layer 2 Resolution](#layer-2-resolution)
+ - [Layer 2 Resolution](#layer-2-resolution)
+ - [OER (Cisco Optimized Edge Routing)](#oer-(cisco-optimized-edge-routing))
+
+  OER (Cisco Optimized Edge Routing) 
 
 ## Routing Decisions 
 Understanding how routing decisions are made by a router is crucial for understanding the concepts of routing protocols as well as for design and troubleshooting purposes. 
