@@ -109,7 +109,9 @@ Reverse ARP (RARP) which can be used by a host to discover its IP address. In th
  
 Display ARP Mappings ```Router# show ip arp```
 
-Displays entire ARP table, including the IP to MAC address mapping, age, and outgoing interface. ```Router# show ip arp [ip-address] [host-name] [mac-address] [interface type/number]```
+Displays entire ARP table, including the IP to MAC address mapping, age, and outgoing interface. 
+
+```Router# show ip arp [ip-address] [host-name] [mac-address] [interface type/number]```
 
 Using operators you can specify what host you are searching for within the ARP table. 
 
