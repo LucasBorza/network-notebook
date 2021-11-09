@@ -4,9 +4,18 @@
  - [Switching Paths](#switching-paths)
  - [Layer 2 Resolution](#layer-2-resolution)
  - [OER Cisco Optimized Edge Routing](#oer-cisco-optimized-edge-routing)
- - [PFR Performance Routing](#pfr-performance-routing)
+    - [PFR Performance Routing](#pfr-performance-routing)
+ - [ODR On Demand Routing](#odr-on-demand-routing)
+ - [Secondary IP Address](#secondary-ip-address)
+ - [Static Routing](#static-routing)
+    - [Floating Static Route](#floating-static-route)
+ - [Backup Interface](#backup-interface)
+ - [GRE Tunneling](#gre-tunneling)
+ - [PBR Policy Based Routing](#pbr-policy-based-routing)
+ - [31 Bit Mask](#31-bit-mask)
+ - [IP Unnumbered](#ip-unnumbered) 
 
-  OER (Cisco Optimized Edge Routing) 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Routing Decisions 
 Understanding how routing decisions are made by a router is crucial for understanding the concepts of routing protocols as well as for design and troubleshooting purposes. 
@@ -315,7 +324,7 @@ NOTE: OER was the original technology added to enhance routing decisions and fur
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Secondary IP Configuration
+## Secondary IP Address
 
 Cisco IOS supports multiple IP addresses on a single interface.  There will be a one Primary IP address and the possibility of multiple Secondary IP Addresses on the interface.  Configuring multiple IP addresses on your device can sometimes help when you have multiple subnets having one single physical router interface and multiple subnets accessing it.
 
@@ -422,3 +431,218 @@ Router(config-if)# backup interface serial0/1
 ```
 
 This command specifies that serial0/1 will become the backup interface in the event serial0/0 goes down.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## GRE Tunneling 
+
+Generic Routing Encapsulation (GRE) defines a method of tunneling data from one router to another. To tunnel the traffic, the sending router encapsulates packets of one networking protocol, called the passenger protocol, inside packets of another protocol, called the transport protocol, transporting these packets to another router. The receiving router de-encapsulates and forwards the original passenger protocol packets.  This process allows the routers in the network to forward traffic that might not be natively supported by the intervening routers.  For instance, if some routers did not support IP multicast, the IP multicast traffic could be tunneled from one router to another using IP unicast packets.
+
+*NOTE: GRE Tunnels are by nature not secure, but they can be configured with IPsec for increased security. This can also allow for a L3 VPN creation allowing for both a secure VPN tunnel and allowing for layer 3 protocols to traverse the VPN.*
+
+**GRE Tunnel Interface Configuration**
+
+```
+Router(config)# interface tunnel <number>
+```
+
+• Enters tunnel configuration mode, specifies tunnel interface number.
+
+```
+Router(config-if)# tunnel source [ip-address | source-interface]
+```
+
+• Specifies a source interface for the tunnel
+
+```
+Router(config-if)# tunnel destination [ip-address]
+```
+
+• Specifies the destination IP address for the tunnel.
+
+```
+Router(config-if)# tunnel mode [gre {ip | multipoint} | dvmrp | ipip | mpls | nos]
+```
+
+• Specifies tunnel mode; default GRE - IP.
+
+```
+Router(config-if)# keepalive [seconds | retries ]
+```
+
+• Enables keepalive on the interface and optionally specifies the time interval and the number of retries.
+
+**GRE Tunnel Configuration Example**
+
+The configuration below is a simple GRE tunnel formed between two routers. 
+
+**Configure Loopback Interface - R1**
+
+Loopbacks are used as an "always on" interface and will allow for the connection to stay online even if the primary egress interface goes down the tunnel could still potentially communicate by traversing another path.
+
+```
+Router1(config)# interface loopback0
+Router1(config-if)# ip address 150.1.1.1 255.255.255.0
+```
+
+**Configure Tunnel Interface (GRE) - R1**
+
+```
+Router1(config)# interface Tunnel 0
+Router1(config-if)# ip address 192.168.1.1 255.255.255.0
+``` 
+
+• Creates Tunnel 0 and assigns the address defined above to the GRE tunnel 
+
+```
+Router1(config-if)# interface source Loopback0
+```
+
+• Defines Loopback0 as the tunnel source address to be used
+
+```
+Router1(config-if)# tunnel destination 150.2.2.2
+```
+
+• Defines the above IP address destination to form the tunnel 
+
+
+**Create Loopback Interface - R2**
+```
+Router2(config)# interface loopback0
+Router2(config-if)# ip address 150.2.2.2 255.255.255.0
+```
+
+**Create Tunnel Interface (GRE) - R2**
+```
+Router2(config)# interface Tunnel 0
+Router2(config-if)# ip address 192.168.1.2 255.255.255.0
+Router2(config-if)# tunnel source Loopback0
+Router2(config-if)# tunnel destination 150.1.1.1
+```
+
+**Troubleshooting/Verification**
+```
+Router# show ip interface brief
+```  
+  
+• Displays interface status and IP address assignment; can be used to confirm tunnel is operational. 
+
+``` 
+Router# show interface tunnel <number>
+```
+
+• Displays detailed configuration of tunnel interfaces
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## PBR Policy Based Routing
+
+While dynamic routing protocols provide easy deployment, there will be situations in which more specific selection of routing paths can be advantageous. Policy Based Routing  (PBR) provides a flexible mechanism for network administrators to customize the operation of the routing table and the flow of traffic within their networks.
+
+Policy Based Routing (PBR) has an infinite amount of configuration possibilities and depends on what exactly you wish to accomplish and how the network is configured. However, below displays the basic method for how to configure PBR and can be used as a template for other configuration designs.
+
+**Policy Based Routing (PBR) Configuration**
+Multihoming is very common and means that your external router connects to multiple connections in case of a failure or specific resources are dedicated to different lines.  Below displays the configuration for an example of Multihoming using PBR/
+
+Define which network to be affected using an ACL
+
+```
+Router(config)#ip access-list 10 permit 10.1.1.0 0.0.0.255
+```
+
+Create route-map in order to specify match and set criteria.
+
+```
+Router(config)# route-map SetNextHop permit 10
+Router(config-route-map)# match ip address 10
+```
+
+• Match statements are used to match addresses that will be reflected by the set commands, in this scenario ACL 10.
+
+```
+Router(config-route-map)# set ip next-hop 192.168.0.1
+```
+
+• All addresses under ACL 10 will have their net hop set to 192.168.0.1 
+
+```
+Router(config-route-map)#set interface fa0/1
+```
+
+• Optionally instead of specifying a specific address, the next hop interface can be defined.
+	
+**Apply route-map to interface** 
+Typically the internal interface which is connected to the network you would like to redirect or perform PBR on.
+
+```
+Router(config)# interface fa0/0
+Router(config-if)# ip policy route-map SetNextHop
+```
+
+**Troubleshooting/Verification**
+
+```
+Router#show route-map
+```
+
+• Displays route-map configuration
+
+```
+Router#traceroute
+```
+
+Using an extended traceroute a specified address that is being manipulated can be tested to see if it's traversing the correct path and that PBR is performing correctly.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## 31 Bit Mask
+
+In order to conserve IP address space on the Internet, a 31-bit prefix length allows the use of only two IP addresses on a point-to-point link. Previously, customers had to use four IP addresses or unnumbered interfaces for point-to-point links.
+
+Using a 31-bit prefix length leaves only two numbering possibilities, 0 and 1. In a point-to-point link with a 31-bit subnet mask, these two addresses must be interpreted as host addresses, and directed broadcast to the link will be eliminated. Limited broadcast must be used for all broadcast traffic on a point-to-point link with a 31-bit mask assigned to it. 
+
+**Configuration**
+
+```
+Router(config)# interface serial0/0
+Router(config-if)# ip address 10.10.10.1 255.255.255.254
+```
+
+• Sets the interface with a /31 subnet mask; the opposite end of the point-to-point connection will be .2
+
+```
+Router(config-if)# no ip directed-broadcast
+```
+
+Disables broadcasts from IP packets that have a destination address of a particular IP subnet.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## IP Unnumbered
+
+IP-Unnumbered allows for enabling of IP processing on a serial interface without assigning it an explicit IP address. The IP unnumbered interface can "borrow" the IP address of another interface already configured on the router, which conserves network and address space. 
+
+**IP-Unnumbered Configuration**
+Consider the network shown below. Router A has a serial interface S0 and an Ethernet interface E0.  
+
+![ipunnumbered.gif](/Images/ipunnumbered.gif)
+
+**Configure interface as IP-Unnumbered**
+
+```
+Router(config)# interface serial 0
+Router(config-if)# ip unnumbered Ethernet 0
+```
+
+• Borrows the IP address from Ethernet 0
+
+*NOTE: IP-Unnumbered can only be configured on point-to-point links. Typically addresses for IP-Unumbered should be borrowed from a Loopback interface which never goes down - if the interface upon which the address is being borrowed goes down, IP-Unnumbered will not function.*
+
+**Troubleshooting/Verification**
+
+```
+Router# show ip interface brief
+```
+
+Displays interface status and address assignment
