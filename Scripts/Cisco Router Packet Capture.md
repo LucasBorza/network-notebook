@@ -1,6 +1,7 @@
 ## Cisco Router Packet Capture
 
 Associate a filter. The filter may be specified inline, or an ACL or class-map can be referenced:
+
 ```monitor capture CAP interface Port-channel1 both``` 
 
 ```monitor capture CAP match ipv4 any any```
