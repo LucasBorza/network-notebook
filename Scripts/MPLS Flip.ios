@@ -1,6 +1,0 @@
-!The purpose of this script is to flip MPLS providers from the primary to backup line.
-
-!SSH into [SITE].MPLS.CL
-!Apply the following commands:
-config term
-router bgp [#####]
