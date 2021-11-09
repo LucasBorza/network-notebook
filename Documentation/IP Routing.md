@@ -287,3 +287,138 @@ Displays MC/BR border address and state as well as exit points (internal & exter
 ```Router# show ip route```
 
 Displays routing table, any redistributed routes will be shown as static.  
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## ODR On Demand Routing
+
+Optimized Edge Routing was created to extend the capability of routers to more optimal route traffic than routing protocols can provide on their own.  
+
+OER uses the following information in order to better calculate the best path  
+	• Packet loss  
+	• Response time  
+	• Path availability  
+	• Traffic load distribution  
+	
+By adding this information into the routing decision process, OER can influence routing to avoid links with unacceptable latency, packet loss, or network problems serve enough to cause serious application performance problems, but not severe enough to trigger routing changes by the routing protocols in use.  Furthermore, taking into account that many modern networks use multiple service provider circuits and typically do little  or no load balancing between them. OER performs these functions automatically, but also allows for network administrators to manually configure them in a highly granular way if desired. 
+
+Five-phase OER operational model
+Profile - Learn the flows of traffic that have high latency or high throughput.
+Measure - Passively/actively collect traffic performance metrics.
+Apply Policy - Create low and high thresholds to define in-policy and out-of-policy (OOP) performance categories.
+Control - Influence traffic by manipulating routing or by routing in conjunction with PBR.
+Verify - Measure OOP event performance and adjust policy to bring performance in-policy.
+
+OER and PfR influence traffic by collecting information and then injecting new routes into the routing table with the appropriate routing information, tags and other attributes (for BGP routes) to steer traffic in a desired direction.  The new routes are redistributed into the IGP. As conditions change, these new routes may be removed, or more may be added. To provide for the required level of granularity, OER and PfR can split up subnets or extract part of a subnet or prefix from the remainder of that prefix by injecting a longer match into the routing table.  Because the longest match is the first criteria in a Cisco router's decision-making process about where to send traffic. OER and PfR don't require any deep changes in how routers make decisions.  You can think of this feature set as providing more information to the router to help it make better routing decisions, on a flow-by-flow basis.
+
+NOTE: OER was the original technology added to enhance routing decisions and further enhanced and renamed to PfR, continue to Performance Routing (PfR) subpage for additional concepts and  configuration. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Secondary IP Configuration
+
+Cisco IOS supports multiple IP addresses on a single interface.  There will be a one Primary IP address and the possibility of multiple Secondary IP Addresses on the interface.  Configuring multiple IP addresses on your device can sometimes help when you have multiple subnets having one single physical router interface and multiple subnets accessing it.
+
+The IP addresses can be from different subnets or from entirely different networks.
+
+**Secondary IP Configuration**
+```   
+Router(config)# interface fa0/0  
+Router(config-if)# ip address 10.10.10.1 255.255.255.0  
+	• Defines Primary IP Address  
+Router(config-if)# ip address 10.10.20.1 255.255.255.0 [secondary]  
+	• Defines the Secondary IP address by the keyword secondary  
+```
+Now host's will be able to access the same physical interface and be assigned to different networks.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Static Routing
+
+Static routing is a core technology that any network engineer must understand. Its the ability to statically configure a route  to a defined network with the next transit path hop to get to that network or using the outgoing interface.
+
+For example If router R1 is connected to network 10.61.10.0/24 and PC’s on that network need to get to the 10.61.30.0/24 network then R1 must know where what router to send that traffic to that’s local to R1 that can reach that network.
+Let’s say R1 passes this traffic off to R2 and R2 see’s that the network is not directly connected so then R2 then must forward the traffic to the “next hop” in the transit path to get to a router that has that network directly attached. So it then passes it off to R3 which has the 10.61.88.0/24 network directly connected to interface Gi3/10.
+
+Take a step back for a minute and think about bi-directional traffic. If you have static routes pointing in one direction does that necessarily mean that IP communication will be successful? What if the router R3 has no route back to 10.61.21.0/24? This means that traffic from 10.61.21.0/24 can get to the 10.61.88.0/24 network but traffic from the 10.61.88.0/24 network cannot get back. So with that being the case any PC on the 10.61.21.0/24 can send traffic to the 10.61.88.0/24 network but not receive any response back.
+
+Commonly static routes are used for floating routes and a default route which is discussed in lab 6-3 however, many engineers rely on static routes in their infrastructure due to a lack of understanding of dynamic routing protocols such as RIP, EIGRP and OSPF. A well designed network should have very few static routes as the general rule of thumb; when you configure a static route and the network changes, you’ll then potentially need to reassess and reconfigure the static route to ensure network reachability.
+
+**Static Routing Configuration**
+Shown below is a logical topology of the network you will be building in this lab. Check out the overall lab topology to view the physical topology. However; looking down on this network you’ll see the topology is built upon the operational function of each network device as shown below:
+
+![staticrouting.png](/Images/staticrouting.png)
+
+In this lab the Loopback0 interface on R1, R2 and R3 will simulate their connected networks which you will be configuring static routing for.
+
+Syntax
+Router(config)# ip route <destination-address> <destination-mask> <next-hop-address | outgoing interface>
+
+Example
+``` 
+Router(config)# IP route 192.168.20.0 255.255.255.0 192.168.20.5 
+```
+
+This effectively says to get to network 192.168.20.0/24 go to the next-hop of 192.168.20.5. Additionally you could also use the outgoing interface to reach the destination network in lieu of a next-hop-address. 
+	
+Create a Static Route on R1 that states to get to 10.61.20.0/24 go to the next hop of 10.61.12.2 then place the return route on R2 stating to get to 10.61.10.0/24 go to the next hop of 10.61.12.1. Verify that the routes added operate correctly by pinging R2′s Lo0 interface sourced from R1′s Lo0 interface.
+
+```
+R1(config)# ip route 10.61.20.0 255.255.255.0 10.61.12.2
+!
+R2(config)# ip route 10.61.10.0 255.255.255.0 10.61.12.1
+```
+
+Troubleshooting/Verification
+```
+Router# show ip route [static]
+```
+Displays the routing table, including static routes; optional static operator will display only static routes. 
+
+```	
+Router(config)# debug ip routing
+```
+Displays routing changes and notifications
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Floating Static Route
+
+A floating static route is simply a static route configured with a higher administrative distance than the current route in the routing table.  It will only be used if the more preferable routes for a destination fail.
+
+**Floating Static Route Configuration**
+```
+Router(config)# ip route <destination-address> <destination-mask> <next-hop-address> [administrative distance]
+```
+
+Example:
+A route has been learned using OSPF with an administrative distance of 110 and is the most preferable route currently in the routing table.  The following floating static route is entered:
+
+```
+Router(config)# ip route 10.10.10.11 255.255.252 10.10.10.12 180
+```
+
+The above floating static route will be entered into the routing table and allow for communication to continue using the statically configured address.  The administrative distance of 180 is set and is higher than the default of 110 and therefore is never injected into the routing table until the OSPF route fails.
+
+**Troubleshooting/Verification**
+```
+Router# show ip route
+```
+
+• Displays the routing table, in the event of route failure, the static route will be injected and be displayed in the routing table.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Backup Interface
+
+When the router receives an indication that the primary line is down, a backup interface is brought up. You can configure the backup interface to go down once the primary connection has been restored for a specified period. 
+
+**Backup Interface Configuration**
+To configure a backup interface enter the interface you wish to supply a backup to.  
+
+```
+Router(config)# interface serial0/0
+Router(config-if)# backup interface serial0/1
+```
+
+This command specifies that serial0/1 will become the backup interface in the event serial0/0 goes down.
