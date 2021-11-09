@@ -23,4 +23,4 @@ Monitor cap CAP buffer 100
 !Examine the capture in a summary view: 
 show monitor capture CAP buffer brief 
 !Examine the capture in a detailed view: 
-show monitor capture CAP buffer detailed  
+show monitor capture CAP buffer detailed
