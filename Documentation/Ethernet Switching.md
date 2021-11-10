@@ -1,9 +1,15 @@
 # Ethernet Technologies Index
 - [Ethernet Technologies Overview](#ethernet-technologies)
   - [Ethernet Configuration](#ethernet-configuration)
-  - [Switchport](#switchport)
-      - [Trunk](#trunk)
-          - [Dot1q Tunneling](#dot1q-tunneling)
+  - [PPPOE PPP Over Ethernet](#pppoe-ppp-over-ethernet)
+- [Switchport](#switchport) 
+  - [Trunk](#trunk) 
+    - [Dot1q Tunneling](#dot1q-tunneling) 
+    - [L2P Tunneling](#l2p-tunneling)
+- [VTP](#vtp)
+  - [VLANs](#vlans)
+- [Layer 3 Routing](#layer-3-routing)
+  - [Router On A Stick](#router-on-a-stick)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -184,6 +190,133 @@ interface FastEthernet0/0
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+## PPPOE PPP Over Ethernet
+
+PPPoE provides an emulated (and optionally authenticated) point-to-point link across a shared medium, typically a broadband aggregation network such as those found in DSL service providers. In fact, a very common scenario is to run a PPPoE client on the customer side (commonly on a SOHO Linksys or similar brand router), which connects to and obtains its configuration from the PPPoE server (head-end router) at the ISP side.
+
+**PPPoE Client Configuration**
+
+Create a dialer interface to handle the PPPoE connection
+
+```
+Router(config)# interface dialer1
+Router(config-if)# dialer pool 1
+Router(config-if)# encapsulation ppp
+Router(config-if)# ppp chap hostname CPE
+Router(config-if)# ppp chap password mYp@ssW0rD
+```
+
+• Enables CHAP authentication and defines hostname and password required to authenticate with ISP and obtain an IP address.
+
+```
+Router(config-if)# ip address negotiated
+```
+
+• Specifies the client to use an address provided by the PPPoE server.
+	
+Reduce Maximum Transmission Unit (MTU)
+
+```
+Router(config-if)# mtu 1492
+```
+
+• The PPP header adds 8 bytes of overhead to each frame. Assuming the default Ethernet MTU of 1500 bytes, we'll want to lower our MTU on the dialer interface to 1492 to avoid unnecessary fragmentation.
+
+Apply Dialer interface to the outgoing ISP-facing interface
+
+```
+Client(config)# interface FastEthernet0/0
+Client(config-if)# no ip address
+Client(config-if)# pppoe-client dial-pool-number 1
+Client(config-if)# no shutdown
+```
+
+**PPPoE Server Configuration**
+
+More than likely Server configuration will not be necessary for the CCIE Lab, however it's a good thing to understand.
+
+Create Broadband Aggregation (BBA) group which will handle incoming PPPoE connection attempts
+
+```
+ISP(config)# bba-group pppoe MyGroup
+ISP(config-bba-group)# virtual-template 1
+```
+
+Set PPPoE Session limits (Optional)
+
+```
+ISP(config-bba-group)# sessions per-mac limit 2
+```
+
+• Limit the number of sessions established per client MAC address (setting this limit to 2 allows a new session to be established immediately if the prior session was orphaned and is waiting to expire). 
+	
+**Create Virtual Template for customer-facing interface**
+
+When a PPPoE client initiates a session with this router, the router automatically spawns a virtual interface to represent that point-to-point connection.
+
+```
+ISP(config)# interface virtual-template 1
+ISP(config-if)# ip address 10.0.0.1 255.255.255.0
+ISP(config-if)# peer default ip address pool MyPool
+ISP(config-if)# ppp authentication chap callin
+```
+
+• Enables authentication using CHAP
+
+**Create IP Address pool for associated clients**
+
+```
+ISP(config)# ip local pool MyPool 10.0.0.2 10.0.0.254
+```
+
+Enable PPPoE group on the interface facing the customer network
+
+```
+ISP(config)# interface FastEthernet0/0
+ISP(config-if)# no ip address
+ISP(config-if)# pppoe enable group MyGroup
+ISP(config-if)# no shutdown
+```
+
+Defines remote client account
+
+```
+ISP(config)# username CPE password  mYp@ssW0rD
+```
+
+• Typically account creation is typically performed on a back-end server and referenced via RADIUS or TACACS+ rather than being stored locally.
+
+**Troubleshooting/Verification**
+
+```
+debug pppoe events
+```
+
+• Displays PPPoE protocol messages about events that are part of normal session establishment or shutdown
+
+```
+debug pppoe authentication
+```
+
+• Displays authentication protocol messages such as CHAP and PAP messages
+
+```	
+show pppoe session
+```
+
+• Displays information about currently active PPPoE sessions
+
+```	
+show ip dhcp binding
+```
+
+• Displays address binding on the Cisco IOS DHCP server
+
+```
+show ip nat translation
+```
+
+Displays active NAT translations
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -265,6 +398,54 @@ Switch(config-if)# switchport nonegotiate
 ```
 
 Disable DTP messages, whenever manually forcing a switchport mode (trunk or access)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Trunk
+
+Trunks are used to carry traffic that belongs to multiple VLANs between devices over the same link. A device can determine which VLAN the traffic belongs to by its VLAN identifier. The VLAN identifier is a tag that is encapsulated with the data. ISL and 802.1Q are two types of encapsulation that are used to carry data from multiple VLANs over trunk links. 
+
+ISL is a Cisco proprietary protocol for the interconnection of multiple switches and maintenance of VLAN information as traffic goes between switches. ISL provides VLAN trunking capabilities while it maintains full wire-speed performance on Ethernet links in full-duplex or half-duplex mode. ISL operates in a point-to-point environment and can support up to 1000 VLANs. In ISL, the original frame is encapsulated and an additional header is added before the frame is carried over a trunk link. At the receiving end, the header is removed and the frame is forwarded to the assigned VLAN. ISL uses Per VLAN Spanning Tree (PVST), which runs one instance of Spanning Tree Protocol (STP) per VLAN. PVST allows the optimization of root switch placement for each VLAN and supports the load balancing of VLANs over multiple trunk links.
+ 
+802.1Q is the IEEE standard for tagging frames on a trunk and supports up to 4096 VLANs. In 802.1Q, the trunking device inserts a 4-byte tag into the original frame and recomputes the frame check sequence (FCS) before the device sends the frame over the trunk link. At the receiving end, the tag is removed and the frame is forwarded to the assigned VLAN. 802.1Q does not tag frames on the native VLAN. It tags all other frames that are transmitted and received on the trunk. When you configure an 802.1Q trunk, you must make sure that you configure the same native VLAN on both sides of the trunk. IEEE 802.1Q defines a single instance of spanning tree that runs on the native VLAN for all the VLANs in the network. This is called Mono Spanning Tree (MST). This lacks the flexibility and load balancing capability of PVST that is available with ISL. However, PVST+ offers the capability to retain multiple spanning tree topologies with 802.1Q trunking. 
+
+**Trunk Port Configuration**
+
+```
+Switch(config)# interface FastEthernet 0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport nonegotiate
+```
+
+• Enables trunk mode and disables DTP messages from being sent.
+
+```
+Switch(config-if)# switchport trunk allowed vlan 10,30-80
+```
+
+• Only the specified VLANs will be allowed to communicate over the trunk. 
+
+```
+Switch(config-if)# switchport trunk native vlan 99
+```
+
+• Native VLAN must match on both sides of the trunk, no access layer devices should be on the native VLAN.  The VLAN is strictly for the purpose of transporting management protocols such as VTP, STP, DTP etc. Native VLANs are not used in ISL configurations.
+	
+**Troubleshooting/Verification**
+
+```
+Switch# show vlan
+```
+
+• Displays all VLANs and what interfaces are assigned to each. 
+	
+*NOTE: Trunk interfaces are not shown using the command show vlan, only access interfaces.* 
+
+```
+Switch# show interface trunk
+```
+
+Displays information related to configured trunk ports (mode, encapsulation, vlans and ports)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -358,4 +539,357 @@ Provides a list of dot1q-tunnel interfaces
 Switch# show vlan dot1q tag native  
 ```
 
-Display 802.1Q native VLAN tagging status.  
+Display 802.1Q native VLAN tagging status.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## L2P Tunneling
+
+Using Layer Two Protocol (L2P) Tunneling switches can be configured to forward layer 2 protocols such as CDP, STP and VTP frames instead of intercepting them.  L2P provides a level of transparency when forming  adjacencies across an ISP network.  
+
+When protocol tunneling is enabled, edge switches on the inbound side of the service-provider network encapsulate Layer 2 protocol packets with a special MAC address and send them across the service-provider network. Core switches in the network do not process these packets but forward them as normal packets. Layer 2 protocol data units (PDUs) for CDP, STP, or VTP cross the service-provider network and are delivered to customer switches on the outbound side of the service-provider network. Identical packets are received by all customer ports on the same VLANs with these results: 
+
+• Users on each of a customer's sites can properly run STP, and every VLAN can build a correct spanning tree based on parameters from all sites and not just from the local site. 
+
+• CDP discovers and shows information about the other Cisco devices connected through the service-provider network. 
+
+• VTP provides consistent VLAN configuration throughout the customer network, propagating to all switches through the service provider. 
+	
+**L2P Tunneling Configuration**
+
+Configure Interface as an Access Port or an IEEE 802.1Q tunnel port
+
+```
+Switch(config)# interface fastethernet0/1
+Switch(config-if)# switchport mode { access | dot1q-tunnel }
+```
+
+**Enable L2P Tunneling**
+
+```
+Switch(config-if)# l2protocol-tunnel 
+```
+
+• Enables CDP, STP and VTP each can be specifically defined if you only wish to tunnel specific protocols
+• Disables CDP on the port
+	
+Enabled point-to-point protocols (optional)
+
+```
+Switch(config-if)# l2protocol-tunnel  point-to-point
+```
+
+• Expands tunnel to support point-to-point protocols such as PAgP, LACP and UDLD. 
+	
+Define Thresholds (optional)
+
+```
+Switch(config-if)# l2protocol-tunnel shutdown-threshold [cdp | stp | vtp] 1500
+```
+
+• Shutdown interface if the defined packets-per-second threshold is reached; range 1 to 4096.
+
+```
+Switch(config-if)# l2protocol-tunnel drop-threshold [cdp | stp | vtp] 1000
+```
+
+• Drops packets if the defined packets-per-second threshold is reached; range of 1 to 4096
+
+```
+Switch(config-if)# l2protocol-tunnel drop-threshold point-to-point [pagp | lacp | udld] 1000
+```
+
+• Drops packets if the defined packets-per-second threshold is reached; range of 1 to 4096
+	
+*NOTE: If both thresholds are configured, the drop threshold must be less or equal the shutdown threshold.*
+
+Define CoS value for tunneled traffic (optional) 
+
+```
+Switch(config-if)# l2protocol-tunnel cos [0-7]
+```
+
+**Troubleshooting/Verification**
+
+```
+Switch# show l2protocol-tunnel
+```
+
+• Display the Layer 2 tunnel ports on the switch, including the protocols configured, the thresholds, and the counters. 
+
+```
+Switch# show l2protocol-tunnel summary
+```
+
+• Display only Layer 2 protocol summary information
+
+```	
+Switch# clear l2protocol-tunnel counters
+```
+
+• Clear the protocol counters on Layer 2 protocol tunneling ports.
+
+```
+Switch# errdisable recovery cause l2ptguard
+```
+
+• Enable auto-recovery of L2P tunneled ports which shutdown due to the maximum threshold being reached.
+
+```	
+Switch# show dot1q-tunnel
+```
+
+• Display IEEE 802.1Q tunnel ports on the switch.
+
+```	
+Switch# show vlan dot1q tag native
+```
+
+• Display the status of native VLAN tagging on the switch.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+VLAN Trunking Protocol (VTP) is a way to propagate VLANs across your LAN, instead of manually configuring VLANs on each device. 
+
+Terminology
+Domain: Common to all switches participating in VTP
+Server Mode: Generates and propagates VTP advertisements to clients; default mode on unconfigured switches
+Client Mode: Receives and forwards advertisements from servers; VLANs cannot be manually configured on switches in client mode.
+Transparent Mode: Forwards advertisements but does not participate in VTP; VLANs must be configured manually
+Pruning: VLANs not having any access ports on an end switch are removed from the trunk to reduce flooded traffic
+Revision numbers: VTP works off revision numbers, if VLAN information is changed on a VTP Server this information will be replicated to other switches that are in Server or Client mode.
+
+**VTP Configuration**
+
+```
+Switch(config)# vtp mode {server | client | transparent}
+Switch(config)# vtp domain <name>
+Switch(config)# vtp password <password>
+```
+
+• Provides MD5 hash that includes VTP updates and will only propagate VTP information to those devices with the same password. 
+
+```
+Switch(config)# vtp version {1 | 2}
+Switch(config)# vtp pruning
+```
+
+**VTP Pruning**
+
+```
+Switch(config)# vtp pruning {enable | disabled }
+```
+
+• This command can be entered on a VTP server to enable or disable VTP pruning and will be propagated across the LAN. 
+	
+```
+Switch(config)# clear vtp pruneeligible <vlan range>
+```
+
+• (Optional) Make specific VLANs pruning-ineligible on the device.  (By default, VLANs 2-1000 are pruning-eligible.)
+
+```
+Switch(config)# set vtp pruneeligible <vlan range>
+```
+
+• (Optional) Make specific VLANs pruning-eligible on the device.
+
+**Troubleshoot/Verification**
+
+```
+Switch# show vlan
+```
+
+• This command can be used to show configured VLANs, note if a port is missing it's in trunk mode.
+
+```	
+Switch# show interface trunk
+```
+
+• This command is used to display information related to configured trunk ports and to verify the correct VLANs are being pruned. 
+
+```	
+Switch# show vtp status
+```
+
+• Display the VTP switch configuration information, including VTP pruning.
+
+```	
+Switch# show vtp password
+```
+
+• The password is encrypted in MD5, this is the only way to view the VTP password. 
+
+```	
+Switch# show vtp counters
+```
+
+Display counters about VTP messages that have been sent and received. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## VLANs
+
+VLANs are in place for a number of reasons including but not limited to logically separating broadcast domains, security and separating different traffic types (such as data and voice).
+
+Normal Usable Range: 1-1001
+Extended Range: 1006-4094
+
+**VLAN Configuration**
+
+```
+Switch(config)#vlan 10
+Switch(config-vlan)#name Data
+Switch(config)#vlan 20
+Switch(config-vlan)#name Voice
+```
+
+**Troubleshooting**
+
+```
+Switch# delete flash: vlan.dat
+```
+
+• Clearing startup-config will not remove VLANs, it's stored in a protected file.  You will need to issue the command above to remove VLAN configuration and then reload the switch.
+
+```
+Switch# show vlan
+```
+
+• This command can be used to show configured VLANs, note if a port is missing it's in trunk mode.
+
+```	
+Switch# show interface trunk
+```
+
+• This command is used to display information related to configured Trunk ports.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Layer 3 Routing
+
+Layer 2 switching is hardware based, which means it uses the media access control address (MAC address) from the host's network interface cards (NICs) to decide where to forward frames. Switches use application-specific integrated circuits (ASICs) to build and maintain filter tables (also known as MAC address tables).
+
+The only difference between a Layer 3 switch and router is the way the administrator creates the physical implementation. Also, traditional routers use microprocessors to make forwarding decisions, and the switch performs only hardware-based packet switching. However, some traditional routers can have other hardware functions as well in some of the higher-end models. Layer 3 switches can be placed anywhere in the network because they handle high-performance LAN traffic and can cost-effectively replace routers. Layer 3 switching is all hardware-based packet forwarding, and all packet forwarding is handled by hardware ASICs. Layer 3 switches really are no different functionally than a traditional router and perform the same functions.
+
+This is important when it comes to reducing the amount of hardware needed to perform the same function within your network.  We could use the traditional method of intervlan routing using a router & switch (Router-on-a-Stick).  But in the case of a layer 3 switching, we would only need one device to perform the same task and it would likely have better performance due to its hardware based packet switching.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Router On A Stick
+
+Router-On-A-Stick refers to a common configuration to allow intervlan routing between VLANs.  
+
+The following scenario describes two VLANs (10 - Accounting & 20 - Management) who require 
+Intervlan routing using a layer 2 switch and router. 
+
+Create VLANs; assign hosts to an individual VLAN
+
+```
+Switch(config)#vlan 10
+Switch(config-vlan)#name Accounting
+Switch(config)#vlan 20
+Switch(config-vlan)#name Management
+Switch(config)# interface FastEthernet1/0/2
+Switch(config-if)# description HOST-IN-VLAN-10
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config)# interface FastEthernet1/0/3
+Switch(config-if)# description HOST-IN-VLAN-20
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+```
+
+Create Trunk interface to Router
+
+```
+Switch(config)# interface FastEthernet 0/1
+Switch(config-if)# description Trunk-To-Router
+Switch(config-if)# switchport trunk encapsulation dot1q
+Switch(config-if)# switchport mode trunk
+```
+
+*NOTE: Additional trunk options (DTP, Allowed VLANs etc.) has been removed from the configuration for brevity; view Switchport: Trunk configuration for details.* 
+
+Create Trunk interface to Switch; Subinterfaces corresponding to each VLAN.
+
+```
+Router(config)# interface fastethernet 0/0.10
+Router(config-if)# encapsulation dot1q 10
+Router(config-if)# ip address 10.10.10.1 255.255.255.0
+Router(config)# interface fastethernet 0/0.20
+Router(config-if)# encapsulation dot1q 20
+Router(config-if)# ip address 20.20.20.1 255.255.255.0
+```
+
+*NOTE: No IP configuration is done under the physical interface; only under subinterfaces.*
+
+**Troubleshooting/Verification**
+
+```
+Switch# show vlan
+```
+
+• Displays VLANs and what interfaces are associated with each VLAN; trunk ports will not be displayed.
+
+```	
+Switch# show interface trunk
+```
+
+• Displays information related to configured trunk ports (mode, encapsulation, VLANs and ports)
+
+```	
+Router# show ip route
+```
+
+Displays the traditional IP routing table
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
