@@ -1989,7 +1989,7 @@ Source routing is a technique whereby the sender of a packet can specify the rou
 ```
 Router(config)# no ip source-route
 ```
- 
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Proxy ARP
