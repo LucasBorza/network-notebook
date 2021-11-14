@@ -1,89 +1,92 @@
 ## Security Index
-
+- [Local Authentication](#local-authentication)
 - [SSH Secure Shell](#ssh-secure-shell)
 - [AAA Authentication Authorization Accounting](#aaa-authentication-authorization-accounting)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-- [](#)
-
-
-
-
+  - [Overriding Login Security Defaults](#overriding-login-security-defaults)
+- [Standard Access-Lists](#standard-access-lists)
+  - [ACL Logging](#acl-logging)
+- [Extended Access-Lists](#extended-access-lists)
+  - [IP Options](#ip-options)
+- [Time Based Access-Lists](#time-based-access-lists)
+- [Dynamic Access-Lists](#dynamic-access-lists)
+- [Reflexive Access-Lists](#reflexive-access-lists)
+- [CBAC Context-Based Access Control](#cbac-context-based-access-control)
+- [ZBF Zone Based Firewall](#zbf-zone-based-firewall)
+- [RITE IP Traffic Export](#rite-ip-traffic-export)
+- [IPS Intrustion Prevention System](#ips-intrusion-prevention-system)
+- [Virtual Private Networks VPN](#virtual-private-networks-vpn)
+  - [Remote Access VPN](#remote-access-vpn)
+  - [Site to Site VPN](#site-to-site-vpn)
+  - [GRE over IPsec VPN](#gre-over-ipsec-vpn)
+- [Disabling Services](#disabling-services)
+  - [Source Routing](#source-routing)
+  - [Proxy ARP](#proxy-arp)
+  - [IP Option](#ip-option)
+  - [IP Redirects](#ip-redirects)
+  - [IP Unreachable](#ip-unreachable)
+  - [Cisco Discovery Protocol CDP](#cisco-discovery-protocol-cdp)
+- [TCP Intercept](#tcp-intercept)
+- [Unicast Reverse Path Forwarding uRPF](#unicast-reverse-path-forwarding-urpf)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Local Authentication
 
-**Overview**
-
 Cisco IOS can be configured to require simple password protection for each of the three methods to access user mode. To do so, the **login** command is used to tell Cisco IOS to prompt the user for a password, and the **password** subcommand defines the password. Depending on the configuration mode implies for which of the three access methods the password should be required (console, aux, telnet).
 
  
-
+```
 Router>   \<-- User EXEC Mode
-
 Router#   \<-- Privileged EXEC mode
-
- 
+```
 
 **Local Authentication Configuration**
 
 **Console**
 
+```
 Router(config)#line console 0
-
 Router(config-line)#login
+```
 
 -   Login disabled on line 0, until \'password\' is set.
 
+```
 Router(config-line)#password *\<password>*
-
+```
  
 
 **Telnet**
 
+```
 Router(config)#line vty 0 15
+```
 
 -   0 - 15 means 16 telnet connections can be made to the device at a time.
 
+```
 Router(config-line)#login
+```
 
 -   Login disabled on line 0, until \'password\' is set.
 
+```
 Router(config-line)#password *\<password>*
-
+```
  
 
 **Aux**
 
+```
 Router(config)#line aux 0
-
 Router(config-line)#login
+```
 
 -   Login disabled on line 0, until \'password\' is set.
 
+```
 Router(config-line)#password *\<password>*
-
+```
  
 
 **NOTE:** These passwords are stored as clear text in the configuration, butt hey can be encrypted by including the **service password-encryption** global command.
@@ -97,14 +100,16 @@ Router(config-line)#password *\<password>*
 
 **No encryption**
 
+```
 Router(config)# enable password *\<password>*
-
+```
  
 
 **Encrypted in MD5-Hashed value**
 
+```
 Router(config)# enable secret *\<password>*
-
+```
  
 
 **User Accounts**
@@ -112,34 +117,33 @@ Router(config)# enable secret *\<password>*
 This allows for local authentication using a defined username and password. Encryption is done in the exact same manner as the enable password.
 
  
-
 **No encryption**
 
+```
 Router(config)# username *\<name>* password *\<password>*
 
+```
  
 
 **Encrypted in MD5-Hashed value**
 
+```
 Router(config)# username *name>* secret *\<password>*
 
+```
  
 
 **NOTE:** Running-configuration will show a number behind the scrambled password, this is used to signify the encryption level.
 
 -   7 for service password-encryption
 
--   5 for MD5-hased value
-
->  
+-   5 for MD5-hased value 
 
 **Troubleshooting/Verification**
 
 Router# show run
 
 -   Displays running-configuration; used to confirm encryption techniques.
-
- 
 
  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -165,18 +169,21 @@ Telnet is enabled by default, but configuring even a basic SSH server requires s
 
 **Configure a hostname**
 
+```
 NoName(config)# hostname Router
-
->  
+```
 
 **Configure domain name**
 
+```
 Router(config)# ip domain-name *\<domain.name>*\
- 
+```
 
 **Tell the router or switch to generate the Rivest, Shamir, and Adelman (RSA) keys that will be used to encrypt the session.**
 
+```
 Router(config)# crypto key generate rsa
+```
 
 -   When it prompts for the modulus size, choose a range between 360 and 2048. Recommended: 1024.
 
@@ -184,44 +191,46 @@ Router(config)# crypto key generate rsa
 
 **Specify the SSH version, if you want to use version 2.**
 
+```
 Router(config)# ip ssh version \[1 \| **2**\]
-
+```
  
 
 **Disable Telnet on the VTY lines.**
-
-Router(config)#line vty 0 4
-
+```
+Router(config)#line vty 0 4\
 Router(config-line)#transport input none
-
+```
  
 
 **Enable SSH on the VTY lines.**
 
+```
 Router(config)#line vty 0 4
-
 Router(config-line)# transport input ssh
-
-!
-
 Router(config-line)# transport output ssh
+```
 
 -   This command allows for you to allow access telnet or ssh from the device itself to other connecting devices.
 
 **\
 Create Local User Account (or use AAA)\
-**Router(config)# username \<username> privilege 15 password 0 \<password>
 
- 
+```
+**Router(config)# username \<username> privilege 15 password 0 \<password>
+```
 
 **Troubleshooting/Verification**\
+
+```
 Router# show ip ssh
+```
 
 -   Displays current SSH settings
 
->  
-
+```
 Router# show ssh
+```
 
 -   Displays current SSH sessions/connections.
 
@@ -275,17 +284,18 @@ The term authentication, authorization, and accounting (AAA) refers to a variety
 4.  Apply Authentication List (VTY, Console Lines)
 
  
-
+```
 **Enable AAA\
 **Router(config)# aaa new-model
+```
 
--   Enables AAA and removes previous authentication methods until the next command is entered.
-
->  
+-   Enables AAA and removes previous authentication methods until the next command is entered.  
 
 **Create local database user**
 
+```
 Router(config)# username *\<username>* privilege 15 password 0 *\<password>*
+```
 
 -   As shown in the basic configuration guide, this adds a new user to the local database for authentication. This is required if a RADIUS or TACACS+ server is not in use.
 
@@ -293,20 +303,23 @@ Router(config)# username *\<username>* privilege 15 password 0 *\<password>*
 
 **Define RADIUS or TACACS+** (Optional)
 
+```
 Router(config)# radius-server host x.x.x.x \[auth-port ***xx***\] \[acct-port ***xx***\]
+```
 
 -   Optionally define ports other than the defaults for RADIUS authentication and accounting.
 
+```
 Router(config)# radius-server key *\<key>*
-
-!\
 Router(config)# tacacs-server host x.x.x.x
-
 Router(config)# tacacs-server key *\<key>*
+```
 
 **Create authentication list**
 
+```
 Router(config)# aaa authentication login default *\[authentication methods\]*
+```
 
 -   Define list of authentication methods that should be queried in order.
 
@@ -314,11 +327,12 @@ Router(config)# aaa authentication login default *\[authentication methods\]*
 
 **Example**
 
+```
 Router(config)# aaa authentication login default group radius local
+```
 
 -   This configuration specifies for a user to be first authenticated using a Radius server. If the server does not respond or is offline the user will be authenticated using the local database.
 
->  
 
 **Authentication Methods**
 
@@ -342,37 +356,35 @@ Router(config)# aaa authentication login default group radius local
 
 **Apply authentication lists to the console and VTY lines**
 
+```
 Router(config)# line con 0
-
 Router(config-line)# login authentication default
-
-!
-
 Router(config)# line vty 0 4
-
 Router(config-line)# login authentication default
+```
 
 -   The above commands applies the AAA authentication method to the interfaces. Users who not attempt to access the console port or telnet/SSH lines will be prompted for a user a password.
-
->  
-
+ 
 **Optional Parameters**
 
 **RADIUS**
 
+```
 Router(config)# radius-server retransmit *\<retries>*
+```
 
 -   Specifies the number of times the router transmits each RADIUS request to the server before giving up (the default is three).
 
  
-
+```
 Router(config)# radius-server timeout *\<seconds>*
+```
 
 -   Specifies the number of seconds a router waits for a reply from a RADIUS request before retransmitting the request.
 
- 
-
+```
 Router(config)# radius-server deadtime *\<minutes>*
+```
 
 -   Specifies the number of minutes a RADIUS server, which is not responding to authentication requests, is passed over by requests for RADIUS authentication.
 
@@ -380,21 +392,23 @@ Router(config)# radius-server deadtime *\<minutes>*
 
 **TACACS+**
 
+```
 Router(config)# tacacs-server timeout
+```
 
 -   Specifies the number of seconds a router waits for a reply from a RADIUS request before retransmitting the request.
 
  
-
+```
 Router (config)#tacacs-server last-resort {password \| succeed}
+```
 
 -   Defines TACACS action if no server responds
 
 -   Password: The \'enable\' password must be provided
 
 -   Succeed: Access to privileged level is granted
-
->  
+  
 
 **Troubleshooting/Verification**
 
@@ -444,11 +458,9 @@ Router#show radius statistics x.x.x.x
 
 -   Displays RADIUS statistics for a specific server
 
- 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
 ## Overriding Login Security Defaults
-
-**Overview**
 
 The console, vty, and aux (routers only) lines can override the use of the default login authentication methods in favor of using AAA.
 
@@ -534,25 +546,15 @@ Router(config-line)# login authentication *for-aux*
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Standard Access-Lists
-
-Saturday, May 28, 2011
-
-12:23 PM
-
- 
-
-**Overview**
+## Standard Access-Lists
 
 Standard Access Control Lists (ACL) are Cisco IOS-based commands used to filter packets on Cisco routers based on the source IP Address of the packet. Access-Lists are not only used for filtering, but can also be used to identify traffic to be manipulated or used in many other technologies within the Cisco IOS (e.g. NAT, QoS etc.)
 
- 
 
 Cisco IOS processes the Access Control Entries (ACEs) of an ACL sequentially, either permitting or denying a packet based on the first ACE matched by that packet in the ACL. For an individual ACE, all the configured values must match before the ACE is considered a match.
 
- 
 
 **Wildcard Masks**
 
@@ -655,17 +657,9 @@ Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number
 
 -   Redefine sequence numbers for a crowded ACL
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-ACL Logging
-
-Saturday, January 01, 2011
-
-5:06 PM
-
- 
-
-**Overview**
+## ACL Logging
 
 Logging-enabled access control lists (ACLs) provide insight into traffic as it traverses the network or is dropped by network devices.
 
@@ -699,17 +693,9 @@ Router# show ip access-lists
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Extended Access-Lists
-
-Saturday, May 28, 2011
-
-12:23 PM
-
- 
-
-**Overview**
+## Extended Access Lists
 
 As opposed to Standard ACLs, Extended ACLs have the ability to filter packets based on source and destination IP addresses and provide a higher level of granularity by having the ability to filter by protocol, ports and [IP Options].
 
@@ -810,17 +796,9 @@ Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number
 
 -   Redefine sequence numbers for a crowded ACL
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-IP Options
-
-Saturday, May 28, 2011
-
-12:25 PM
-
- 
-
-**Overview**
+## IP Options
 
 IP uses four key mechanisms in providing its service: Type of Service, Time to Live, Options, and Header Checksum.
 
@@ -907,19 +885,9 @@ Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number
 
 -   Redefine sequence numbers for a crowded ACL
 
- 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
- 
-
-Time Based Access-Lists
-
-Saturday, May 28, 2011
-
-12:24 PM
-
- 
-
-**Overview**
+## Time Based Access Lists
 
 Time Base Access-lists provide a method to enable an access-list only during specified times.
 
@@ -982,17 +950,9 @@ Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Dynamic Access-Lists
-
-Saturday, May 28, 2011
-
-12:24 PM
-
- 
-
-**Overview**
+## Dynamic Access-Lists
 
 Access lists are normally used to filter traffic at the packet level. In other words, when a connection is attempted through a router interface, packet headers are inspected for prohibited IP addresses or application port numbers, and traffic is passed or blocked.
 
@@ -1104,17 +1064,9 @@ Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Reflexive Access-Lists
-
-Saturday, May 28, 2011
-
-12:24 PM
-
- 
-
-**Overview**
+## Reflexive Access-Lists
 
 Reflexive ACLs allow IP packets to be filtered based on upper-layer session information. They are generally used to allow outbound traffic and to limit inbound traffic in response to sessions that originate inside the router.
 
@@ -1126,9 +1078,7 @@ Reflexive ACLs can be defined only with extended named IP ACLs. They cannot be d
 
 A typical approach to network perimeter security is to allow outbound traffic not explicitly denied, and to deny inbound traffic unless it is explicitly allowed. Although simple in concept, this approach requires significant considerations regarding the return path of internally initiated sessions. Consider the following scenario:
 
-![][1]
-
- 
+![reflexiveaccesslist1.png](/Images/reflexiveaccesslist1.png)
 
 **Scenario**
 
@@ -1152,23 +1102,24 @@ To employ reflexive ACLs, three access lists are actually needed: one for inboun
 
 **Create an outbound ACL**
 
+```
 Router(config)# ip access-list extended *Egress*\
 Router(config-ext-nacl)# permit ip any any reflect *Mirror*\
-!
+```
 
 **Apply to interface (outbound)**
 
+```
 Router(config-ext-nacl)# interface f0/1
-
 Router(config-if)# ip access-group out *Egress*
-
+```
  
 
 Any packet matched by Egress will be reflected into our reflexive ACL, named Mirror. Since Egress matches all IP traffic, we reflect entries for TCP, UDP, and ICMP. If we wanted, we could have specified only TCP, for example, to only match TCP traffic. While TCP sessions are relatively simple to track, IOS can also roughly track UDP and ICMP \"sessions,\" even though these aren\'t true session-oriented protocols.
 
  
 
-![][2]
+![reflexiveaccesslist2.png](/Images/reflexiveaccesslist2.png)
 
  
 
@@ -1195,7 +1146,7 @@ Router(config-if)# ip access-group in Ingress
 
  
 
-![][3]
+![reflexiveaccesslist3.png](/Images/reflexiveaccesslist3.png)
 
  
 
@@ -1240,17 +1191,9 @@ Router# show ip access-lists interface *\<interface>*
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-(CBAC) Context-Based Access Control
-
-Saturday, May 28, 2011
-
-12:25 PM
-
- 
-
-**Overview**
+## CBAC Context Based Access Control
 
 The Context-Based Access Control (CBAC) feature of the Cisco IOS® Firewall Feature Set actively inspects the activity behind a firewall. CBAC specifies what traffic needs to be let in and what traffic needs to be let out by using access lists (in the same way that Cisco IOS uses access lists). However, CBAC access lists include ip inspect statements that allow the inspection of the protocol to make sure that it is not tampered with before the protocol goes to the systems behind the firewall.
 
@@ -1260,11 +1203,8 @@ The Context-Based Access Control (CBAC) feature of the Cisco IOS® Firewall Feat
 
  
 
-![][4]
+![contextbasedaccesscontrol.png](/Images/contextbasedaccesscontrol.png)
 
- 
-
- 
 
 **Identify traffic you want to let out**
 
@@ -1362,17 +1302,9 @@ Router# show ip inspect sessions
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-(ZBF) Zone Based Firewall
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## ZBF Zone Based Firewall
 
 Zone-Based Firewall (ZBF) is similar to the concept used by appliance firewalls (ASA). Router interfaces are places into security zones. Traffic can travel freely between interfaces in the same zone, but is blocked by default from traveling between zones. Traffic is also blocked between interfaces that have been assigned to a security zone and those that have not. You must explicitly apply a policy to allow traffic between zones. Zone policies are configured using the Class-Based Policy Language (CPL), which is similar to the Modular QoS CLI (MQC) in its use of class maps and policy maps. Class maps let you configure highly granular policies if needed. A new class and policy map type, the *inspect* type, is introduced for use with zone-based firewalls.
 
@@ -1394,7 +1326,7 @@ ZBF allows the inspection and control of multiple protocols, including the follo
 
 **Zone-Based Firewall Configuration**
 
-[![][5]][6]
+![zonebasedfirewall.png](/Images/zonebasedfirewall.png)
 
 For this example, we will pretend the R1 device is in the Inside, private, protected network. R3 represents a device in the Outside, public, unprotected Internet. R2 in the middle will be our IOS Zone-Based Firewall. We want to inspect HTTP, HTTPS and FTP traffic sourced from the Inside network traveling to the Outside network, and we want to dynamically permit return traffic back in from the Outside based on session information.
 
@@ -1471,17 +1403,9 @@ Router# show policy-map type inspect zone-pair
 
  
 
- 
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-(RITE) IP Traffic Export
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## RITE IP Traffic Export
 
 When it comes to capturing packets traversing an Ethernet switch, Cisco\'s Switched Port Analyzer (SPAN) feature is an invaluable tool. However, replicating traffic across router interfaces poses a problem: SPAN can\'t be used on routers, as the underlying hardware doesn\'t support it.
 
@@ -1495,7 +1419,7 @@ Cisco\'s solution is IP traffic export (sometimes referred to as Router IP Traff
 
  
 
-![][7]
+![iptrafficexport.png](/Images/iptrafficexport.png)
 
  
 
@@ -1579,17 +1503,9 @@ Router# show ip traffic-expert
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-(IPS) Intrusion Prevention System
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## IPS Intrusion Prevention System
 
 Cisco IOS Intrusion Prevention System (IPS) is a feature that you can enable on Cisco routers. It provides Deep Packet Inspection (DPI) of traffic transiting the router. This is especially useful in branch offices to catch worms, viruses, and other exploits before they leave the local site. Thus, the attack is contained, and WAN bandwidth is not used needlessly. Routers with the security image come with a package of signature files loaded in their flash. Updates to signature packages are posted on Cisco.com, where they can be downloaded to a TFTP server and then installed on the router. You can also configure the router to download and install new signatures on a regular basis. The number of signature files that a router supports depends on the amount of its memory.
 
@@ -1686,17 +1602,9 @@ Router# show ip ips configuration
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Virtual Private Networks (VPN)
-
-Wednesday, June 22, 2011
-
-8:53 PM
-
- 
-
-**Overview**
+## Virtual Private Networks VPN
 
 Improve security and maintain productivity with Cisco VPN technology. Cisco VPNs help securely connect offices, remote users, and business partners. VPNs have become the primary solution for remote connectivity for organizations of all sizes, using affordable, third-party Internet access.
 
@@ -1712,17 +1620,9 @@ Improve security and maintain productivity with Cisco VPN technology. Cisco VPNs
 
 **IPsec over GRE VPN -** Extending a VPN Site-to-Site connection (GRE) Generic Router Encapsulation allows for additional protocols to pass through the VPN including but not limited to routing protocols and enables communication over a secure VPN tunnel.
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Remote Access (VPN)
-
-Tuesday, June 21, 2011
-
-6:53 PM
-
- 
-
-**Overview**
+## Remote Access VPN
 
 Remote access VPNs extend almost any data, voice, or video application to the remote desktop, emulating the main office desktop. With this VPN, you can provide highly secure, customizable remote access to anyone, anytime, anywhere, with almost any device.
 
@@ -1730,8 +1630,7 @@ Remote access VPNs extend almost any data, voice, or video application to the re
 
 **Remote Access (VPN) Configuration**
 
-![][8]
-
+![remoteaccess.png](/Images/remoteaccess.png)
  
 
 **Configure ISAKMP Policy (IKE Phase 1)**
@@ -1906,24 +1805,16 @@ Router# show crypto map
 
 -   Displays the crypto map configuration
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Site-to-Site (VPN)
-
-Tuesday, June 21, 2011
-
-6:53 PM
-
- 
-
-**Overview**
+## Site to Site VPN
 
 Site-to-site VPNs provide an Internet-based WAN infrastructure to extend network resources to branch offices, home offices, and business partner sites. All traffic between sites is encrypted using IPsec protocol and integrates network features such as routing, quality of service, and multicast support.
 
 **\
 Site-to-Site VPN Configuration**
 
-![][8]
+![remoteaccess.png](/Images/remoteaccess.png)
 
  
 
@@ -2071,17 +1962,9 @@ Router# debug crypto ipsec
 
 -   This command allows you to observe Phase 2 IPSec negotiations.
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-GRE over IPsec (VPN)
-
-Tuesday, June 21, 2011
-
-6:53 PM
-
- 
-
-**Overview**
+# GRE over IPsec VPN
 
 We can encrypt our GRE tunnels using IPsec, and it is also possible to have GRE over IPSEC, in other words: Sending GRE header inside the IPsec transport headers. (transport mode instead of tunnel mode)
 
@@ -2093,7 +1976,7 @@ What we are trying to cover in this section is IPsec over GRE tunnels (as a tran
 
 **GRE over IPsec Configuration**
 
-![][8]
+![remoteaccess.png](/Images/remoteaccess.png)
 
  
 
@@ -2301,17 +2184,9 @@ Router# debug crypto ipsec
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Disabling Services
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## Disabling Services
 
 The three functional planes of a network, the management plane, control plane, and data plane, each provide different functionality that needs to be protected. There are several services that can be disabled in order to help secure a Cisco IOS network device.
 
@@ -2331,17 +2206,9 @@ The three functional planes of a network, the management plane, control plane, a
 
 Keep in mind that there is no full proof network security with anything technological. Best practice is to disable any services that are not absolutely necessary.
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Source Routing
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## Source Routing
 
 Source routing is a technique whereby the sender of a packet can specify the route that a packet should take through the network. As a packet travels through the network, each router will examine the destination IP address and choose the next hop to forward the packet to. In source routing, the \"source\" (i.e., the sender) makes some or all of these decisions. Attackers can use source routing to probe the network by forcing packets into specific parts of the network. Using source routing, an attacker can collect information about a network s topology, or other information that could be useful in performing an attack. During an attack, an attacker could use source routing to direct packets to bypass existing security restrictions.
 
@@ -2350,16 +2217,9 @@ Source routing is a technique whereby the sender of a packet can specify the rou
 Router(config)# no ip source-route
 
  
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Proxy ARP
-
-Saturday, May 28, 2011
-
-12:27 PM
-
- 
-
-**Overview**
+## Proxy ARP
 
 Proxy ARP (Address Resolution Protocol) is the technique in which one host, usually a router, answers ARP requests intended for another machine. By \"faking\" its identity, the router accepts responsibility for routing packets to the \"real\" destination. Proxy ARP can help machines on a subnet reach remote subnets without the need to configure routing or a default gateway.
 
@@ -2385,17 +2245,9 @@ Router(config)# interface *\[interface\]*
 
 Router(config-if)# no ip proxy-arp
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-IP Options
-
-Saturday, May 28, 2011
-
-12:27 PM
-
- 
-
-**Overview**
+## IP Option
 
 The IP Options Selective Drop feature enables you to protect your network routers in the event of a
 
@@ -2421,17 +2273,9 @@ The IP Options Selective Drop feature provides the ability to drop packets with 
 
 Router(config)# ip options drop
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-IP Redirects
-
-Saturday, May 28, 2011
-
-8:27 PM
-
- 
-
-**Overview**
+## IP Redirects
 
 ICMP supports IP traffic by relaying information about paths, routes, and network conditions. ICMP redirect messages instruct an end node to use a specific router as its path to a particular destination. In a properly functioning IP network, a router will send redirects only to hosts on its own local subnets, no end node will ever send a redirect, and no redirect will ever be traversed more than one network hop. However, an attacker may violate these rules; some attacks are based on this. Disabling ICMP redirects will cause no operational impact to the network, and it eliminates this possible method of attack.
 
@@ -2443,17 +2287,9 @@ Router(config)# interface *\[interface\]*
 
 Router(config-if)# no ip redirects
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-IP Unreachable
-
-Saturday, May 28, 2011
-
-8:01 PM
-
- 
-
-**Overview**
+## IP Unreachable
 
 ICMP supports IP traffic by relaying information about paths, routes, and network conditions. ICMP host unreachable messages are sent out if a router receives a nonbroadcast packet that uses an unknown protocol, or if the router receives a packet that it is unable to deliver to the ultimate destination because it knows of no route to the destination address. These messages can be used by an attacker to gain network mapping information
 
@@ -2465,17 +2301,9 @@ Router(config)# interface *\[interface\]*
 
 Router(config-if)# no ip unreachables
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-IP Directed Broadcast
-
-Saturday, May 28, 2011
-
-8:23 PM
-
- 
-
-**Overview**
+## IP Directed Broadcast
 
 An IP directed broadcast is a datagram sent to the broadcast address of a subnet to which the sending machine is not directly attached. The directed broadcast is routed through the network as a unicast packet until it arrives at the target subnet, where it is converted into a link-layer broadcast.
 
@@ -2495,17 +2323,9 @@ Router(config)# interface *\[interface\]*
 
 Router(config-if)# no ip directed-broadcast
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Cisco Discovery Protocol (CDP)
-
-Saturday, May 28, 2011
-
-12:27 PM
-
- 
-
-**Overview**
+## Cisco Discovery Protocol (CDP)
 
 Cisco Discover Protocol or CDP is a Cisco-proprietary protocol that runs on all Cisco products. CDP allows devices to learn about neighboring devices (the ones attached directly to the switch) including information about their platform, IP address, the version of IOS or other OS, VLAN membership, etc. This can be helpful information when troubleshooting network issues, it can also provide an attacker valuable information about the layout of your network. Other vulnerabilities include a denial of service attack in which CDP packets are generated, flooding the network.
 
@@ -2527,17 +2347,9 @@ Router(config-if)# no cdp enable
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-TCP Intercept
-
-Saturday, May 28, 2011
-
-12:26 PM
-
- 
-
-**Overview**
+## TCP Intercept
 
 The TCP intercept feature implements software to protect TCP servers from TCP SYN-flooding attacks, which are a type of denial-of-service attack.
 
@@ -2671,17 +2483,9 @@ Router# show tcp intercept statistics
 
  
 
- 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Unicast Reverse Path Forwarding (uRPF)
-
-Saturday, May 28, 2011
-
-12:29 PM
-
- 
-
-**Overview**
+## Unicast Reverse Path Forwarding uRPF
 
 Network administrators can use Unicast Reverse Path Forwarding (Unicast RPF) to help limit the malicious traffic on an enterprise network. This security feature works by enabling a router to verify the reachability of the source address in packets being forwarded. This capability can limit the appearance of spoofed addresses on a network. If the source IP address is not valid, the packet is discarded. Unicast RPF works in one of three different modes: strict mode, loose mode, or VRF mode. Note that not all network devices support all three modes of operation.
 
@@ -2732,16 +2536,3 @@ Router# show cef interface *\[interface\]*
 Router# show ip verify statistics
 
 -   Displays statistics about Unicast RPF.
-
-  [AAA]: onenote:Security.one#(AAA)%20Authentication,%20Authorization,%20Accounting&section-id={50D4DAED-AE8D-4511-A4F8-795ADDBB568E}&page-id={2C67E213-ADE3-45B1-83D3-FC43D067A8C5}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE
-  [IP Options]: onenote:Security.one#IP%20Options&section-id={50D4DAED-AE8D-4511-A4F8-795ADDBB568E}&page-id={E1DB3394-9EDF-479D-B658-EF517E713CEA}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE
-  [Overriding Login Security Defaults]: onenote:Security.one#Overriding%20Login%20Security%20Defaults&section-id={50D4DAED-AE8D-4511-A4F8-795ADDBB568E}&page-id={C838E669-9B44-493E-9222-03CA88B05104}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE
-  [1]: ''/media/image1.png
-  [2]: ''/media/image2.png
-  [3]: ''/media/image3.png
-  [4]: ''/media/image4.png
-  [5]: ''/media/image5.png
-  [6]: http://blog.internetworkexpert.com/wp-content/uploads/2009/08/zone.png
-  [7]: ''/media/image6.png
-  [8]: ''/media/image7.png
-  [GRE Tunnel]: onenote:IP%20Routing.one#GRE%20Tunneling&section-id={212B437F-A376-49D1-B39F-0186D40662A3}&page-id={9298E740-D94E-4E54-815D-E38FC0C5101C}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE
