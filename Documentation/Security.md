@@ -412,49 +412,54 @@ Router (config)#tacacs-server last-resort {password \| succeed}
 
 **Troubleshooting/Verification**
 
+```
 Router#show aaa local user locked
+```
 
 -   Displays a list of all locked-out users
 
->  
-
+```
 Router#clear aaa local user fail-attempts *\[user1\]*
+```
 
 -   Clears all unsuccessful login attempts for *user1*
 
->  
-
+```
 Router#show aaa sessions
+```
 
 -   Displays total AAA sessions since last reload
+  
 
->  
-
+```
 Router#show aaa user *\[ID/all\]*
+```
 
 -   Displays all AAA users or specific users based on local ID
+  
 
->  
-
+```
 Router#show users
+```
 
 -   Displays the users who are logged in
+  
 
->  
-
+```
 Router#show tacacs
+```
 
 -   Displays the TACACS+ server configuration for all servers
 
->  
-
+```
 Router#show radius-server group
+```
 
 -   Displays RADIUS server groups
 
->  
-
+```
 Router#show radius statistics x.x.x.x
+```
 
 -   Displays RADIUS statistics for a specific server
 
@@ -492,15 +497,18 @@ Configured in a similar manner to the authentication methods list as described w
 
 **Syntax**
 
+```
 Router(config)# aaa authentication login *\<name> \[authentication methods\]*
-
+```
  
 
 **Console, VTY, Aux Examples**
 
 **Create name authentication method list (for console)**
 
+```
 Router(config)# aaa authentication login *for-console* group radius line
+```
 
 -   Try the RADIUS servers, and use the line password if no response.
 
@@ -508,15 +516,17 @@ Router(config)# aaa authentication login *for-console* group radius line
 
 **Apply to line console**
 
+```
 Router(config)# line con 0
-
 Router(config-line)# login authentication *for-console*
-
+```
  
 
 **Create name authentication method list (for vty)**
 
+```
 Router(config)# aaa authentication login *for-vty* group radius local
+```
 
 -   Try the RADIUS servers, and use the local usernames/passwords if no response.
 
@@ -524,15 +534,17 @@ Router(config)# aaa authentication login *for-vty* group radius local
 
 **Apply to vty lines**
 
+```
 Router(config)# line vty 0 4
-
 Router(config-line)# login authentication *for-vty*
-
+```
  
 
 **Create name authentication method list (for aux)**
 
+```
 Router(config)# aaa authentication login *for-aux* group radius radius
+```
 
 -   Try the RADIUS servers, and do not authenticate if no response.
 
@@ -540,11 +552,10 @@ Router(config)# aaa authentication login *for-aux* group radius radius
 
 **Apply to vty lines**
 
+```
 Router(config)# line aux 0
-
 Router(config-line)# login authentication *for-aux*
-
- 
+```
 
  ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -561,8 +572,9 @@ Cisco IOS processes the Access Control Entries (ACEs) of an ACL sequentially, ei
 A wildcard mask can be thought of as a subnet mask, with ones and zeros inverted; for example, a wildcard mask of 0.0.0.255 corresponds to a subnet mask of 255.255.255.0. A wildcard mask is usually used in combination with an IP address. For example, in a standard ACL, a statement like the following:
 
  
-
+```
 Router(config)# access-list 10 permit 10.0.3.0 0.0.0.255
+```
 
 -   allows data from subnet 10.0.3.0/24 to pass, that is, the first three bytes must match exactly, whereas all the bits in the fourth octet can take on any value.
 
@@ -593,7 +605,9 @@ Wildcard masks are used in situations where the subnet mask may not apply. For e
 
 **Legacy Syntax**
 
+```
 Router(config)# access-list \<number> {permit \| deny} *\<source>* \[log\]
+```
 
 **Modern Syntax**
 
@@ -605,15 +619,17 @@ Router(config)# access-list \<number> {permit \| deny} *\<source>* \[log\]
 
 >  
 
+```
 Router(config)# ip access-list standard {\<number> \| \<name>} \[\<sequence>\] {permit \| deny} *\<source>* \[log\]
-
+```
  
 
 **Apply ACL to interface**
 
+```
 Router(config)# interface \[interface\]
-
 Router(config-if)# ip access-group {*\<number>* \| *\<name>*} {in \| out}
+```
 
 -   You can only apply a single ACL, one for both inbound and outbound per interface.
 
@@ -623,7 +639,9 @@ Router(config-if)# ip access-group {*\<number>* \| *\<name>*} {in \| out}
 
 -   Used to control access to VTY lines using a standard or extended ACL.
 
+```
 Router(config-line)# access-class \[*\<number>* \| *\<name>*\] \[in \| out\]
+```
 
 >  
 
@@ -631,29 +649,40 @@ Router(config-line)# access-class \[*\<number>* \| *\<name>*\] \[in \| out\]
 
 Comments/Remarks make Access-Lists easier to understand and can often explain meticulous to read ACL configurations.
 
-**Syntax**\
-Router(config)# ip access-list {standard \| extended} \<access-list-name> remark *\"comment goes here, without quotes\"*
+**Syntax**
 
-**Troubleshooting/Verification\
-**Router# show access-lists \[*\<number>* \| *\<name>*\]
+```
+Router(config)# ip access-list {standard \| extended} \<access-list-name> remark *\"comment goes here, without quotes\"*
+```
+
+**Troubleshooting/Verification
+
+```
+Router# show access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
 >  
 
+```
 Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number *\<increment>*
+```
 
 -   Redefine sequence numbers for a crowded ACL
 
@@ -671,7 +700,9 @@ The **log** and **log-input** options apply to an individual ACE and cause packe
 
 **ACL Logging Configuration**
 
+```
 Router(config)# ip access-list standard LOG-TEST deny any **\[*log \| log-input*\]**
+```
 
 -   Enable Log or Log-input
 
@@ -679,7 +710,9 @@ Router(config)# ip access-list standard LOG-TEST deny any **\[*log \| log-input*
 
 **Verification**
 
+```
 Router(config)# logging on
+```
 
 -   Enable logging to all enabled destinations (e.g. console, vty etc.)
 
@@ -687,7 +720,9 @@ Router(config)# logging on
 
 >  
 
+```
 Router# show ip access-lists
+```
 
 -   Displays access-lists and if log command is used the number of matches to the specific ACL entry.
 
@@ -745,8 +780,9 @@ Extended ACLs options have the ability to match based on port.
 
 **Legacy Syntax**
 
+```
 Router(config)# access-list \<number> {permit \| deny} \<protocol> \<source> \[\<ports>\] \<destination> \[\<ports>\]
-
+```
  
 
 **Modern Syntax**
@@ -759,40 +795,50 @@ Router(config)# access-list \<number> {permit \| deny} \<protocol> \<source> \[\
 
 >  
 
+```
 Router(config)# ip access-list extended {\<number> \| \<name>} \[\<sequence>\] {permit \| deny} \<protocol> \<source> \[\<ports>\] \<destination> \[\<ports>\] \[\<options>\]
-
+```
  
 
 **Apply ACL to interface**
 
+```
 Router(config)# interface \[interface\]
-
 Router(config-if)# ip access-group {*\<number>* \| *\<name>*} {in \| out}
+```
 
 -   You can only apply a single ACL, one for both inbound and outbound per interface.
 
  
 
 **Troubleshooting/Verification\
-**Router# show access-lists *\<number>*
+
+```
+Router# show access-lists *\<number>*
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
 >  
 
+```
 Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number *\<increment>*
+```
 
 -   Redefine sequence numbers for a crowded ACL
 
@@ -808,9 +854,8 @@ The Options, commonly referred to as IP Options, provide for control functions t
 
 **Common IP Options**
 
-  ------------------------------------------------------------------------
   **dscp** *\<DSCP>*       Match the specified IP DSCP
-  ------------------------ -----------------------------------------------
+
   **Fragments**            Check non-initial fragments
 
   **option** *\<option>*   Match the specified IP option
@@ -818,15 +863,14 @@ The Options, commonly referred to as IP Options, provide for control functions t
   **precedence** *{0-7}*   Match the specified IP precedence
 
   **ttl** *\<count>*       Match the specified IP time to live (TTL)
-  ------------------------------------------------------------------------
 
 >  
 
 **TCP Options**
 
-  -----------------------------------------------------------------------
+
   ack                Match ACK flag
-  ------------------ ----------------------------------------------------
+
   fin                Match FIN flag
 
   psh                Match PSH flag
@@ -838,50 +882,55 @@ The Options, commonly referred to as IP Options, provide for control functions t
   urg                Match URG flag
 
   established        Match packets in an established session.
-  -----------------------------------------------------------------------
-
- 
 
 **IP Options Configuration**
 
 The ACL Support for Filtering IP Options feature can be used only with named, extended ACLs.
 
- 
-
+```
 Router(config)# ip access-list extended {\<number> \| \<name>} \[\<sequence>\] {permit \| deny} \<protocol> \<source> \[\<ports>\] \<destination> \[\<ports>\] \[\<options>\]
-
+```
  
 
 **Example**
 
+```
 Router(config)# ip access-list extended mylist1
-
 Router(config-ext-nacl)# deny ip any any option traceroute
+```
 
 -   Denies any packet that contains the traceroute IP option
 
 >  
 
 **Troubleshooting/Verification\
-**Router# show access-lists \[*\<number>* \| *\<name>*\]
+
+```
+Router# show access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
 >  
 
+```
 Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number *\<increment>*
+```
 
 -   Redefine sequence numbers for a crowded ACL
 
@@ -899,15 +948,16 @@ Time Base Access-lists provide a method to enable an access-list only during spe
 
 **Define name and time/date**
 
+```
 Router(config)#time-range *\<name>*
-
 Router(config-time-range)# absolute \[**start** *time date*\] \[**end** *time date*\]
+```
 
 -   Absolute time/date; used to specify a specific time and date that an ACL will be applied.
 
-!
-
+```
 Router(config-time-range)# periodic *days-of-the-week* hh:mm **to** *days-of-the-week* hh:mm
+```
 
 -   Periodic time/date; used to specify a periodic time and date that an ACL will be applied.
 
@@ -918,33 +968,40 @@ Router(config-time-range)# periodic *days-of-the-week* hh:mm **to** *days-of-the
 In order for a time range to be applied, you must reference it by name in a feature that can implement time ranges
 
  
-
+```
 Router(config)# ip acess-list extended *time-range-specified*
-
 Router(config-ext-nacl)# {permit \| deny} \<protocol> \<source> \[\<ports>\] \<destination> \[\<ports>\] **time-range** *\<name>*
-
+```
  
 
 **Troubleshooting/Verification\
-**Router# show access-lists *\<number>*
+
+```
+Router# show access-lists *\<number>*
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
 >  
 
+```
 Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number *\<increment>*
+```
 
 -   Redefine sequence numbers for a crowded ACL
 
@@ -980,10 +1037,10 @@ The following sequence of code snippets shows how lock-and-key could be configur
 
 **Create Dynamic ACL**
 
+```
 Router(config)# access-list 103 permit tcp any host 209.198.207.2 eq telnet
-
 Router(config)# access-list 103 dynamic TEMP timeout 60 permit ip any any
-
+```
  
 
 In the following statement, the first entry of access list 103 allows only Telnet connections into the router. The second entry of access list 103 is ignored until lock-and-key is triggered whenever a Telnet connection has been established in the router. The keyword **dynamic** defines access list 103 as a dynamic (lock-and-key) list.
@@ -999,12 +1056,11 @@ This is the key juncture. If so configured, an attempted Telnet connection to th
 
 **Apply Dynamic ACL to Interface**
 
+```
 Router(config)# interface fastethernet0/0
-
 Router(config)# ip address 209.198.207.2 255.255.255.0
-
 Router(config-if)# ip access-group 103 in
-
+```
  
 
 Finally, an **autocommand** statement creates a temporary inbound access list entry (named TEMP in the previous dynamic ACL configuration) at the network interface FastEthernet0/0 and line 0 on the router. The temporary access list entry will time out after five minutes.
@@ -1013,9 +1069,10 @@ Finally, an **autocommand** statement creates a temporary inbound access list en
 
 **Apply to line Interface**
 
+```
 Router(config)# line vty 0
-
 Router(config-line)# login local
+```
 
 -   To configure the use of an authentication server, reference [Overriding Login Security Defaults].
 
@@ -1033,32 +1090,42 @@ Dynamic access lists can also be configured to authenticate users against a user
 
 **Troubleshooting/Verification**
 
+```
 Router# clear access-template \[*access-list-number* \| *name*\] \[*dynamic-name*\] \[*source*\] \[*destination*\]
+```
 
 -   Deletes specified dynamic access-lists
 
  
 
 **Troubleshooting/Verification\
-**Router# show access-lists *\<number>*
+
+```
+Router# show access-lists *\<number>*
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
 >  
 
+```
 Router(config)# ip access-list resequence *\<acl-name>* starting-sequence-number *\<increment>*
+```
 
 -   Redefine sequence numbers for a crowded ACL
 
@@ -1139,11 +1206,12 @@ We\'ll create an inbound ACL named Ingress to evaluate Mirror, and apply it inbo
 
 >  
 
+```
 Router(config)# ip access-list extended Ingress\
 Router(config-ext-nacl)# evaluate Mirror\
 Router(config-ext-nacl)# interface f0/1\
 Router(config-if)# ip access-group in Ingress
-
+```
  
 
 ![reflexiveaccesslist3.png](/Images/reflexiveaccesslist3.png)
@@ -1157,7 +1225,7 @@ Router(config-if)# ip access-group in Ingress
 Now packets inbound on FastEthernet0/1 are only allowed in if they are permitted by Ingress, which is essentially just a reference to Mirror. Note, however, that we are free to add normal entries to Ingress both before and after the evaluate statement if we want. With all three components in place, we can see the static outbound entries (Egress), the static inbound entries (Ingress), and the dynamic inbound entries (Mirror):
 
  
-
+```
 Router# show ip access-lists\
 *Extended IP access list Egress\
 10 permit ip any any reflect Mirror (76 matches)\
@@ -1165,7 +1233,7 @@ Extended IP access list Ingress\
 10 evaluate Mirror\
 Reflexive IP access list Mirror\
 permit tcp host 209.20.64.81 eq www host 192.168.0.123 eq 62839 (7 matches) (time left 248)*
-
+```
  
 
 **NOTE:** The expiration timer on the *Mirror* entry this timer is reset to 300 seconds with each new packet that would cause the reflection. If no new traffic has been seen before the timer expires, the entry is erased. Additionally, when the router detects a session has been closed (for example, using the FIN flag in TCP), the timer is immediately reduced and the entry is removed shortly thereafter.
@@ -1173,19 +1241,25 @@ permit tcp host 209.20.64.81 eq www host 192.168.0.123 eq 62839 (7 matches) (tim
  
 
 **Troubleshooting/Verification\
-**Router# show access-lists *\<number>*
+
+```
+Router# show access-lists *\<number>*
+```
 
 -   Displays access list information for all protocols.
 
 >  
 
+```
 Router# show ip access-lists \[*\<number>* \| *\<name>*\]
+```
 
 -   Displays access-list information specific to IP.
 
  
-
+```
 Router# show ip access-lists interface *\<interface>*
+```
 
 -   Displays ACLs configured on a defined interface
 
@@ -1211,15 +1285,13 @@ The Context-Based Access Control (CBAC) feature of the Cisco IOS® Firewall Feat
 What traffic you want to let out depends on your site security policy, but in this general example everything is permitted outbound. If your access list denies everything, then no traffic can leave. Specify outbound traffic with this extended access list:
 
  
-
+```
 Router(config)#ip access-list extended OUTBOUND
-
 Router(config-ext-nacl)# permit tcp 10.10.10.0 0.0.0.255 any
-
 Router(config-ext-nacl)# permit udp 10.10.10.0 0.0.0.255 any\
 Router(config-ext-nacl)# permit icmp 10.10.10.0 0.0.0.255 any\
 Router(config-ext-nacl)# deny ip any any
-
+```
  
 
 **Identify traffic you want to let in**
@@ -1227,20 +1299,17 @@ Router(config-ext-nacl)# deny ip any any
 What traffic you want to let in depends on your site security policy. However, the logical answer is anything that does not damage your network. In this example, there is a list of traffic that seems logical to let in. Internet Control Message Protocol (ICMP) traffic is generally acceptable, but it can allow some possibilities for DOS attacks. This is a sample access list for incoming traffic:
 
  
-
+```
 Router(config)#ip access-list extended INBOUND
-
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 echo-reply\
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 unreachable\
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 administratively-prohibited\
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 packet-too-big\
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 echo\
 Router(config-ext-nacl)# permit icmp any 10.10.10.0 0.0.0.255 time-exceeded
-
 Router(config-ext-nacl)# permit tcp any host 10.10.10.1 eq smtp
-
 Router(config-ext-nacl)# deny ip any any
-
+```
  
 
 Access list INBOUND is for the inbound traffic and allows only the specified ICMP inbound traffic as well as SMTP access inbound to the server located at 10.10.10.1
@@ -1251,18 +1320,19 @@ The CBAC within Cisco IOS supports many common protocols such as http, ftp, smtp
 
  
 
-**Syntax**\
+**Syntax**
+```
 Router(config)# ip inspect name *\<name>* \[protocol\]
-
+```
  
 
 **Example**
 
+```
 Router(config)# ip inspect name *cbac* ftp
-
 Router(config)# ip inspect name *cbac* smtp
-
 Router(config)# ip inspect name *cbac* tcp
+```
 
 -   This configuration inspects FTP, SMTP, and Telnet (TCP).
 
@@ -1270,33 +1340,30 @@ Router(config)# ip inspect name *cbac* tcp
 
 **Apply access-lists and inspection statements (CBAC) to the appropriate interfaces**
 
+```
 Router(config)# interface ethernet0
-
 Router(config-if)# description \<\--Inside interface
-
 Router(config-if)# ip access-group OUTBOUND in
-
 Router(config-if)# ip inspect *cbac* in
-
-!
-
 Router(config)# interface serial0.1
-
 Router(config-if)# description \--\>Outside interface
-
 Router(config-if)# ip access-group INBOUND in
-
+```
  
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip inspect config
+```
 
 -   Displays CBAC inspection information
 
 >  
 
+```
 Router# show ip inspect sessions
+```
 
 -   Displays activate data sessions being inspected.
 
@@ -1334,55 +1401,50 @@ For this example, we will pretend the R1 device is in the Inside, private, prote
 
 **Define Zones**
 
+```
 R2(config)# zone security ZONE_PRIVATE\
 R2(config-sec-zone)# description Private LAN
-
-!
-
 R2(config)# zone security ZONE_INTERNET
-
 R2(config-sec-zone)# description Public Internet
-
+```
  
 
 **Apply Zones to Interfaces**
 
+```
 R2(config)# interface fa0/0
-
 R2(config-if)# zone-member security ZONE_PRIVATE
-
-!
-
 R2(config-if)# interface fa0/1\
 R2(config-if)# zone-member security ZONE_INTERNET
+```
 
 >  
 
 **Define the class maps that identify traffic that is permitted between zones**
 
+```
 R2(config)# class-map type inspect match-any CM_INTERNET_TRAFFIC\
 R2(config-cmap)# match protocol http
-
 R2(config-cmap)# match protocol https
-
 R2(config-cmap)# match protocol ftp
-
+```
  
 
 **Configure a policy map that specifies actions for the traffic**
 
+```
 R2(config)# policy-map type inspect PM_PRIVATE_TO_INTERNET
-
 R2(config-pmap)# class type inspect CM_INTERNET_TRAFFIC\
 R2(config-pmap-c)# inspect
-
+```
  
 
 **Configure the zone pair and apply the policy**
 
+```
 R2(config)# zone-pair security ZONEP_PRIV_INT source ZONE_PRIVATE destination ZONE_INTERNET\
 R2(config-sec-zone-pair)# service-policy type inspect PM_PRIVATE_TO_INTERNET
-
+```
  
 
 Further testing can be completed, if you attempted to use any protocol besides the ones that are specified, the connection would fail.
@@ -1391,13 +1453,16 @@ Further testing can be completed, if you attempted to use any protocol besides t
 
 **Troubleshooting/Verification**
 
+```
 Router# show zone-pair security
+```
 
 -   Displays zone pairs and their associated service-policy
 
  
-
+```
 Router# show policy-map type inspect zone-pair
+```
 
 -   Displays information related to ZBF; zone-pair, policy, class-maps and additional details.
 
@@ -1443,17 +1508,18 @@ We can see from the diagram that our sniffer is attached to FastEthernet0/0, and
 
 **Define Profile**
 
+```
 R1(config)# ip traffic-export profile MyProfile
-
+```
  
 
 **Define Sniffer Destination**
 
+```
 R1(conf-rite)# interface f0/0\
 R1(conf-rite)# mac-address 0001.0203.0405
-
 R1(conf-rite)# bidirectional
-
+```
  
 
 The above configuration is all that\'s required for a minimal profile. Additionally, we\'ll include the bidirectional parameter here to ensure that traffic from both directions is replicated (versus only inbound traffic).
@@ -1466,18 +1532,23 @@ We can also optionally specify an access list and/or sampling rate to limit the 
 
 **Define Type and/or sampling of traffic**
 
+```
 R1(conf-rite)# incoming ?\
 access-list Apply standard or extended access lists to exported traffic\
 sample Enable sampling of exported traffic
+```
 
+```
 R1(conf-rite)# incoming access-list ?\
 \<1-199> IP access list (standard or extended)\
 \<1300-2699> IP expanded access list (standard or extended)\
 WORD Access-list name
+```
 
+```
 R1(conf-rite)# incoming sample ?\
 one-in-every Export one packet in every
-
+```
  
 
 Forgoing these options for this scenario, we are ready to apply our RITE policy to R1\'s serial interface. Make sure that you exit RITE configuration before entering interface configuration to avoid modifying the interface parameter of the RITE profile.
@@ -1485,10 +1556,12 @@ Forgoing these options for this scenario, we are ready to apply our RITE policy 
  
 
 **Apply to interface that is to be replicated**\
+
+```
 R1(config)# interface s0/0\
 R1(config-if)# ip traffic-export apply MyProfile\
 *%RITE-5-ACTIVATE: Activated IP traffic export on interface Serial0/0*
-
+```
  
 
 All IP traffic traversing R1\'s Serial0/0 interface is now being replicated out R1\'s FastEthernet0/0 interface toward our sniffer, with one observed exception. Only transit traffic is replicated; inbound traffic destined for R1 itself is also replicated, however outbound traffic generated locally by R1 is *not*. Also note that only IP traffic is being replicated, and we lose any lower-layer headers (like PPP) due to the change in medium.
@@ -1497,7 +1570,9 @@ All IP traffic traversing R1\'s Serial0/0 interface is now being replicated out 
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip traffic-expert
+```
 
 -   Displays RITE configuration and statistics
 
@@ -1535,15 +1610,17 @@ Enabling IOS IPS on a router is fairly simple. At its most basic, you need to gl
 
 **Create Crypto Key and load Cisco\'s Public Key**
 
+```
 Router(config)#crypto key pubkey-chain rsa
-
 Router(config-pubkey-chain)#named-key realm-cisco.pub signature
-
 Router(config-pubkey-key)#key-string
+```
 
 Enter a public key as a hexidecimal number \....
 
+```
 Router(config-pubkey)#\$64886 F70D0101 01050003 82010F00 3082010A 02820101
+```
 
 -   The entire public key is not shown.
 
@@ -1551,19 +1628,19 @@ Router(config-pubkey)#\$64886 F70D0101 01050003 82010F00 3082010A 02820101
 
 **Load only the basic IP signature package**
 
+```
 Router(config)#ip ips signature-category
-
 Router(config-ips-category)#category all
-
 Router(config-ips-category-action)#retired true
+```
 
 -   Disables all additional IP signatures
 
+```
 Router(config-ips-category-action)#exit
-
 Router(config-ips-category)#category ios_ips basic
-
 Router(config-ips-category-action)#retired false
+```
 
 -   Enables only basic IP signature package
 
@@ -1571,32 +1648,36 @@ Router(config-ips-category-action)#retired false
 
 **Create a location to store IPS information**
 
+```
 Router# mkdir flash:ips
+```
 
-**\
-Create an IPS rule**
+**Create an IPS rule**
 
+```
 Router(config)# ip ips name *\<name>*
-
- 
+```
 
 **Specify the location for the signature information**
 
+```
 Router(config)# ip ips config location flash:ips
-
+```
  
 
 **Assign the IPS rule to an interface**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# ip ips *\<name>* outbound
-
+```
  
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip ips configuration
+```
 
 -   Displays IPS information
 
@@ -1638,28 +1719,39 @@ Remote access VPNs extend almost any data, voice, or video application to the re
 Phase 1 establishes a secure channel over which the IPsec tunnel can be negotiated.
 
  
-
+```
 Edmonton(config)# crypto isakmp policy 10
+```
 
 -   Creates IKE Policy
 
+```
 Edmonton(config-isakmp)# encryption aes 128
+```
 
 -   Defines the encryption method (AES128)
 
+```
 Edmonton(config-isakmp)# hash sha
+```
 
 -   Defines the hashing method (SHA) algorithm
 
+```
 Edmonton(config-isakmp)# authentication pre-share
+```
 
 -   Specifies authentication with a preshared key.
 
+```
 Edmonton(config-isakmp)# group 2
+```
 
 -   Defines Diffie-Hellman group 2 key exchange algorithm
 
+```
 Edmonton(config-isakmp)# lifetime 3600
+```
 
 -   Specifies the lifetime of the IKE SA
 
@@ -1667,18 +1759,22 @@ Edmonton(config-isakmp)# lifetime 3600
 
 **Configure Policies for the Client Group(s)**
 
+```
 Edmonton(config)# crypto isakmp client configuration group **VPNGRP1**
-
 Edmonton(config-isakmp-group)# key 12345678
+```
 
 -   Defines preshared key authentication of remote access VPN clients.
 
+```
 Edmonton(config-isakmp-group)# pool VPNPOOL
+```
 
 -   Defines addresses that will be assigned to remote access VPN clients.
 
+```
 Edmonton(config-isakmp-group)# dns 192.31.7.1
-
+```
  
 
 **IPsec Transform Set (IKE Phase 2)**
@@ -1686,9 +1782,9 @@ Edmonton(config-isakmp-group)# dns 192.31.7.1
 Transform set, defines parameters of the IPsec security associations which will carry and encrypt the actual data.
 
  
-
+```
 Edmonton(config)# crypto ipsec transform-set **AES128-SHA-HMAC** esp-aes esp-sha-hmac
-
+```
  
 
 **Configure AAA and Add VPN client users**
@@ -1696,32 +1792,39 @@ Edmonton(config)# crypto ipsec transform-set **AES128-SHA-HMAC** esp-aes esp-sha
 Cisco IOS based VPNs require router [AAA] service to be enabled. VPN clients can be defined locally in the router or on an AAA server. There are separate lists for authentication and authorization of VPN users.
 
  
-
+```
 Edmonton(config)# aaa new-model
+```
 
 -   Enables AAA service
 
+```
 Edmonton(config)# aaa *authentication* login default local
+```
 
 -   Verifies login authentication for \"default\" group using the local user database.
 
+```
 Edmonton(config)# aaa *authentication* login VPNAUTH local
+```
 
 -   Verifies login authentication for the VPNAUTH group using the local user database.
 
-!
-
+```
 Edmonton(config)# aaa *authorization* exec default local
+```
 
 -   Verifies EXEC authorization for the \"default\" group using the local user database.
 
+```
 Edmonton(config)# aaa *authorization* network VPNAUTHOR local
+```
 
 -   Verifies network access authorization for the VPNAUTHOR group using the local user database.
 
-!
-
+```
 Edmonton(config)# username *user1* secret *password1*
+```
 
 -   Creates local database use for VPN authentication
 
@@ -1729,11 +1832,11 @@ Edmonton(config)# username *user1* secret *password1*
 
 **Create VPN Client Policy for SA Negotiation (Dynamic Map)**
 
+```
 Edmonton(config)# crypto dynamic-map **DYNMAP** 10
-
 Edmonton(config-crypto-map)# set transform-set **AES128-SHA-HMAC**
-
 Edmonton(config-crypto-map)# reverse-route
+```
 
 -   Reverse route has the router add a return route for the VPN client in the routing table.
 
@@ -1741,19 +1844,27 @@ Edmonton(config-crypto-map)# reverse-route
 
 **Cryptomap (IKE Phase 2)**
 
+```
 Edmonton(config)# crypto map **CRYPTO-MAP** client authentication list **VPNAUTH**
+```
 
 -   Configures IKE extended authentication (Xauth) for the VPN group VPNAUTH.
 
+```
 Edmonton(config)# crypto map **CRYPTO-MAP** isakmp authorization list **VPNAUTHOR**
+```
 
 -   Configures IKE key lookup from a AAA server for the VPN group VPNAUTHOR
 
+```
 Edmonton(config)# crypto map **CRYPTO-MAP** client configuration address respond
+```
 
 -   Enables the router to accept IP address requests from any peer.
 
+```
 Edmonton(config)# crypto map **CRYPTO-MAP** 65535 ipsec-isakmp dynamic **DYNMAP**
+```
 
 -   Uses IKE to establish IPsec Sas as specified by crypto map DYNMAP.
 
@@ -1761,47 +1872,54 @@ Edmonton(config)# crypto map **CRYPTO-MAP** 65535 ipsec-isakmp dynamic **DYNMAP*
 
 **Apply Crypto Map (IKE Phase 2)**
 
+```
 Edmonton(config)# interface serial 0/0
-
 Edmonton(config-if)# ip address 192.31.7.1 255.255.255.252
-
 Edmonton(config-if)# crypto map **CRYPTO-MAP**
-
+```
  
 
 **Troubleshooting/Verification**
 
+```
 Router# show crypto ipsec sa
+```
 
 -   This command displays the settings used by the current Security Associations (SAs).
 
 >  
 
+```
 Router# show crypto isakmp sa
+```
 
 -   This command displays current IKE Security Associations.
 
  
-
+```
 Router# debug crypto isakmp
+```
 
 -   This command allows you to observe Phase 1 ISAKMP negotiations.
 
  
-
+```
 Router# debug crypto ipsec
+```
 
 -   This command allows you to observe Phase 2 IPSec negotiations.
 
- 
-
+```
 Router# show crypto dynamic-map
+```
 
 -   Displays a dynamic crypto map set
 
 >  
 
+```
 Router# show crypto map
+```
 
 -   Displays the crypto map configuration
 
@@ -1811,40 +1929,47 @@ Router# show crypto map
 
 Site-to-site VPNs provide an Internet-based WAN infrastructure to extend network resources to branch offices, home offices, and business partner sites. All traffic between sites is encrypted using IPsec protocol and integrates network features such as routing, quality of service, and multicast support.
 
-**\
-Site-to-Site VPN Configuration**
+**Site-to-Site VPN Configuration**
 
 ![remoteaccess.png](/Images/remoteaccess.png)
-
- 
 
 **Configure ISAKMP Policy (IKE Phase 1)**
 
 Phase 1 establishes a secure channel over which the IPsec tunnel can be negotiated.
 
- 
-
+```
 Winnipeg(config)# crypto isakmp policy 10
+```
 
 -   Creates IKE Policy
 
+```
 Winnipeg(config-isakmp)# encryption aes 128
+```
 
 -   Defines the encryption method (AES128)
 
+```
 Winnipeg(config-isakmp)# hash sha
+```
 
 -   Defines the hashing method (SHA) algorithm
 
+```
 Winnipeg(config-isakmp)# authentication pre-share
+```
 
 -   Specifies authentication with a preshared key.
 
+```
 Winnipeg(config-isakmp)# group 2
+```
 
 -   Defines Diffie-Hellman group 2 key exchange algorithm
 
+```
 Winnipeg(config-isakmp)# lifetime 3600
+```
 
 -   Specifies the lifetime of the IKE SA
 
@@ -1857,108 +1982,111 @@ Winnipeg(config-isakmp)# lifetime 3600
 Key must match on both sides, address identifies other end of the tunnel.
 
  
-
+```
 Winnipeg(config-isakmp)# crypto isakmp key ***0** 12345678* address 192.31.71.1
+```
 
 -   Specifies the key required for the tunnel endpoint, the 0 specifies the password is unencrypted (clear text) password, option 6 would encrypt the key. The address defines the peer IP address for tunnel association.
 
-!
-
+```
 Edmonton(config-isakmp)# crypto isakmp key ***0** 12345678* address 172.107.55.9
-
- 
+```
 
 **IPsec Transform Set (IKE Phase 2)**
 
 Transform set, defines parameters of the IPsec security associations which will carry and encrypt the actual data.
 
  
-
+```
 Winnipeg(config)# crypto ipsec transform-set **AES128-SHA-HMAC** esp-aes esp-sha-hmac
+```
 
 -   Creates a transform set for IKE phase 2 policy
 
+```
 Winnipeg(cgf-crypto-trans)# mode tunnel
+```
 
 -   Tunnel (datagram encapsulation) mode, more secure and preferred.
 
 -   Transport (payload encapsulation) mode.
 
-!
-
+```
 Winnipeg(config)# crypto ipsec security-association lifetime seconds 1200
+```
 
 -   Defines a 20 minute SA - security association lifetime.
 
 **ACL to allow traffic across the tunnel**
 
+```
 Winnipeg(config)# access-list **100** permit ip 192.168.30.0 0.0.0.255 10.10.30.0 0.0.0.255
+```
 
-!
-
+```
 Edmonton(config)# access-list **100** permit ip 10.10.30.0 0.0.0.255 192.168.30.1 0.0.0.255
-
- 
+```
 
 **Cryptomap (IKE Phase 2)**
 
 Cryptomap selects data flows that need security processing. Second, it defines the policy for these flows and the crypto peer that traffic needs to go to.
 
- 
-
+```
 Winnipeg(config)# crypto map CRYPTO-MAP *1* ipsec-isakmp
+```
 
 -   Defines crypto map, note the **1** defines the crypto-map sequence number.
 
+```
 Winnipeg(config-crypto-map)# set peer 192.31.7.1
-
 Winnipeg(config-crypto-map)# set transform-set **AES128-SHA-HMAC**
-
 Winnipeg(config-crypto-map)# match address **100**
+```
 
-!
-
+```
 Edmonton(config)# crypto map CRYPTO-MAP *1* ipsec-isakmp
-
 Edmonton(config-crypto-map)# set peer 128.107.55.9
-
 Edmonton(config-crypto-map)# set transform-set **AES128-SHA-HMAC**
-
 Edmonton(config-crypto-map)# match address **100**
-
- 
+```
 
 **Apply Crypto Map (IKE Phase 2)**
 
 Only a single cryptomap can be applied per interface, however multiple VPNs can be created on a single interface. This is accomplished by incrementing the cryptomap sequence number as denoted above in the previous configuration. Crypto map must be applied on both the physical interface and the tunnel interface.
 
  
-
+```
 Winnipeg(config)# interface FastEthernet0/0
-
 Winnipeg(config-if)# crypto map **CRYPTO-MAP**
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show crypto ipsec sa
+```
 
 -   This command displays the settings used by the current Security Associations (SAs).
 
 >  
 
+```
 Router# show crypto isakmp sa
+```
 
 -   This command displays current IKE Security Associations.
 
  
-
+```
 Router# debug crypto isakmp
+```
 
 -   This command allows you to observe Phase 1 ISAKMP negotiations.
 
  
-
+```
 Router# debug crypto ipsec
+```
 
 -   This command allows you to observe Phase 2 IPSec negotiations.
 
@@ -1985,44 +2113,50 @@ What we are trying to cover in this section is IPsec over GRE tunnels (as a tran
 Reference [GRE Tunnel] configuration for additional information about Generic Router Encapsulation.
 
  
-
+```
 Winnipeg(config)# interface tunnel0
-
 Winnipeg(config-if)# ip address 192.168.3.1 255.255.255.0
-
 Winnipeg(config-if)# tunnel source fastethernet0/0
-
 Winnipeg(config-if)# tunnel destination 192.31.7.1
-
- 
+```
 
 **Configure ISAKMP Policy (IKE Phase 1)**
 
 Phase 1 establishes a secure channel over which the IPsec tunnel can be negotiated.
 
- 
-
+```
 Winnipeg(config)# crypto isakmp policy 10
+```
 
 -   Creates IKE Policy
 
+```
 Winnipeg(config-isakmp)# encryption aes 128
+```
 
 -   Defines the encryption method (AES128)
 
+```
 Winnipeg(config-isakmp)# hash sha
+```
 
 -   Defines the hashing method (SHA) algorithm
 
+```
 Winnipeg(config-isakmp)# authentication pre-share
+```
 
 -   Specifies authentication with a preshared key.
 
+```
 Winnipeg(config-isakmp)# group 2
+```
 
 -   Defines Diffie-Hellman group 2 key exchange algorithm
 
+```
 Winnipeg(config-isakmp)# lifetime 3600
+```
 
 -   Specifies the lifetime of the IKE SA\
     >  
@@ -2031,74 +2165,72 @@ Winnipeg(config-isakmp)# lifetime 3600
 
 Key must match on both sides, address identifies other end of the tunnel.
 
- 
-
+```
 Winnipeg(config-isakmp)# crypto isakmp key ***0** 12345678* address 192.31.71.1
+```
 
 -   Specifies the key required for the tunnel endpoint, the 0 specifies the password is unencrypted (clear text) password, option 6 would encrypt the key. The address defines the peer IP address for tunnel association.
 
-!
-
+```
 Edmonton(config-isakmp)# crypto isakmp key ***0** 12345678* address 172.107.55.9
+```
 
-**\
-IPsec Transform Set**
+**IPsec Transform Set**
 
 Transform set defines parameters of the IPsec security associations which will carry and encrypt the actual data.
 
- 
-
+```
 Winnipeg(config)# crypto ipsec transform-set **AES128-SHA-HMAC** esp-aes esp-sha-hmac
+```
 
 -   Creates a transform set for IKE phase 2 policy
 
+```
 Winnipeg(cgf-crypto-trans)# mode tunnel
+```
 
 -   Tunnel (datagram encapsulation) mode, more secure and preferred.
 
 -   Transport (payload encapsulation) mode.
 
+```
 Winnipeg(config)# crypto ipsec security-association lifetime seconds 1200
+```
 
 -   Defines a 20 minute SA - security association lifetime.
-
- 
 
 **ACL to allow traffic across the tunnel**
 
 Slightly different than a traditional site-to-site VPN, GRE is carrying the traffic and not the Ipsec VPN, because of this you just need allow GRE to be permitted between tunnel endpoints.
 
- 
-
+```
 Winnipeg(config)# access-list 101 permit gre host 128.10.7.55.9 host 192.31.7.1
+```
 
-!
-
+```
 Edmonton(config)# access-list 102 permit gre host 192.31.7.1 host 128.107.55.9
-
- 
+```
 
 **Cryptomap (IKE Phase 2)**
 
 Cryptomap selects data flows that need security processing. Second, it defines the policy for these flows and the crypto peer that traffic needs to go to.
 
  
-
+```
 Winnipeg(config)# crypto map **CRYPTO-MAP** *1* ipsec-isakmp
+```
 
 -   Defines crypto map, note the **1** defines the crypto-map sequence number.
 
+```
 Winnipeg(config-crypto-map)# set transform-set **AES128-SHA-HMAC** Winnipeg(config-crypto-map)# set peer 192.31.7.1
+```
 
-!
-
+```
 Edmonton(config)# crypto map **CRYPTO-MAP** *1* ipsec-isakmp
-
 Edmonton(config-crypto-map)# set transform-set **AES128-SHA-HMAC**
-
 Edmonton(config-crypto-map)# set peer 128.107.55.9
-
- 
+```
 
 **Routing over GRE Tunnel**
 
@@ -2108,13 +2240,15 @@ GRE is multiprotocol and can tunnel any OSI Layer 3 protocol.
 
 **Static Routing**
 
+```
 Winnipeg(config)# ip route 0.0.0.0 0.0.0.0 128.107.55.10
+```
 
 -   Configures a static default route to the physical next-hop IP address, such as the connection to the internet.
 
-!
-
+```
 Winnipeg(config)# ip route 10.10.30.0 255.255.255.0 192.168.3.2
+```
 
 -   Configures a static route for (local) tunnel traffic giving the far-end tunnel address as the next-hop IP address.
 
@@ -2131,55 +2265,53 @@ Dynamic would be configured as is; ensure that routing is only performed using t
 Allow Crypto Maps to both the physical and tunnel interface.
 
  
-
+```
 Winnipeg(config)# interface fastethernet 0/0
-
 Winnipeg(config-if)# crypto map **CRYPTO-MAP**
-
 Winnipeg(config)# interface tunnel 0
-
 Winnipeg(config-if)# crypto map **CRYPTO-MAP**
+```
 
-!
-
+```
 Edmonton(config)# interface serial 0/0
-
 Edmonton(config-if)# crypto map **CRYPTO-MAP**
-
 Edmonton(config)# interface tunnel 0
-
 Edmonton(config-if)# crypto map **CRYPTO-MAP**
-
- 
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show crypto ipsec sa
+```
 
 -   This command displays the settings used by the current Security Associations (SAs).
 
 >  
 
+```
 Router# show crypto isakmp sa
+```
 
 -   This command displays current IKE Security Associations.
 
 >  
 
+```
 Router# show interfaces tunnel *number*
+```
 
 -   Lists tunnel interface information
 
- 
-
+```
 Router# debug crypto isakmp
+```
 
 -   This command allows you to observe Phase 1 ISAKMP negotiations.
 
- 
-
+```
 Router# debug crypto ipsec
-
+```
 -   This command allows you to observe Phase 2 IPSec negotiations.
 
  
@@ -2214,8 +2346,9 @@ Source routing is a technique whereby the sender of a packet can specify the rou
 
 **Disable Source Routing**
 
+```
 Router(config)# no ip source-route
-
+```
  
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2241,9 +2374,10 @@ Proxy ARP (Address Resolution Protocol) is the technique in which one host, usua
 
 **Disabling Proxy ARP**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# no ip proxy-arp
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2271,7 +2405,9 @@ The IP Options Selective Drop feature provides the ability to drop packets with 
 
 **IP Options Selective Drop**
 
+```
 Router(config)# ip options drop
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2283,9 +2419,10 @@ ICMP supports IP traffic by relaying information about paths, routes, and networ
 
 **Disable IP Redirects**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# no ip redirects
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2297,9 +2434,10 @@ ICMP supports IP traffic by relaying information about paths, routes, and networ
 
 **Disabling IP Unreachables**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# no ip unreachables
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2319,9 +2457,10 @@ IP directed broadcasts are used in the extremely common and popular "smurf" Deni
 
 **Disable IP Directed Broadcast**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# no ip directed-broadcast
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2335,17 +2474,17 @@ Cisco Discover Protocol or CDP is a Cisco-proprietary protocol that runs on all 
 
 **Disable Globally**
 
+```
 Router(config)# no cdp run
-
+```
  
 
 **Disable per interface**
 
+```
 Router(config)# interface *\[interface\]*
-
 Router(config-if)# no cdp enable
-
- 
+```
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2375,7 +2514,9 @@ You can choose to operate TCP intercept in watch mode, as opposed to intercept m
 
 **Enable TCP Intercept**
 
+```
 Router(config)# ip access-list *\<acl>* {permit \| deny} tcp any \[*destination - wildcard mask*\]
+```
 
 -   Define ACL to intercept all requests or only those coming from specific networks or destined for specific servers.Typically the access list will define the source as *any* and define specific destination networks or servers. That is, you do not attempt to filter on the source addresses because you do not necessarily know who to intercept packets from. You identify the destination in order to protect destination servers. If no access list match is found, the router allows the request to pass with no further action.
 
@@ -2383,7 +2524,9 @@ Router(config)# ip access-list *\<acl>* {permit \| deny} tcp any \[*destination 
 
 **Setting the TCP Intercept Mode**
 
+```
 Router(config)# ip tcp intercept mode {intercept \| watch}
+```
 
 -   **intercept mode** (Default), the software actively intercepts each incoming connection request (SYN) and responds on behalf of the server with an SYN-ACK, then waits for an ACK from the client. When that ACK is received, the original SYN is sent to the server and the software performs a three-way handshake with the server. When this is complete, the two half-connections are joined.
 
@@ -2393,7 +2536,9 @@ Router(config)# ip tcp intercept mode {intercept \| watch}
 
 **Setting the TCP Intercept Drop Mode**
 
+```
 Router(config)# ip tcp intercept drop-mode {oldest \| random}
+```
 
 -   When under attack, the TCP intercept feature becomes more aggressive in its protective behavior. If the number of incomplete connections exceeds 1100 or the number of connections arriving in the last one minute exceeds 1100, each new arriving connection causes the oldest partial connection to be deleted. Also, the initial retransmission timeout is reduced by half to 0.5 seconds (so the total time trying to establish a connection is cut in half).
 
@@ -2403,19 +2548,23 @@ Router(config)# ip tcp intercept drop-mode {oldest \| random}
 
 **Changing TCP Intercept Timers**
 
+```
 Router(config)# ip tcp intercept watch-timeout *\<seconds>*
+```
 
 -   By default, the software waits for 30 seconds for a watched connection to reach established state before sending a Reset to the server. Changes the time allowed to reach established state.
 
  
-
+```
 Router(config)# ip tcp intercept finrst-timeout *\<seconds>*
+```
 
 -   By default, the software waits for 5 seconds from receipt of a reset or FIN-exchange before it ceases to manage the connection. Changes the time between receipt of a reset or FIN-exchange and dropping the connection.
 
  
-
+```
 Router(config)# ip tcp intercept connection-timeout *\<seconds>*
+```
 
 -   By default, the software still manages a connection for 24 hours after no activity. Changes the time the software will manage a connection after no activity.
 
@@ -2440,14 +2589,16 @@ When a threshold is exceeded, the TCP intercept assumes the server is under atta
 You can change the threshold for triggering aggressive mode based on the total number of incomplete connections. The default values for **low** and **high** are 900 and 1100 incomplete connections, respectively.
 
  
-
+```
 Router(config)# ip tcp intercept max-incomplete low \<*number>*
+```
 
 -   Sets the threshold for stopping aggressive mode.
 
  
-
+```
 Router(config)# ip tcp intercept max-incomplete high \<*number>*
+```
 
 -   Sets the threshold for triggering aggressive mode.
 
@@ -2455,15 +2606,16 @@ Router(config)# ip tcp intercept max-incomplete high \<*number>*
 
 You can also change the threshold for triggering aggressive mode based on the number of connection requests received in the last 1-minute sample period. The default values for **low** and **high** are 900 and 1100 connection requests, respectively.
 
- 
-
+```
 Router(config)# ip tcp intercept one-minute low \<*number>*
+```
 
 -   Sets the threshold for stopping aggressive mode.
 
  
-
+```
 Router(config)# ip tcp intercept one-minute high \<*number>*
+```
 
 -   Sets the threshold for triggering aggressive mode.
 
@@ -2471,14 +2623,17 @@ Router(config)# ip tcp intercept one-minute high \<*number>*
 
 **Troubleshooting/Verification**
 
+```
 Router# show tcp intercept connections
+```
 
 -   Displays incomplete connections and established connections.
 
 >  
 
+```
 Router# show tcp intercept statistics
-
+```
 -   Displays TCP intercept statistics
 
  
@@ -2489,15 +2644,12 @@ Router# show tcp intercept statistics
 
 Network administrators can use Unicast Reverse Path Forwarding (Unicast RPF) to help limit the malicious traffic on an enterprise network. This security feature works by enabling a router to verify the reachability of the source address in packets being forwarded. This capability can limit the appearance of spoofed addresses on a network. If the source IP address is not valid, the packet is discarded. Unicast RPF works in one of three different modes: strict mode, loose mode, or VRF mode. Note that not all network devices support all three modes of operation.
 
-* *
 
 When administrators use Unicast RPF in strict mode, the packet must be received on the interface that the router would use to forward the return packet. Unicast RPF configured in strict mode may drop legitimate traffic that is received on an interface that was not the router\'s choice for sending return traffic. Dropping this legitimate traffic could occur when asymmetric routing paths are present in the network.
 
- 
 
 When administrators use Unicast RPF in loose mode, the source address must appear in the routing table. Administrators can change this behavior using the *allow-default* option, which allows the use of the default route in the source verification process. Additionally, a packet that contains a source address for which the return route points to the Null 0 interface will be dropped. An access list may also be specified that permits or denies certain source addresses in Unicast RPF loose mode.
 
- 
 
 Care must be taken to ensure that the appropriate Unicast RPF mode (loose or strict) is configured during the deployment of this feature because it can drop legitimate traffic. Although asymmetric traffic flows may be of concern when deploying this feature, Unicast RPF loose mode is a scalable option for networks that contain asymmetric routing paths.
 
@@ -2511,28 +2663,26 @@ Unicast RPF is enabled on a per-interface basis. The **ip verify unicast source 
 
 **Enable uRFP**
 
+```
 Router(config)# interface fa0/0
-
 Router(config-if)# ip verify unicast source reachable-via {rx \| any} \[allow-default\] \[allow-self-ping\] \[*list\]*
-
+```
  
-
 Addresses that should never appear on a network can be dropped by entering a route to a null interface. The following command will cause all traffic received from the 10.0.0.0/8 network to be dropped even if Unicast RPF is enabled in loose mode with the **allow-default** option: **ip route 10.0.0.0 255.0.0.0 Null0**
-
- 
 
 **NOTE:** Cisco Express Forwarding switching must be enabled for Unicast RPF to function
 
- 
 
 **Troubleshooting/Verification**
 
+```
 Router# show cef interface *\[interface\]*
+```
 
 -   Verify CEF and Unicast RPF have been enabled on an interface.
 
- 
-
+```
 Router# show ip verify statistics
+```
 
 -   Displays statistics about Unicast RPF.
