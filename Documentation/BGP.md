@@ -3493,32 +3493,23 @@ Router(config-router)# do show ip bgp summary \| begin Neighbor
 
 Border Gateway Protocol (BGP) policy accounting measures and classifies IP traffic that is sent to, or received from, different peers. Policy accounting is enabled on an input interface, and counters based on parameters such as community list, autonomous system number, or autonomous system path are assigned to identify the IP traffic.
 
- 
-
 You can use this feature to account for IP traffic differentially on an edge router by assigning counters based on BGP prefixes and attributes on a per-input interface basis.
 
- 
-
-BGP Policy Accounting relies on community-lists and route-maps, reference [*communities*](onenote:BGP.one#Communities&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={EAAABEC9-26B4-451F-AE1B-C4624B37C139}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE) notes before attempting to understand this configuration.
-
- 
+BGP Policy Accounting relies on community-lists and route-maps, reference [*communities*] notes before attempting to understand this configuration.
 
 **BGP Policy Accounting**
 
 In this scenario let\'s assume you want set a specific \"traffic-index\" described above to different areas in your network that have been defined by the community attribute.
 
- 
-
 **Specify communities in community-lists (or define AS-path lists) that classify traffic for accounting.**
 
+```
 Router(config)# ip community-list 30 permit 100:190
-
-Router(config)# ip community-list 40 permit 100:198\
-Router(config)# ip community-list 50 permit 100:197\
-Router(config)# ip community-list 60 permit 100:296\
+Router(config)# ip community-list 40 permit 100:198
+Router(config)# ip community-list 50 permit 100:197
+Router(config)# ip community-list 60 permit 100:296
 Router(config)# ip community-list 70 permit 100:201
-
- 
+```
 
 **Define a route-map to match community lists and set appropriate bucket numbers.**
 
