@@ -2966,13 +2966,13 @@ The local-AS feature is useful if ISP-A purchases ISP-B, but ISP-B's customers d
 
 -   ISP-A has not yet purchased ISP-B. In Figure 2, ISP-A has purchased ISP-B, and ISP-B uses the local-AS feature.
 
-![localas1.png](/Images/BGP/localas1.png)
+![localas1.gif](/Images/BGP/localas1.gif)
 
 **Figure 2**
 
 -   ISP-B belongs to AS 100, and ISP-C to AS 300. When peering with ISP-C, ISP-B uses AS 200 as its AS number with the use of the **neighbor** *ISP-C* **local-as 200** command. In updates sent from ISP-B to ISP-C, the AS_SEQUENCE in the AS_PATH attribute contains "200 100". The "200" is prepended by ISP-B due to the **local-as 200** command configured for ISP-C.
 
-![localas2.png](/Images/BGP/localas2.png)
+![localas2.gif](/Images/BGP/localas2.gif)
 
 **Local-AS Configuration**
 
