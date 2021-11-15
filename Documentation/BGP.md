@@ -1896,8 +1896,6 @@ Router(config-router)# redistribute *[eigrp | ospf | rip | ospf | isis | egp || 
 
 Border Gateway Protocol (BGP) allows the aggregation of specific routes into one summarized route. When you issue the aggregate-address command without any arguments, there is no inheritance of the individual route attributes (such as AS_PATH or community), which causes a loss of granularity.
 
- 
-
 **Scenario**
 
 Routers one and two each advertise four /24 routes to their respective networks. These routes are advertised to R3, which in turn advertises them to R4. Inspecting the BGP table on R4, we can see four routes each from AS 10 and 20.
