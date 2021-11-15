@@ -201,7 +201,7 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
 From this list, you can see it is *impossible* for two BGP routes to TIE each other and become equally preferred. As has been stated elsewhere in this site, BGP contains only a *single best path* to any given destination. BGP runs across the entire Internet, therefore it must manage to reduce the number of advertised routes in order to prevent the Internet from becoming flooded with route advertisement traffic. Thus, this algorithm is designed to eliminate all but 1 route to a destination.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Routing Updates
 
@@ -245,7 +245,7 @@ With Partial Routes, you configure the router to receive only certain routes. Yo
 
 Typically, you would designate a default route for each provider, plus some specific routes through each provider to frequently-accessed IP addresses (web apps, frequently-used web sites and services, off-site servers, etc.).
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Neighbor Relationships
 
@@ -290,7 +290,7 @@ After the TCP connection is establish. BGP begins with BGP ***Open messages***. 
 
 **NOTE:** Keepalive are sent every 60 seconds, hold-down of 180 seconds. Peers can use MD5 shared secret.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Peer Groups
 
@@ -323,7 +323,7 @@ Router# show ip bgp peer-group \[*peer-group-name\] \[summary\]*
 
 -   Displays peer group configuration
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Peer Templates
 
@@ -494,7 +494,7 @@ unsuppress-map
 weight
 ```
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Authentication
 
@@ -543,7 +543,7 @@ Router(config)# debug ip routing
 
 -   Displays routing changes and notifications
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Multihop
 
@@ -561,7 +561,7 @@ EBGP packets by default have a TTL (time to live) of 1, requiring neighbors to b
 
 Router(config-router)# neighbor *\<IP address* ebgp-multihop *\<hop count*
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Backdoor
 
@@ -647,7 +647,7 @@ Router(config-router)# network 3.3.3.3 mask 255.255.255.255
 
 Router(config-router)# neighbor 23.23.23.2 remote-as 200
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Distance
 
@@ -676,7 +676,7 @@ Administrative distance is a dependability rating for the source of routing info
 **Distance Configuration**\
 Router(config-router)# distance bgp *external-distance internal-distance local-distance*
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Maximum Paths
 
@@ -731,7 +731,7 @@ The maximum number applies only to routes learned from external peers unless you
 
 Router(config-router)# maximum-paths *ibgp* \[1-6\]
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## DMZ Link Bandwidth
 
@@ -899,7 +899,7 @@ Router# show ip bgp *\<ip-address*
 
 -   Displays multipath information as well as the DMZ-Link bandwidth of each link.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Next Hop Processing
 
@@ -957,11 +957,7 @@ R4(config-router)# neighbor 1.1.1.1 *next-hop-self*
 
 -   This changes the way R4 processes routes to its neighbor 1.1.1.1 (R1) and now will adjust the next-hop-address for routes being sent to it\'s address of 4.4.4.4 (loopback address) that is not shown on the diagram. Because R1 can access this iBGP neighbor and the address of 4.4.4.4. routes will be processed correctly into the routing table an thus R1 will be able to reach the networks behind R5.
 
- 
-
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Internal Border Gateway Protocol iBGP
 
@@ -1006,7 +1002,7 @@ Router(config)# debug ip routing
 
 -   Displays routing changes and notifications
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Update Source
 
@@ -1286,7 +1282,7 @@ R5(config-router)# neighbor 10.17.1.1 remote-as 6300
 
 **NOTE:** Earlier versions of IOS will not remove private AS information and may require manually removal of private AS. This can be accomplished using the command **neighbor x.x.x.x remove-private-as**
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## iBGP Synchronization
 
@@ -1301,7 +1297,7 @@ Router(config)# router bgp *\<asn*
 Router(config-router)# no synchronization
 ```
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Best Path Selection Process
 
@@ -1333,7 +1329,7 @@ Router(config-router)# neighbor *\[ip-address \| peer-group-name\]* filter-list 
 
 **NOTE:** The default weight value is 32,768 for locally originating networks (including those via redistributing) and is 0 for all other networks.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Local Preference
 
@@ -1347,7 +1343,7 @@ You can apply local preference in the following ways:
 
 -   Using the **bgp default local-preference** command to change the default local preference value applied to all updates coming from external neighbors or originating locally.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## AS Path Prepending
 
@@ -1361,7 +1357,7 @@ You manipulate autonomous system paths by prepending autonomous system numbers t
 
 You can configure manual manipulation of the autonomous system path attribute (prepending) using a route map with the **set as-path prepend** set clause.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Multi Exit Discriminator MED
 
@@ -1387,9 +1383,7 @@ You can use a route map to set MED on incoming or outgoing updates. Use the **se
 
 You must use the command **bgp bestpath med confed** when you use MED within a confederation to influence the route selection process. A router compares MED values for those routes that originate in the confederation.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Communities
 
@@ -1617,7 +1611,7 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 
 -   Used to enable multipath load balancing for external links with unequal bandwidth capacity.
 
--   Enabling under an IPv4 or VPNv4 address family sessions by entering the **bgp dmzlink-bw** command. (Refer to [Dmzlink-bw](onenote:BGP.one#Dmzlink-bw&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={CAD726FD-5D1D-4B70-80C5-F87427F2DCC2}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE))
+-   Enabling under an IPv4 or VPNv4 address family sessions by entering the **bgp dmzlink-bw** command. 
 
 -   Routes learned from a directly connected external neighbor propagated through the iBGP network with the bandwidth of the source external link.
 
@@ -1705,9 +1699,7 @@ Router# show ip bgp community-list \<*community-list*
 
 -   Displays all routes in BGP table that match a specified community-list.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Default Originate
 
@@ -1797,9 +1789,7 @@ Router(config-router)# neighbor \<neighbor-ipdefault-originate route-map *check-
 
 -   Verifies with route-map *check-default* to see if a default route exists before advertising it to the specified neighbor.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Originating Prefixes
 
@@ -1843,7 +1833,7 @@ Unlike other routing protocols BGP has two independent configurations. First to 
 
 **?** - Redistributed Route
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Auto Summary
 
@@ -1869,7 +1859,7 @@ Router(config)# router bgp *\<asn*
 
 Router(config-router)# no auto-summary
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Network Statement
 
@@ -1888,7 +1878,7 @@ Router(config-router)# network *\<ip-address* mask *\<subnet*
 **Example:**\
 Router(config-router)# network 10.10.0.0 mask 255.255.0.0
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Redistribution
 
@@ -1908,7 +1898,7 @@ Router(config-router)# redistribute *\[eigrp \| ospf \| rip \| ospf \| isis \| e
 
 **NOTE:** Advanced filtering can be accomplished with access-lists and route maps after the redistribution command. As well as adjusting the metric and weight for the redistributed routes.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Aggregation
 
@@ -2178,7 +2168,7 @@ Router# show ip bgp
 
 -   Displays the BGP routing table
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## AS Set
 
@@ -2273,9 +2263,7 @@ R4# **show ip bgp**
 Network Next Hop Metric LocPrf Weight Path\
 \*\172.16.0.0/21 10.0.0.9 0 0 *30 10* ?
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Filtering
 
@@ -2355,9 +2343,10 @@ The tools differ in what they can match in the BGP Update message.
 
  
 
-After configuration of any filtering technique the peer session needs to be renewed. A soft reset can be done to avoid disruption in the network; reference [Clearing BGP Sessions.](onenote:BGP.one#Clearing%20BGP%20Sessions&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={3E99C962-E8C9-4BF7-8FC6-47DAE2CF04CF}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE)
+After configuration of any filtering technique the peer session needs to be renewed. A soft reset can be done to avoid disruption in the network; reference [Clearing BGP Sessions.]
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 ## AS Path Filter List
 
@@ -2381,9 +2370,9 @@ Router(config-router)# neighbor *\<neighbor-ip* filter-list *\<1-500* \[in \| ou
 
  
 
-**NOTE:** Reference [Regular Expressions](onenote:BGP.one#Regular%20Expressions&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={6098A62B-3BDE-4FEC-A5A1-4F05DD70823A}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE) for configuration parameters to defines AS.
+**NOTE:** Reference [Regular Expressions] for configuration parameters to defines AS.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Distribute lists
 
@@ -2493,7 +2482,7 @@ Router# show ip bgp
 
 -   Displays BGP route table, can be used to verify distribute-list operation.
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Prefix lists
 
@@ -2630,12 +2619,9 @@ Router# show route-map
 
 Router# show ip bgp
 
--   Displays BGP route table to confirm route-map operation\
-     
+-   Displays BGP route table to confirm route-map operation
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Conditional Advertisement
 
@@ -2732,7 +2718,7 @@ Let's make an AS path access list that defines an AS path that came directly fro
 
 **R4**(config-router)# ip as-path access-list 1 permit \^65005\$
 
-Now, we need to create two more access lists. One will match the default route we receive from R5, the other will match the route we want to conditionally advertise to R2 (198.51.100.0/24). Reference [regular expressions](onenote:BGP.one#Regular%20Expressions&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={6098A62B-3BDE-4FEC-A5A1-4F05DD70823A}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE) for additional information regarding this syntax.
+Now, we need to create two more access lists. One will match the default route we receive from R5, the other will match the route we want to conditionally advertise to R2 (198.51.100.0/24). Reference [regular expressions] for additional information regarding this syntax.
 
  
 
@@ -2852,9 +2838,7 @@ Router# show ip route
 
 *Source: [Evil Routers - Conditional Advertisement](http://evilrouters.net/2010/03/05/bgp-conditional-advertisements/)*
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Conditional Route Injection
 
@@ -3001,9 +2985,7 @@ Router# show ip bgp injected-paths
 
 *Source: [Arden Packeer - Conditional Route Injection](http://ardenpackeer.com/routing-protocols/tutorial-bgp-conditional-route-injection-with-inject-map/)*
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Clearing BGP Sessions
 
@@ -3117,9 +3099,7 @@ Router# clear ip bgp {\* \| neighbor ip \| peer-group} in
 
 -   \* clears all sessions, or a more specific neighbor or peer group can be reset.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Outbound Route Filtering ORF
 
@@ -3181,9 +3161,7 @@ Router# debug ip bgp updates *\[in \| out\]*
 
 -   Enables debugging for incoming BGP updates, keyword can be defined to designate packets *in* or *out*.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Local AS
 
@@ -3260,9 +3238,7 @@ Router# show ip bgp neighbor *\<neighbor-ip*
 
 -   Displays neighbor details, including real and local AS number.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Route Dampening
 
@@ -3309,9 +3285,7 @@ Router# show ip bgp dampening parameters
 
 -   Displays configured parameters, if none are defined -defaults will be used.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Regular Expressions
 
@@ -3401,9 +3375,7 @@ Router(config-router)# neighbor {ip-address \| peer-group} filter-list *as-path-
 
 **NOTE:** The AS path access list filters the AS paths in routing updates to or from a specific neighbor. You can use the in and out keywords to specify the filter direction. Only one in and one out AS path filter can be configured.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Fast External Fallover FEA
 
@@ -3421,9 +3393,7 @@ Router(config)# router bgp *\<asn*
 
 Router(config-router)# *no* bgp fast-external-fallover
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Fast Peering Session Deactivation FPSD
 
@@ -3439,9 +3409,7 @@ Unlike Fast External Fallover, FPSD is able to monitor a peer session adjacency 
 
 Router(config-router)# neighbor *\<ip-address* fall-over
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Next Hop Address Tracking
 
@@ -3477,9 +3445,7 @@ Router(config)# router bgp *\<asn*
 
 Router(config-router)# *no* bgp next-hop triggered enable
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Maximum Prefix
 
@@ -3521,9 +3487,7 @@ Router(config-router)# do show ip bgp summary \| begin Neighbor
 
 -   Displays neighbor statistics; including the number of prefixes being sent by a neighbor.
 
- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## BGP Policy Accounting
 
