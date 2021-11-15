@@ -2978,15 +2978,21 @@ The local-AS feature is useful if ISP-A purchases ISP-B, but ISP-B's customers d
 
 **ISP-B**
 
+```
 ISP-B(config)# router bgp 100
+```
 
 -   ISP A (AS 100) this is now used by all routers in ISP-B after its acquisition by ISP-A.
 
+```
 ISP-B(config-router)# neighbor 192.168.1.2 remote-as 300
+```
 
 -   Defines eBGP connection to ISP-C
 
+```
 ISP-B(config-router)# neighbor 192.168.1.2 local-as 200
+```
 
 -   This command makes the remote router in ISP-C to see this router as belonging to AS 200 instead of AS 100. This also makes this router prepend AS200 in all updates to ISP-C.  
 
