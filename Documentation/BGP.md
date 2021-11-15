@@ -3525,75 +3525,72 @@ Router(config)# ip community-list 70 permit 100:201
 BGP policy accounting (BPA) is another BGP feature that takes advantage of the FIB policy parameters. In this case, the parameter is traffic index. Traffic index is a router internal counter within a FIB leaf with values between 1 and 8. Think of the traffic index as a table of eight independent buckets. Each can account for one type of traffic matching certain criteria. The number of packets and bytes in each bucket of an interface is recorded.
 
  
-
-Router(config)# route-map set_bucket permit 10\
-Router(config-route-map)# match community 30\
-Router(config-route-map)# set traffic-index 2\
-!\
-Router(config)# route-map set_bucket permit 20\
-Router(config-route-map)# match community 40\
-Router(config-route-map)# set traffic-index 3\
-!\
-Router(config)# route-map set_bucket permit 30\
-Router(config-route-map)# match community 50\
-Router(config-route-map)# set traffic-index 4\
-!\
-Router(config)# route-map set_bucket permit 40\
-Router(config-route-map)# match community 60\
-Router(config-route-map)# set traffic-index 5\
-!\
-Router(config)# route-map set_bucket permit 50\
-Router(config-route-map)# match community 70\
+```
+Router(config)# route-map set_bucket permit 10
+Router(config-route-map)# match community 30
+Router(config-route-map)# set traffic-index 2
+!
+Router(config)# route-map set_bucket permit 20
+Router(config-route-map)# match community 40
+Router(config-route-map)# set traffic-index 3
+!
+Router(config)# route-map set_bucket permit 30
+Router(config-route-map)# match community 50
+Router(config-route-map)# set traffic-index 4
+!
+Router(config)# route-map set_bucket permit 40
+Router(config-route-map)# match community 60
+Router(config-route-map)# set traffic-index 5
+!
+Router(config)# route-map set_bucket permit 50
+Router(config-route-map)# match community 70
 Router(config-route-map)# set traffic-index 6
-
- 
+```
 
 **Use the table-map command under BGP to modify the bucket number when the IP routing table is updated with routes learned from BGP.**
 
+```
 Router(config)# router bgp 1
-
 Router(config-router)# table-map *set_bucket*
+```
 
 -   Set_bucket defines the route-map that keeps track of the traffic index.
 
- 
-
 **Enable the policy accounting feature on the input interface connected to the customer.**
 
+```
 Router(config)# interface serial0/0
-
 Router(config-if)# bgp-policy accounting
-
- 
+```
 
 **Configuring BGP Policy Accounting - Output Interface Accounting**
 
 The configuration of BGP PA Output Interface Accounting is very similar to BGP PA. The first three step described in the previous section are exactly the same. The only change is in the *bgp-policy accounting* command that is used to enable the PA feature on the interface. The PA criteria is based on the source address of the output traffic instead of the input as configured above.
 
- 
-
 **Output Interface Accounting Configuration**
 
+```
 Router(config)# interface serial0/0
-
 Router(config-if)# bgp-policy accounting *output source*
-
+```
  
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip cef *\<ip-address* detail
+```
 
 -   Displays what bucket (traffic index) is assigned to a specific prefix.
 
- 
-
+```
 Router# show ip bgp *\<ip-address*
+```
 
 -   Displays what community (or communities) are assigned to a specific prefix.
 
- 
-
+```
 Router# show cef interface policy-statistics
+```
 
--   Displays per-interface traffic statistics .
+-   Displays per-interface traffic statistics.
