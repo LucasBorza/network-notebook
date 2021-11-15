@@ -221,7 +221,7 @@ Router(config-router)# neighbor x.x.x.x default-originate
 ```
 
 -   Advertises a default-route to an established neighbor.
- 
+
 **2. Full Routes: failover plus optimization**
 
 Using full BGP routes with multiple Internet providers allows a company to:
