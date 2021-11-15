@@ -50,7 +50,7 @@
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-**Border Gateway Protocol (BGP)** is the protocol backing the core routing decisions on the Internet. It maintains a table of IP networks or \'prefixes\' which designate network reachability among autonomous systems (AS). It is described as a path vector protocol. BGP does not use traditional Interior Gateway Protocol (IGP) metrics, but makes routing decisions based on path, network policies and/or rulesets. For this reason, it is more appropriately termed a reachability protocol rather than routing protocol.
+**Border Gateway Protocol (BGP)** is the protocol backing the core routing decisions on the Internet. It maintains a table of IP networks or 'prefixes' which designate network reachability among autonomous systems (AS). It is described as a path vector protocol. BGP does not use traditional Interior Gateway Protocol (IGP) metrics, but makes routing decisions based on path, network policies and/or rulesets. For this reason, it is more appropriately termed a reachability protocol rather than routing protocol.
 
 BGP is an advanced path vector protocol and includes the following:
 
@@ -114,7 +114,7 @@ BGP is an advanced path vector protocol and includes the following:
 
 BGP selects a **single** best path to a destination, and inserts it in the IP routing table. IP datagrams are only forwarded based on routes in the IP table, NOT by the routes in the BGP table.
 
-Since each distinct prefix is a unique destination, BGP will select and advertise only a single best path. To decide which is the \'best path\', BGP uses an extensive tie-breaking algorithm. At each step, BGP seeks to break a tie between metrics. The selection process ends at the point where a tie between routes is broken.
+Since each distinct prefix is a unique destination, BGP will select and advertise only a single best path. To decide which is the 'best path', BGP uses an extensive tie-breaking algorithm. At each step, BGP seeks to break a tie between metrics. The selection process ends at the point where a tie between routes is broken.
 
 Attributes are assigned to routes and then the path vector algorithm is performed to insert the appropriate route into the IP routing table.
 
@@ -122,7 +122,7 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
 -   **Well-known mandatory -** *must be supported and included*
 
-    -   Origin - The source of the route (IGP \EGP \Unknown - route was redistributed)
+    -   Origin - The source of the route (IGP EGP Unknown - route was redistributed)
 
     -   AS Path - An ordered list of the ASs the route has traversed, two types exist.
 
@@ -138,13 +138,13 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
     -   Atomic Aggregate - Informs the neighbor autonomous system that the originating router aggregated (summarized) routes
 
--   **(Optional) Transitive -** *don\'t have to be supported, but must be passed onto peer*
+-   **(Optional) Transitive -** *don't have to be supported, but must be passed onto peer*
 
     -   Aggregator - Identifies the router and AS where summarization was performed
 
     -   Community - Provides route tagging capability
 
--   **(Optional) Nontransitive -** *don\'t have to be supported, and can be ignored*
+-   **(Optional) Nontransitive -** *don't have to be supported, and can be ignored*
 
     -   Multi Exit Discriminator - Used to discriminate between multiple entry point into an autonomous system
 
@@ -156,7 +156,7 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
 **Path Vector Algorithm**
 
--   The first path received is automatically the \'best path\'. Any further paths received are compared to this path to determine if the new path is \'best\'.
+-   The first path received is automatically the 'best path'. Any further paths received are compared to this path to determine if the new path is 'best'.
 
 -   Is the route **VALID**? To be valid:
 
@@ -168,7 +168,7 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
     -   **The AS_PATHs received from an external AS *must not contain the local AS,* or they will be discarded.**
 
-    -   **The local routing policy must permit the route. If the neighbor is filtering the route, they won\'t use it.**
+    -   **The local routing policy must permit the route. If the neighbor is filtering the route, they won't use it.**
 
 -   Highest **WEIGHT**
 
@@ -180,8 +180,8 @@ Attributes are assigned to routes and then the path vector algorithm is performe
 
 -   **Shortest AS-PATH**
 
--   **Lowest ORIGIN type:\
-    IGP** \< **EGP** \< **INCOMPLETE**
+-   Lowest ORIGIN type:
+    **IGP**  **EGP**  **INCOMPLETE**
 
 -   Lowest **MULTI-EXIT-DISCRIMINATOR (MED)**
 
@@ -216,7 +216,7 @@ BGP tells your router where to send outbound traffic. When you connect your netw
 Configuring BGP for each Internet connection using a default route allows a company to have automatic failover between two providers should one provider go down. However, BGP will not load-balance and will send all outgoing traffic to only one ISP. Default routes are often used on routers with less than 512 MB RAM.
 
 ```
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 Router(config-router)# neighbor x.x.x.x default-originate
 ```
 
@@ -233,8 +233,8 @@ Using full BGP routes with multiple Internet providers allows a company to:
 However, Full Routes typically require a router with minimum 1 GB RAM. Advertising full routes requires keeping all the Internet's available paths in your router's memory. As of 2010, there are over 280,000 routes on the Internet, so having two ISPs means you'll need to store over 560,000 paths.
 
 ```
-Router(config)# router bgp *\<asn*
-Router(config-router)# neighbor x.x.x.x remote-as *\<asn*
+Router(config)# router bgp *asn*
+Router(config-router)# neighbor x.x.x.x remote-as *asn*
 ```
 
 -   By default the full routing table will be sent to an established neighbor.
@@ -251,7 +251,7 @@ Typically, you would designate a default route for each provider, plus some spec
 
 BGP neighbors are not discovered; rather they must be configured manually on both sides of the connection.
 
-BGP neighbors form a TCP connection with each neighbor, sending BGP messages over the connections- culminating in BGP ***Update messages*** that contain the routing information. Each router explicitly configures its neighbors\' IP addresses, using these definitions to tell a router with which IP addresses to attempt a TCP connection. Also, if a router receives a TCP connection request (to BGP port 179) from a source IP address that is not configured as a BGP neighbor, the router rejects the request.
+BGP neighbors form a TCP connection with each neighbor, sending BGP messages over the connections- culminating in BGP ***Update messages*** that contain the routing information. Each router explicitly configures its neighbors' IP addresses, using these definitions to tell a router with which IP addresses to attempt a TCP connection. Also, if a router receives a TCP connection request (to BGP port 179) from a source IP address that is not configured as a BGP neighbor, the router rejects the request.
 
 After the TCP connection is establish. BGP begins with BGP ***Open messages***. Once a pair of BGP Open messages has been exchanged, the neighbors have reached the ***Established state***, which is the stable state of two working BGP peers. At this point, BGP update messages can be exchanged.
 
@@ -259,7 +259,7 @@ After the TCP connection is establish. BGP begins with BGP ***Open messages***. 
 
 1.  The router must receive a TCP connection request with a source address that the router finds in a BGP neighbor command.
 
-2.  A router\'s ASN (autonomous system number) must match the neighbor\'s router\'s reference to that ASN with its **neighbor remote** *\<asn*
+2.  A router's ASN (autonomous system number) must match the neighbor's router's reference to that ASN with its **neighbor remote** *asn*
 
 3.  The BGP RIDs (Router ID) of the two routers must not be the same.
 
@@ -267,7 +267,7 @@ After the TCP connection is establish. BGP begins with BGP ***Open messages***. 
 
 **Packet Types**
 
-**Open -** Used to establish a neighbor relationship and exchange basic parameters.\
+**Open -** Used to establish a neighbor relationship and exchange basic parameters.
 **Update -** Used to exchange routing information
 
 **Keepalive -** Used to maintain the neighbor relationship
@@ -301,14 +301,14 @@ To configure one router with multiple BGP peer relationships, configurations can
 **Create a BGP peer group**
 
 ```
-Router(config-router)# neighbor *\<group-name* peer-group
+Router(config-router)# neighbor *group-name* peer-group
 ```
 
 **Specify parameters for the BGP peer group (AS number, Update-Source, Filtering etc.)**
 
 ```
-Router(config-router)# neighbor *\<group-name* remote-as 65200
-Router(config-router)# neighbor *\<group-name* update-source loopback 0
+Router(config-router)# neighbor *group-name* remote-as 65200
+Router(config-router)# neighbor *group-name* update-source loopback 0
 ```
 
 **Assign a neighbor to the peer group**
@@ -319,7 +319,7 @@ Router(config-router)# neighbor 1.1.1.1 peer-group *<group-name>*
 
 Troubleshooting/Verification
 
-Router# show ip bgp peer-group \[*peer-group-name\] \[summary\]*
+Router# show ip bgp peer-group [*peer-group-name] [summary]*
 
 -   Displays peer group configuration
 
@@ -331,7 +331,7 @@ Cisco introduced dynamic update peer groups, a feature which essentially enables
 
 With the burden of CPU optimization delegated to dynamic update peer groups, peer templates introduced a much more flexible, hierarchical peer configuration scheme. There are two types of peer templates: *session templates* and *policy templates*.
 
-Session templates affect the actual BGP session with a neighboring router, whereas policy templates affect protocol-specific (NLRI) policy (e.g. IPv4, IPv6, VPNv4). The following table lists which parameters are defined in each type of template (as of IOS 12.4T):\
+Session templates affect the actual BGP session with a neighboring router, whereas policy templates affect protocol-specific (NLRI) policy (e.g. IPv4, IPv6, VPNv4). The following table lists which parameters are defined in each type of template (as of IOS 12.4T):
 
 **Peer Template Configuration Example**
 
@@ -372,7 +372,7 @@ Router(config-router)# **template peer-session BGP-All**
 Router(config-router-stmp)# **timers 30 300**
 Router(config-router-stmp)# **exit-peer-session**
 
-The **BGP-All** template holds the timers configuration line we want to apply to all peers. Next we\'ll create separate IBGP and EBGP templates, both of which will inherit parameters from the **BGP-All** template using the inherit peer-session command.
+The **BGP-All** template holds the timers configuration line we want to apply to all peers. Next we'll create separate IBGP and EBGP templates, both of which will inherit parameters from the **BGP-All** template using the inherit peer-session command.
 
 ![peertemplates2.png](/Images/BGP/peertemplates2.png)
 
@@ -431,9 +431,9 @@ Router(config-router)#neighbor 10.0.1.1 inherit peer-session Internal-Session
 **Apply Peer Policy**
 Router(config-router)# address-family ipv4
 
-Router(config-router-af)# no synchronization\
-Router(config-router-af)# neighbor 10.0.1.1 activate\
-Router(config-router-af)# neighbor 10.0.1.1 inherit peer-policy Internal-Policy\
+Router(config-router-af)# no synchronization
+Router(config-router-af)# neighbor 10.0.1.1 activate
+Router(config-router-af)# neighbor 10.0.1.1 inherit peer-policy Internal-Policy
 Router(config-router-af)# no auto-summary
 
 **Troubleshooting/Verification**
@@ -504,7 +504,7 @@ You can configure MD5 authentication between two BGP peers, meaning that each se
 
 **MD5 Authentication Configuration**
 
-Router(config-router)# neighbor *\[ip-address \| peer-group-name\]* password *\<string*
+Router(config-router)# neighbor *[ip-address | peer-group-name]* password *string*
 
 -   Enables MD5 authentication, must be configured on both neighbors with the same password string.
 
@@ -524,20 +524,18 @@ Router(config-router)# neighbor 10.0.0.2 remote-as 6500**2**
 
 **Adjusting Timers**
 
-Router(config-router)# bgp timers *\<keepalive\<holdtime*
+Router(config-router)# bgp timers *keepaliveholdtime*
 
 -   Used to adjust keepalive and holdtime values globally, 60 and 180 seconds respectively by default.
 
-Router(config-router)# neighbor *\[peer address \| peer-group-name\]* timers *\<keepalive\<holdtime*
+Router(config-router)# neighbor *[peer address | peer-group-name]* timers *keepaliveholdtime*
 
 -   Used to adjust keepalive and holdtime values per neighbor relationship
 
-**Troubleshooting/Verification**\
+**Troubleshooting/Verification**
 Router# show ip bgp summary
 
 -   Displays neighbor relationship status and statistics
-
- 
 
 Router(config)# debug ip routing
 
@@ -559,7 +557,7 @@ The routing software decides based on the ASN following the remote-as statement 
 
 EBGP packets by default have a TTL (time to live) of 1, requiring neighbors to be directly attached. This can be administratively overridden.
 
-Router(config-router)# neighbor *\<IP address* ebgp-multihop *\<hop count*
+Router(config-router)# neighbor *IP address* ebgp-multihop *hop count*
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -591,7 +589,7 @@ Instead of globally adjusting eBGP or IGPs administrative distance, BGP backdoor
 
 **Syntax**
 
-Router(config-router)# *network \<ip-address* mask *\<subnet* backdoor
+Router(config-router)# *network ip-address* mask *subnet* backdoor
 
  
 
@@ -673,7 +671,7 @@ Administrative distance is a dependability rating for the source of routing info
 
  
 
-**Distance Configuration**\
+**Distance Configuration**
 Router(config-router)# distance bgp *external-distance internal-distance local-distance*
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -729,7 +727,7 @@ The maximum number applies only to routes learned from external peers unless you
 
  
 
-Router(config-router)# maximum-paths *ibgp* \[1-6\]
+Router(config-router)# maximum-paths *ibgp* [1-6]
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -895,7 +893,7 @@ Router C(config-router-af)# maximum-paths 6
 
 **Troubleshooting/Verification**
 
-Router# show ip bgp *\<ip-address*
+Router# show ip bgp *ip-address*
 
 -   Displays multipath information as well as the DMZ-Link bandwidth of each link.
 
@@ -903,7 +901,7 @@ Router# show ip bgp *\<ip-address*
 
 ## Next Hop Processing
 
-BGP next-hop processing was originally designed for \"strange environments\" frame relay, Ethernet etc. and because of this the next-hop-processing can sometimes cause routing issues.
+BGP next-hop processing was originally designed for "strange environments" frame relay, Ethernet etc. and because of this the next-hop-processing can sometimes cause routing issues.
 
 **Key Points**
 
@@ -933,7 +931,7 @@ If R1 is to send routes to R4 it will send them using its next-hop-address of 1.
 
 Now lets say R4 is to pass routes from R1 to R5 and because of the eBGP rule it would change the routes next-hop-address to 10.1.45.1. Which also works correctly, because R5 would traverse R4 which then knows how to reach R1.
 
-Now, here is where the problem comes in to play. R5 has several networks behind it and needs to advertise them to R1. R4 will receive the routes and then route them to R1, but here\'s the catch now that this is an iBGP relationship it will keep the same next-hop-address of R5 (10.1.45.2) which clearly can\'t be reached by R1, because this address is not in its routing table. Because of this the routes will not go into the IP routing table and will remain in the BGP route table.
+Now, here is where the problem comes in to play. R5 has several networks behind it and needs to advertise them to R1. R4 will receive the routes and then route them to R1, but here's the catch now that this is an iBGP relationship it will keep the same next-hop-address of R5 (10.1.45.2) which clearly can't be reached by R1, because this address is not in its routing table. Because of this the routes will not go into the IP routing table and will remain in the BGP route table.
 
  
 
@@ -945,7 +943,7 @@ To resolve the last scenario described a single command can be added to the neig
 
 **Syntax**
 
-Router(config-router)# neighbor *\<neighbor-ip-address* \[next-hop-self\]
+Router(config-router)# neighbor *neighbor-ip-address* [next-hop-self]
 
  
 
@@ -955,13 +953,13 @@ R4(config)# router bgp 5500
 
 R4(config-router)# neighbor 1.1.1.1 *next-hop-self*
 
--   This changes the way R4 processes routes to its neighbor 1.1.1.1 (R1) and now will adjust the next-hop-address for routes being sent to it\'s address of 4.4.4.4 (loopback address) that is not shown on the diagram. Because R1 can access this iBGP neighbor and the address of 4.4.4.4. routes will be processed correctly into the routing table an thus R1 will be able to reach the networks behind R5.
+-   This changes the way R4 processes routes to its neighbor 1.1.1.1 (R1) and now will adjust the next-hop-address for routes being sent to it's address of 4.4.4.4 (loopback address) that is not shown on the diagram. Because R1 can access this iBGP neighbor and the address of 4.4.4.4. routes will be processed correctly into the routing table an thus R1 will be able to reach the networks behind R5.
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Internal Border Gateway Protocol iBGP
 
-Internal Border Gateway Protocol, iBGP is the protocol used between the routers in the same autonomous system (AS). IBGP is used to provide information to your internal routers. IBGP neighbor relationships can form over multiple hops or in other words they don\'t need to be directly attached neighbors.
+Internal Border Gateway Protocol, iBGP is the protocol used between the routers in the same autonomous system (AS). IBGP is used to provide information to your internal routers. IBGP neighbor relationships can form over multiple hops or in other words they don't need to be directly attached neighbors.
 
  
 
@@ -975,23 +973,23 @@ Router(config-router)# neighbor 10.0.0.**2** remote-as 6500**1**
 
  
 
-**NOTE:** It\'s advised to use loopback interfaces in order to create a IGBP neighbor relationship, view update-source subpage for additional details.
+**NOTE:** It's advised to use loopback interfaces in order to create a IGBP neighbor relationship, view update-source subpage for additional details.
 
  
 
 **Adjusting Timers**
 
-Router(config-router)# bgp timers *\<keepalive\<holdtime*
+Router(config-router)# bgp timers *keepaliveholdtime*
 
 -   Used to adjust keepalive and holdtime values globally, 60 and 180 seconds respectively by default.
 
-Router(config-router)# neighbor *\[peer address \| peer-group-name\]* timers *\<keepalive\<holdtime*
+Router(config-router)# neighbor *[peer address | peer-group-name]* timers *keepaliveholdtime*
 
 -   Used to adjust keepalive and holdtime values per neighbor relationship
 
  
 
-**Troubleshooting/Verification**\
+**Troubleshooting/Verification**
 Router# show ip bgp summary
 
 -   Displays neighbor relationship status and statistics
@@ -1006,7 +1004,7 @@ Router(config)# debug ip routing
 
 ## Update Source
 
-Unlike typical routing protocols, BGP neighbors are statically defined. BGP neighbors or peers don\'t need to be directly connected and can use loopback interfaces to form relationships. Often times this is advantageous because if the actual physical interface shuts down, the peer relationship would not be lost (pending another path is available to the same destination).
+Unlike typical routing protocols, BGP neighbors are statically defined. BGP neighbors or peers don't need to be directly connected and can use loopback interfaces to form relationships. Often times this is advantageous because if the actual physical interface shuts down, the peer relationship would not be lost (pending another path is available to the same destination).
 
 **Update-Source Configuration**
 
@@ -1077,7 +1075,7 @@ The **bgp cluster-id** command is used to assign a cluster ID to a route reflect
 
  
 
-R1(config-router)# bgp cluster-id *\[ip-address\]*
+R1(config-router)# bgp cluster-id *[ip-address]*
 
  
 
@@ -1206,7 +1204,7 @@ R1(config)# router bgp 65500
 
 R1(config-router)# bgp confederation identifier 6300
 
--   Identified \"real\" public assigned AS number.
+-   Identified "real" public assigned AS number.
 
 R1(config-router)# bgp confederation peers 65501
 
@@ -1293,7 +1291,7 @@ iBGP peers must be fully meshed, as iBGP-learned routes are not passed to other 
 **Disable iBGP Synchronization**
 
 ```
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 Router(config-router)# no synchronization
 ```
 
@@ -1314,14 +1312,14 @@ Weight, a Cisco-proprietary feature. The administrative weight can be assigned t
 You can use weight to provide local routing policy, and you can use local preference to establish autonomous system-wide routing policy. Higher weights are preferred.
 
 ```
-Router(config-router)# neighbor *\[ip-address \| peer-group-name\]* weight *\<weight*
+Router(config-router)# neighbor *[ip-address | peer-group-name]* weight *weight*
 ```
 
 -   This approach assigns a weight value to all route updates **from** the neighbor this command is configured on. In other word any route this router sends to the neighbor defined will receive the configured weight value.
 
  
 
-Router(config-router)# neighbor *\[ip-address \| peer-group-name\]* filter-list *\<access-list*\\[in \| out\] weight *\<weight*
+Router(config-router)# neighbor *[ip-address | peer-group-name]* filter-list *access-list*[in | out] weight *weight*
 
 -   Configures the router so that all **incoming** routes that match an autonomous system filter receive the configured weight.
 
@@ -1429,7 +1427,7 @@ There are four predefined communities:
 
 -   Cisco IOS parser allows you to specify a 32-bit community value as:
 
-    -   \[AS-number\]:\[low-order-16-bits\]
+    -   [AS-number]:[low-order-16-bits]
 
  
 
@@ -1477,13 +1475,13 @@ Now, after the specific routes have been tagged you can (Step 4) identify the co
 
 **Route-map Configuration**
 
-Router(config)# route-map *\<name*
+Router(config)# route-map *name*
 
-Router(config-route-map)# match *\<condition*
+Router(config-route-map)# match *condition*
 
 -   Prefixes, metric, as-path etc.
 
-Router(config-route-map)# set community *\<value* \[additive\]
+Router(config-route-map)# set community *value* [additive]
 
 -   Based on the match statement you can set a community to match the criteria.
 
@@ -1493,7 +1491,7 @@ Router(config-route-map)# set community *\<value* \[additive\]
 
 **Apply route-map to neighbor**
 
-Router(config-router)# neighbor *\<ip-address* route-map *\<map-name* \[in \| out\]
+Router(config-router)# neighbor *ip-address* route-map *map-name* [in | out]
 
 -   This command applies a route-map to inbound or outbound BGP updates.
 
@@ -1503,7 +1501,7 @@ Router(config-router)# neighbor *\<ip-address* route-map *\<map-name* \[in \| ou
 
 **Apply route-map through redistribution**
 
-Router(config-router)# redistribute *\<protocol* route-map *\<map-name*
+Router(config-router)# redistribute *protocol* route-map *map-name*
 
 -   This command applies a route-map to redistributed routes.
 
@@ -1523,7 +1521,7 @@ set community 387:17](''/media/image10.png){width="6.0in" height="3.822916666666
 
 **Configure send-community to allow communities to be sent to BGP neighbors.**
 
-Router(config-router)# neighbor *\<ip-address* send-community
+Router(config-router)# neighbor *ip-address* send-community
 
 -   By default, communities are stripped in outgoing BGP updates.
 
@@ -1550,7 +1548,7 @@ set community 387:17](''/media/image11.png){width="6.0in" height="3.927083333333
 
 **Standard Community-List Configuration**
 
-Router(config)# ip community-list \[**1 - 99** \| 100 - 500\] permit \| deny *\[value\]*
+Router(config)# ip community-list [**1 - 99** | 100 - 500] permit | deny *[value]*
 
 -   This command defines a standard community-list (1-99)
 
@@ -1564,7 +1562,7 @@ Router(config)# ip community-list \[**1 - 99** \| 100 - 500\] permit \| deny *\[
 
 **Extended Community-List Configuration**
 
-Router(config)# ip community-list \[1 - 99 \| **100 - 500**\] permit \| deny *\[regexp\]*
+Router(config)# ip community-list [1 - 99 | **100 - 500**] permit | deny *[regexp]*
 
 -   This command defines a extended community-list (100-500)
 
@@ -1572,7 +1570,7 @@ Router(config)# ip community-list \[1 - 99 \| **100 - 500**\] permit \| deny *\[
 
 -   Communities attached to a route are ordered, converted to string, and matched with regexp.
 
--   Use \".\*\" to match any community value; exactly the same as the *internet* keyword within a standard community-list.
+-   Use ".*" to match any community value; exactly the same as the *internet* keyword within a standard community-list.
 
  
 
@@ -1603,7 +1601,7 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 
 -   Applied to internal routes by configuring the **set extcommunity cost** command in a route-map.
 
--   Can be used as a \"tie breaker\" during the best-path selection process.
+-   Can be used as a "tie breaker" during the best-path selection process.
 
  
 
@@ -1623,11 +1621,11 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 
 **Route-map Configuration**
 
-Router(config)# route-map *\<map-name* permit \| deny
+Router(config)# route-map *map-name* permit | deny
 
-Router(config-route-map)# match community *commlist-number* \[exact\]
+Router(config-route-map)# match community *commlist-number* [exact]
 
-Router(config-route-map)# set *\<attributes*
+Router(config-route-map)# set *attributes*
 
 -   Community-lists are used in match conditions in route-maps to match on communities attached to BGP routes.
 
@@ -1642,11 +1640,11 @@ Router(config-route-map)# set *\<attributes*
 ![Machine generated alternative text:
 Desired Traffic Flow
 AS213 AS462
-2 Mbps \_\_\_\_\_\_\_\_\_
-\_\_\_\_\_\_s--- -
-10.0.0.0/8 \_\_\_\_\_
+2 Mbps _________
+______s--- -
+10.0.0.0/8 _____
 64 kbps
-Default Traffic Flow \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ R
+Default Traffic Flow _______________________ R
 AS 387
 neighbor Customers per-o J
 router bgp 387
@@ -1687,7 +1685,7 @@ Router# show ip bgp community
 
  
 
-Router# show ip bgp community \<*as:nn\[exact\]*
+Router# show ip bgp community *as:nn[exact]*
 
 -   Displays all routes in a BGP table that have all the specified communities attached.
 
@@ -1695,7 +1693,7 @@ Router# show ip bgp community \<*as:nn\[exact\]*
 
  
 
-Router# show ip bgp community-list \<*community-list*
+Router# show ip bgp community-list *community-list*
 
 -   Displays all routes in BGP table that match a specified community-list.
 
@@ -1711,7 +1709,7 @@ Default Routes can be injected into BGP in one of three ways:
 
 -   By injecting the default using the **redistribute** command.
 
--   By injecting a default route into BGP using the **neighbor** *\<neighbor-id* **default-information** \[route-map *route-map-name*\]
+-   By injecting a default route into BGP using the **neighbor** *neighbor-id* **default-information** [route-map *route-map-name*]
 
  
 
@@ -1733,7 +1731,7 @@ Injecting a default route through redistribution requires an additional configur
 
  
 
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 
 Router(config-router)# default-information originate
 
@@ -1749,15 +1747,15 @@ Router(config)# redistribute static
 
 **Neighbor Default-Information**
 
-Injecting a default route into BGP by using the **neighbor** *\<neighbor-ip* **default-orginate** \[route-map *route-map-name*\] command does not add a default route to the local BGP table; instead, it causes the advertisement of a default to the specified neighbor. In fact, this method does not even check for the existence of a default route in the IP routing table by default, but it can. With the route-map option, the reference route map examines the entries in the IP routing table (not the BGP table); if a route map permit clause is matched, then the default route is advertised to the neighbor.
+Injecting a default route into BGP by using the **neighbor** *neighbor-ip* **default-orginate** [route-map *route-map-name*] command does not add a default route to the local BGP table; instead, it causes the advertisement of a default to the specified neighbor. In fact, this method does not even check for the existence of a default route in the IP routing table by default, but it can. With the route-map option, the reference route map examines the entries in the IP routing table (not the BGP table); if a route map permit clause is matched, then the default route is advertised to the neighbor.
 
  
 
 **Without verifying default route exists on local router**
 
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 
-Router(config-router)# neighbor \<neighbor-ipdefault-originate
+Router(config-router)# neighbor neighbor-ipdefault-originate
 
  
 
@@ -1775,17 +1773,17 @@ Router(config)# ip prefix-list def-route seq 5 permit 0.0.0.0/0
 
 !
 
+```
 Router(config)# route-map *check-default* permit 10
-
 Router(config-route-map)# match ip address prefix-list *def-route*
+```
 
 -   Route map that confirms a route exists or not within the IP routing table
 
-!
-
-Router(config)# router bgp \<asn
-
-Router(config-router)# neighbor \<neighbor-ipdefault-originate route-map *check-default*
+```
+Router(config)# router bgp asn
+Router(config-router)# neighbor neighbor-ipdefault-originate route-map *check-default*
+```
 
 -   Verifies with route-map *check-default* to see if a default route exists before advertising it to the specified neighbor.
 
@@ -1795,15 +1793,11 @@ Router(config-router)# neighbor \<neighbor-ipdefault-originate route-map *check-
 
 Unlike other routing protocols BGP has two independent configurations. First to form a neighbor relationship and second to originate prefixes into the routing process. BGP has several methods to originate prefixes into the BGP routing table.
 
- 
-
 **Network Statement:** traditional method of defining networks to advertise to other BGP peers.
 
 **Redistribution:** redistributing networks from other routing protocols
 
 **Aggregation:** allows the aggregation of specific routes into one route and essentially is used as a point to summarize several networks and advertise it to other BGP peers.
-
- 
 
 **Status Codes**
 
@@ -1815,13 +1809,11 @@ Unlike other routing protocols BGP has two independent configurations. First to 
 
 **h** - history
 
-**\*** - Valid
+***** - Valid
 
-**\** - Best
+**** - Best
 
 **i** - internal
-
- 
 
 **Origin Codes**
 
@@ -1855,7 +1847,7 @@ The logic differs slightly based on whether the route is injected with the redis
 
 **Disable Auto-Summarization**
 
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 
 Router(config-router)# no auto-summary
 
@@ -1871,11 +1863,11 @@ The network statement simply tells what networks to advertise, very straight for
 
 Router(config)# router bgp 65001
 
-Router(config-router)# network *\<ip-address* mask *\<subnet*
+Router(config-router)# network *ip-address* mask *subnet*
 
  
 
-**Example:**\
+**Example:**
 Router(config-router)# network 10.10.0.0 mask 255.255.0.0
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1890,7 +1882,7 @@ Redistribution can be used to redistribute routes from another routing protocols
 
 Router(config)# router bgp 65001
 
-Router(config-router)# redistribute *\[eigrp \| ospf \| rip \| ospf \| isis \| egp \|\| connected \| static\]*
+Router(config-router)# redistribute *[eigrp | ospf | rip | ospf | isis | egp || connected | static]*
 
 -   Provides redistribution with no filtering, all routes within the specified protocol will be advertised.
 
@@ -1910,261 +1902,239 @@ Border Gateway Protocol (BGP) allows the aggregation of specific routes into one
 
 Routers one and two each advertise four /24 routes to their respective networks. These routes are advertised to R3, which in turn advertises them to R4. Inspecting the BGP table on R4, we can see four routes each from AS 10 and 20.
 
- 
-
- 
-
-![](''/media/image14.png){width="5.041666666666667in" height="3.125in"}
-
- 
+![aggregation.png](/Images/BGP/aggregation.png)
 
 Since R4 has only a single path to all of these subnets, maintaining eight independent routes is unnecessary. We can implement aggregation at R3 to optimize the BGP table on R4.
 
 **Creating an Aggregate Route**
 
-The aggregate-address command can be used to generate a summary route on R3. We\'ll create a 172.16.0.0/21 summary to include all more-specific routes while not leaving any overlap.
+The aggregate-address command can be used to generate a summary route on R3. We'll create a 172.16.0.0/21 summary to include all more-specific routes while not leaving any overlap.
 
- 
-
+```
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0
-
+```
  
-
+```
 R4# **show ip bgp**
+```
 
 -   Verify that R4 sees the new aggregate route
 
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 10.0.0.9 0 30 10 ?\
-*\*\172.16.0.0/21 10.0.0.9 0 0 30 i*\
-\*\172.16.1.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.2.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.3.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.4.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.6.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.7.0/24 10.0.0.9 0 30 20 ?
-
- 
+```
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 10.0.0.9 0 30 10 ?
+*172.16.0.0/21 10.0.0.9 0 0 30 i
+*172.16.1.0/24 10.0.0.9 0 30 10 ?
+*172.16.2.0/24 10.0.0.9 0 30 10 ?
+*172.16.3.0/24 10.0.0.9 0 30 10 ?
+*172.16.4.0/24 10.0.0.9 0 30 20 ?
+*172.16.5.0/24 10.0.0.9 0 30 20 ?
+*172.16.6.0/24 10.0.0.9 0 30 20 ?
+*172.16.7.0/24 10.0.0.9 0 30 20 ?
+```
 
 **Creating an Aggregate Route using Summary-only**
 
 BGP route aggregation differs from IGP summarization in that the default behavior is to continue advertising all the more-specific routes of summarized by an aggregate. As we can see here, the aggregate was injected without affecting any of the more-specific routes. We can suppress all the summarized routes by recreating the aggregate route, this time appending the summary-only keyword.
 
- 
-
+```
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0 summary-only
+```
 
+```
 R4# **show ip bgp**
+```
 
 -   Verify that only a summary route is being advertised using summary-only
 
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 30 I
-
- 
+```
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 30 I
+```
 
 **Suppressing Routes**
 
 As stated by default aggregating a route will advertise the summary route and each individual more specific route. If you add the *summary-only* keyword you remove all specific routes in favor of just having a single summary route.
 
- 
-
 Suppressing routes allows for advertising the summary route and selectively allowing more specific routes.
 
- 
+```
+R4# **show ip bgp**
+```
 
-R4# **show ip bgp**\
-BGP table version is 12, local router ID is 10.0.0.10\
-Status codes: s suppressed, d damped, h history, \* valid, \best, i - internal,\
-r RIB-failure, S Stale\
+```
+BGP table version is 12, local router ID is 10.0.0.10
+Status codes: s suppressed, d damped, h history, * valid, best, i - internal,
+r RIB-failure, S Stale
 Origin codes: i - IGP, e - EGP, ? - incomplete
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 10.0.0.9 0 30 10 ?
+*172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?
+*172.16.1.0/24 10.0.0.9 0 30 10 ?
+*172.16.2.0/24 10.0.0.9 0 30 10 ?
+*172.16.3.0/24 10.0.0.9 0 30 10 ?
+*172.16.4.0/24 10.0.0.9 0 30 20 ?
+*172.16.5.0/24 10.0.0.9 0 30 20 ?
+*172.16.6.0/24 10.0.0.9 0 30 20 ?
+*172.16.7.0/24 10.0.0.9 0 30 20 ?
+```
 
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 10.0.0.9 0 30 10 ?\
-*\*\172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?*\
-\*\172.16.1.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.2.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.3.0/24 10.0.0.9 0 30 10 ?\
-\*\172.16.4.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.6.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.7.0/24 10.0.0.9 0 30 20 ?
-
- 
-
-Since we didn\'t append the *summary-only* keyword, all of the aggregate\'s more-specific routes are still advertised independently. Let\'s assume we want to advertise only the 172.16.0.4.0/24 and 172.16.5.0/24 subnets from AS20 as specific-routes, and rely on the aggregate for routing to the remaining subnets. We can use a *suppress map* on R3 to suppress the six routes we don\'t want to advertise independently. First we create a route-map to match the routes to be suppressed, then reference it from the aggregate-address statement.
+Since we didn't append the *summary-only* keyword, all of the aggregate's more-specific routes are still advertised independently. Let's assume we want to advertise only the 172.16.0.4.0/24 and 172.16.5.0/24 subnets from AS20 as specific-routes, and rely on the aggregate for routing to the remaining subnets. We can use a *suppress map* on R3 to suppress the six routes we don't want to advertise independently. First we create a route-map to match the routes to be suppressed, then reference it from the aggregate-address statement.
 
 **Create ACL to specify routes**
 
-R3(config)# ip access-list standard Suppressed_Routes\
-R3(config-std-nacl)# permit 172.16.0.0 0.0.3.255\
+```
+R3(config)# ip access-list standard Suppressed_Routes
+R3(config-std-nacl)# permit 172.16.0.0 0.0.3.255
 R3(config-std-nacl)# permit 172.16.6.0 0.0.1.255
-
- 
+```
 
 **Create Route Map**
 
-R3(config)# route-map MySuppressMap\
+```
+R3(config)# route-map MySuppressMap
 R3(config-route-map)# match ip address Suppressed_Routes
-
- 
+```
 
 **Apply Suppress-Map to Aggregate Address**
 
+```
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0 as-set suppress-map MySuppressMap
-
- 
+```
 
 On R4, we can verify that R3 is now only advertising the aggregate route and the two /24 routes not matched by our suppress map:
 
- 
-
+```
 R4# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?\
-\*\172.16.4.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.9 0 30 20 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?
+*172.16.4.0/24 10.0.0.9 0 30 20 ?
+*172.16.5.0/24 10.0.0.9 0 30 20 ?
+```
 
 **Neighbor Unsuppress-Map**
 
-We\'ve accomplished what we wanted on R4, but R1 and R2 are now facing a serious problem: since their AS numbers are included in the aggregate route (we\'ve appended as-set to the command), neither AS 10 or 20 will accept the aggregate route. R1 knows only of its own routes and the two AS 20 routes we didn\'t suppress into the aggregate:
+We've accomplished what we wanted on R4, but R1 and R2 are now facing a serious problem: since their AS numbers are included in the aggregate route (we've appended as-set to the command), neither AS 10 or 20 will accept the aggregate route. R1 knows only of its own routes and the two AS 20 routes we didn't suppress into the aggregate:
 
- 
-
+```
 R1# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.1.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.2.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.3.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.4.0/24 10.0.0.2 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.2 0 30 20 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 0.0.0.0 0 32768 ?
+*172.16.1.0/24 0.0.0.0 0 32768 ?
+*172.16.2.0/24 0.0.0.0 0 32768 ?
+*172.16.3.0/24 0.0.0.0 0 32768 ?
+*172.16.4.0/24 10.0.0.2 0 30 20 ?
+*172.16.5.0/24 10.0.0.2 0 30 20 ?
+```
 
 R2 knows only its own routes, since all routes from AS 10 were suppressed.
-
  
-
+```
 R2# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.4.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.5.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.6.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.7.0/24 0.0.0.0 0 32768 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.4.0/24 0.0.0.0 0 32768 ?
+*172.16.5.0/24 0.0.0.0 0 32768 ?
+*172.16.6.0/24 0.0.0.0 0 32768 ?
+*172.16.7.0/24 0.0.0.0 0 32768 ?
+```
 
 One way to remedy this is to apply an ***unsuppress map*** to each of these neighbors on R3. As you might expect, an unsuppress map acts opposite of a suppress map, extracting and advertising more-specific routes from an aggregate. We can create route-maps to match routes from AS 10 and 20, and propagate those routes between the two autonomous systems.
 
- 
+**Match routes based on origin AS**
 
-**Match routes based on origin AS**\
-R3(config)# ip as-path access-list 10 permit 10\
+```
+R3(config)# ip as-path access-list 10 permit 10
 R3(config)# ip as-path access-list 20 permit 20
-
- 
+```
 
 **Create Route Map**
 
-R3(config)# route-map AS10_Routes\
-R3(config-route-map)# match as-path 10\
-R3(config)# route-map AS20_Routes\
+```
+R3(config)# route-map AS10_Routes
+R3(config-route-map)# match as-path 10
+R3(config)# route-map AS20_Routes
 R3(config-route-map)# match as-path 20
-
- 
+```
 
 **Apply Neighbor Unsuppress-Map**
 
-R3(config)# router bgp 30\
-R3(config-router)# neighbor 10.0.0.1 unsuppress-map AS20_Routes\
+```
+R3(config)# router bgp 30
+R3(config-router)# neighbor 10.0.0.1 unsuppress-map AS20_Routes
 R3(config-router)# neighbor 10.0.0.5 unsuppress-map AS10_Routes
+```
 
- 
+After completing this configuration, we reset the BGP adjacencies (clear ip bgp * on R3) and inspect the BGP tables of R1 and R2. We can see now they both know of all /24 routes.
 
-After completing this configuration, we reset the BGP adjacencies (clear ip bgp \* on R3) and inspect the BGP tables of R1 and R2. We can see now they both know of all /24 routes.
-
- 
-
+```
 R1# **show ip bgp**
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 0.0.0.0 0 32768 ?
+*172.16.1.0/24 0.0.0.0 0 32768 ?
+*172.16.2.0/24 0.0.0.0 0 32768 ?
+*172.16.3.0/24 0.0.0.0 0 32768 ?
+*172.16.4.0/24 10.0.0.2 0 30 20 ?
+*172.16.5.0/24 10.0.0.2 0 30 20 ?
+*172.16.6.0/24 10.0.0.2 0 30 20 ?
+*172.16.7.0/24 10.0.0.2 0 30 20 ?
+```
 
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.1.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.2.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.3.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.4.0/24 10.0.0.2 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.2 0 30 20 ?\
-\*\172.16.6.0/24 10.0.0.2 0 30 20 ?\
-\*\172.16.7.0/24 10.0.0.2 0 30 20 ?
-
- 
-
+```
 R2# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 10.0.0.6 0 30 10 ?\
-\*\172.16.1.0/24 10.0.0.6 0 30 10 ?\
-\*\172.16.2.0/24 10.0.0.6 0 30 10 ?\
-\*\172.16.3.0/24 10.0.0.6 0 30 10 ?\
-\*\172.16.4.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.5.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.6.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.7.0/24 0.0.0.0 0 32768 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 10.0.0.6 0 30 10 ?
+*172.16.1.0/24 10.0.0.6 0 30 10 ?
+*172.16.2.0/24 10.0.0.6 0 30 10 ?
+*172.16.3.0/24 10.0.0.6 0 30 10 ?
+*172.16.4.0/24 0.0.0.0 0 32768 ?
+*172.16.5.0/24 0.0.0.0 0 32768 ?
+*172.16.6.0/24 0.0.0.0 0 32768 ?
+*172.16.7.0/24 0.0.0.0 0 32768 ?
+```
 
 R4, in contrast, still knows only the aggregate route and the two /24 routes not matched by our suppress map:
 
- 
-
+```
 R4# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?\
-\*\172.16.4.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.9 0 30 20 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ?
+*172.16.4.0/24 10.0.0.9 0 30 20 ?
+*172.16.5.0/24 10.0.0.9 0 30 20 ?
+```
 
 **Modifying Attributes of the Aggregate**
 
-For a final tweak, let\'s change the origin of the aggregate route from unknown (\"?\" in the BGP table listing) to IGP. To do, this we\'ll need to specify an *attribute map* and reference it from the aggregate-address command:
+For a final tweak, let's change the origin of the aggregate route from unknown ("?" in the BGP table listing) to IGP. To do, this we'll need to specify an *attribute map* and reference it from the aggregate-address command:
 
 **Create Route Map**
 
-R3(config)# route-map SetAttributes\
-R3(config-route-map)# set origin igp\
-\
+```
+R3(config)# route-map SetAttributes
+R3(config-route-map)# set origin igp
+```
+
 **Apply Attribute-Map**
 
-R3(config)# router bgp 30\
+```
+R3(config)# router bgp 30
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0 as-set suppress-map MySuppressMap attribute-map SetAttributes
+```
 
- 
+After applying the attribute map, we can see that the aggregate route is now advertised with an origin of IGP ("i"):
 
-After applying the attribute map, we can see that the aggregate route is now advertised with an origin of IGP (\"i\"):
-
- 
-
+```
 R4# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ***i*\
-**\*\172.16.4.0/24 10.0.0.9 0 30 20 ?\
-\*\172.16.5.0/24 10.0.0.9 0 30 20 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 30 {10,20} ***i*
+***172.16.4.0/24 10.0.0.9 0 30 20 ?
+*172.16.5.0/24 10.0.0.9 0 30 20 ?
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays the BGP routing table
 
@@ -2172,96 +2142,76 @@ Router# show ip bgp
 
 ## AS Set
 
-What's dangerous about the aggregate route advertised by R3? Notice that the route, having originated in AS 30, includes only AS 30 in it\'s AS path. Also remember that R4 is not the only router receiving the aggregate route; R1 and R2 receive it as well. These routers, not seeing their own AS in the route\'s AS path, happily install the route in their own BGP tables.
+What's dangerous about the aggregate route advertised by R3? Notice that the route, having originated in AS 30, includes only AS 30 in it's AS path. Also remember that R4 is not the only router receiving the aggregate route; R1 and R2 receive it as well. These routers, not seeing their own AS in the route's AS path, happily install the route in their own BGP tables.
 
- 
-
-![](''/media/image14.png){width="5.010416666666667in" height="3.1041666666666665in"}
-
- 
-
+```
 R1# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 0.0.0.0 0 32768 ?\
-*\*\172.16.0.0/21 10.0.0.2 0 0 30 i*\
-\*\172.16.1.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.2.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.3.0/24 0.0.0.0 0 32768 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 0.0.0.0 0 32768 ?
+**172.16.0.0/21 10.0.0.2 0 0 30 i*
+*172.16.1.0/24 0.0.0.0 0 32768 ?
+*172.16.2.0/24 0.0.0.0 0 32768 ?
+*172.16.3.0/24 0.0.0.0 0 32768 ?
+```
 
 Consider what would happen if one of the /24 routes in AS 10 disappeared. R1, having installed the aggregate advertised from AS 30, would see AS 30 as a less-specific but valid path to the subnet, and route traffic to R3. R3, no longer having the more-specific route back to R1, drops the traffic, creating a black hole.
 
- 
-
-We can protect against this condition by including an *AS set* in the AS path of the aggregate route from R3. An AS set is an unordered list of autonomous system numbers, collected from all the routes summarized by the aggregate. By including these origin AS numbers in the aggregate\'s AS path, we can insure the integrity of BGP\'s loop prevention mechanism; by default, an AS won\'t accept a route with an AS path listing its own AS number.
+We can protect against this condition by including an *AS set* in the AS path of the aggregate route from R3. An AS set is an unordered list of autonomous system numbers, collected from all the routes summarized by the aggregate. By including these origin AS numbers in the aggregate's AS path, we can insure the integrity of BGP's loop prevention mechanism; by default, an AS won't accept a route with an AS path listing its own AS number.
 
 **Creating an Aggregate Route with AS-Set**
 
 To include an AS set in our aggregate route, append the as-set keyword to the aggregate-address command:
 
- 
-
+```
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0 summary-only as-set
-
- 
+```
 
 **Verification**
 
 This configuration generates an aggregate route with an AS path containing the AS set of 10 and 20, since the aggregate contains routes originating from those autonomous systems. On R4 we can see how the AS path appears in the BGP table:
 
- 
-
+```
 R4# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 *30 {10,20}* ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 *30 {10,20}* ?
+```
 
 With the AS set included, R1 now detects its own AS in the AS path of the aggregate route, and no longer accepts the route into its BGP table.
-
  
-
+```
 R1# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.1.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.2.0/24 0.0.0.0 0 32768 ?\
-\*\172.16.3.0/24 0.0.0.0 0 32768 ?
-
- 
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/24 0.0.0.0 0 32768 ?
+*172.16.1.0/24 0.0.0.0 0 32768 ?
+*172.16.2.0/24 0.0.0.0 0 32768 ?
+*172.16.3.0/24 0.0.0.0 0 32768 ?
+```
 
 **Creating an Aggregate Route with specific AS-Set**
 
-There may be instances where you want to include only certain AS numbers in the aggregate\'s AS set; an *advertise map* can be used to achieve this. (This is sort of an odd name for such a tool; try to think of it as specifying the routes whose attributes should be \"advertised\" via the aggregate.) The advertise-map parameter is appended to the aggregate-address command to specify a route-map used to match subnets. Only attributes (like AS paths and communities) from the matched routes will be included in the aggregate.
+There may be instances where you want to include only certain AS numbers in the aggregate's AS set; an *advertise map* can be used to achieve this. (This is sort of an odd name for such a tool; try to think of it as specifying the routes whose attributes should be "advertised" via the aggregate.) The advertise-map parameter is appended to the aggregate-address command to specify a route-map used to match subnets. Only attributes (like AS paths and communities) from the matched routes will be included in the aggregate.
 
- 
+For example, let's say we only wanted to include AS 10 in the aggregate route's AS path and omit AS 20. To do this, we create a route-map to match only AS 10 subnets, and reference it from the aggregate-address statement.
 
-For example, let\'s say we only wanted to include AS 10 in the aggregate route\'s AS path and omit AS 20. To do this, we create a route-map to match only AS 10 subnets, and reference it from the aggregate-address statement.
-
- 
-
-R3(config)# ip access-list standard AS10_subnets\
-R3(config-std-nacl)# permit 172.16.0.0 0.0.3.255\
+```
+R3(config)# ip access-list standard AS10_subnets
+R3(config-std-nacl)# permit 172.16.0.0 0.0.3.255
 !
-
-R3(config)# route-map AS10\
-R3(config-route-map)# match ip add AS10_subnets\
+R3(config)# route-map AS10
+R3(config-route-map)# match ip add AS10_subnets
 !
-
 R3(config-router)# aggregate-address 172.16.0.0 255.255.248.0 summary-only as-set advertise-map AS10
+```
 
 **Verification**
 
-As our advertise map only matches routes from AS 10, only AS 10 is included in the aggregate\'s AS path, as we can see on R4:
+As our advertise map only matches routes from AS 10, only AS 10 is included in the aggregate's AS path, as we can see on R4:
 
+```
 R4# **show ip bgp**
-
-Network Next Hop Metric LocPrf Weight Path\
-\*\172.16.0.0/21 10.0.0.9 0 0 *30 10* ?
+Network Next Hop Metric LocPrf Weight Path
+*172.16.0.0/21 10.0.0.9 0 0 *30 10* ?
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -2269,11 +2219,7 @@ Network Next Hop Metric LocPrf Weight Path\
 
 Sending and receiving BGP updates can be controlled by using a number of different filtering methods. BGP updates can be filtered based on route information, on path information or on communities. All methods will achieve the same results, choosing one over the other depends on the specific network configuration.
 
- 
-
 Many filters exist such as route-maps, filter-lists, prefix-lists and distribute lists. The four main tools have the following features in common:
-
- 
 
 -   All can filter incoming and outgoing Updates, per neighbor or peer group.
 
@@ -2281,17 +2227,13 @@ Many filters exist such as route-maps, filter-lists, prefix-lists and distribute
 
 -   The filters cannot be applied to a single neighbor that is configured as part of a peer group; the filter must be applied to the entire peer group, or the neighbor must be reconfigured to be outside the peer group.
 
--   Each tool\'s matching logic examines the contents of the BGP Update message, which includes BGP path attributes (PAs) and network layer reachability information (NLRI).
+-   Each tool's matching logic examines the contents of the BGP Update message, which includes BGP path attributes (PAs) and network layer reachability information (NLRI).
 
--   If a filter\'s configuration is changed, a **clear** command is required for the changed filter to take effect.
+-   If a filter's configuration is changed, a **clear** command is required for the changed filter to take effect.
 
 -   The **clear** command can use the soft reconfiguration option to implement changes without requiring BGP peers to be brought down and back up.
 
- 
-
 The order of preference varies based on whether the attributes are applied for inbound updates or outbound updates.
-
- 
 
 **For inbound updates the order of preference is:**
 
@@ -2301,8 +2243,6 @@ The order of preference varies based on whether the attributes are applied for i
 
 3.  prefix-list, distribute-list
 
- 
-
 **For outbound updates the order of preference is:**
 
 1.  prefix-list, distribute-list
@@ -2311,17 +2251,11 @@ The order of preference varies based on whether the attributes are applied for i
 
 3.  route-map
 
- 
-
-**NOTE: **The attributes prefix-list and distribute-list are mutually exclusive, and only one command (neighbor prefix-list or neighbor distribute-list) can be applied to each inbound or outbound direction for a particular neighbor.
-
- 
+**NOTE** The attributes prefix-list and distribute-list are mutually exclusive, and only one command (neighbor prefix-list or neighbor distribute-list) can be applied to each inbound or outbound direction for a particular neighbor.
 
 **Filtering Differences**
 
 The tools differ in what they can match in the BGP Update message.
-
- 
 
 **AS-Path Filter**---Used for ﬁltering autonomous systems. An access list is used in BGP to ﬁlter updates sent from a peer based on the autonomous system path.
 
@@ -2329,46 +2263,34 @@ The tools differ in what they can match in the BGP Update message.
 
 -   Extended ACL: Prefix and prefix length, with wild card mask for each.
 
- 
-
 **Distribute lists** ---Used to ﬁlter routing updates. Although they are often used in redistribution, they are not speciﬁc to redistribution; they can be applied to inbound and outbound updates to or from any peer. Both preﬁx lists and distribute lists ﬁlter on network numbers, not autonomous system paths, for which autonomous system path access lists are used.
-
- 
 
 **Prefix list** ---Used for ﬁltering preﬁxes, particularly in redistribution. Preﬁx lists ﬁlter based on the preﬁx of the address. Often performs the same function as a distribute-list, but with easier configuration.
 
- 
-
 **Route maps** ---Used to deﬁne routing policy. A route map is a sophisticated access list that deﬁnes criteria upon which a router acts when a match is found for the stated criteria. It is used in BGP for setting the attributes that determine the basis for selecting the best path to a destination.
-
- 
 
 After configuration of any filtering technique the peer session needs to be renewed. A soft reset can be done to avoid disruption in the network; reference [Clearing BGP Sessions.]
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 ## AS Path Filter List
 
 A filter list is a form of route policy that restricts the routes that will be advertised or accepted based on the AS-Path of the route. To configure a filter list, you must first create an AS-path access list based on the known paths you wish to permit.
-
- 
 
 **AS-Path Filter Configuration**
 
 **Create AS-Path Filter**
 
-Router(config)# ip as-path access-list \<1-500\[permit \| deny\] *\<regexp*
-
- 
+```
+Router(config)# ip as-path access-list 1-500[permit | deny] *regexp*
+```
 
 **Apply Filter to BGP session**
 
-Router(config)# router bgp *\<asn*
-
-Router(config-router)# neighbor *\<neighbor-ip* filter-list *\<1-500* \[in \| out\]
-
- 
+```
+Router(config)# router bgp *asn*
+Router(config-router)# neighbor *neighbor-ip* filter-list *1-500* [in | out]
+```
 
 **NOTE:** Reference [Regular Expressions] for configuration parameters to defines AS.
 
@@ -2378,25 +2300,15 @@ Router(config-router)# neighbor *\<neighbor-ip* filter-list *\<1-500* \[in \| ou
 
 To restrict routing information that the router learns or advertises, you can use filters based on routing updates. The filters consist of an access list or a prefix list, which is applied to updates to neighbors and from neighbors.
 
- 
-
 **Outbound Distribute-List**
 
 An outbound distribute list assures that you do not announce routes heard from one of your peers to another peer. An outbound list restricts your announcements to only those routes you own and can reach.
 
- 
-
 **Inbound Distribute-List**
 
-If you are an Internet Service Provider, you will also need to restrict the routes your downstream customers and peers announce to you. You will need a complete list of routes from that customer to apply to the inbound routes announced by your customer. This is the most common reason for an inbound distribute list, but you should always apply one for \'sanity checking\' to block private and non-routable IP addresses (such as 192.168.0.0 or 127.0.0.1).
+If you are an Internet Service Provider, you will also need to restrict the routes your downstream customers and peers announce to you. You will need a complete list of routes from that customer to apply to the inbound routes announced by your customer. This is the most common reason for an inbound distribute list, but you should always apply one for 'sanity checking' to block private and non-routable IP addresses (such as 192.168.0.0 or 127.0.0.1).
 
- 
-
- 
-
- 
-
-![](''/media/image15.gif){width="5.5in" height="0.8645833333333334in"}
+![distributelists.gif](/Images/BGP/distributelists.gif)
 
 **Scenario**
 
@@ -2408,32 +2320,28 @@ Router 200 announces these networks to its peer Router 100:
 
 -   10.10.0.0/19
 
- 
-
 **Distribute-list Configuration (standard ACL)**
 
 **Syntax**
 
-Router(config-router)# neighbor *\<ip-address* distribute-list *\<acl* \[in \| out\]\
- 
+Router(config-router)# neighbor *ip-address* distribute-list *acl* [in | out]
 
 This sample configuration enables Router 100 to deny an update for network 10.10.10.0/24 and permit the updates of networks 192.168.10.0/24 and 10.10.0.0/19 in its BGP table:
 
-**\
-Configure Standard ACL**
+**Configure Standard ACL**
 
+```
 Router100(config)# ip access-list 1 deny 10.10.10.0 0.0.0.255
-
 Router100(config)# ip access-list 1 permit any
-
- 
+```
 
 **Apply Distribute-List**
 
-Router100(config)# router bgp 100\
+```
+Router100(config)# router bgp 100
 Router100(config-router)# neighbor 172.16.1.2 remote-as 200
-
 Router100(config-router)# neighbor 172.16.1.2 distribute-list 1 in
+```
 
 **Distribute-list Configuration (extended ACL)**
 
@@ -2443,42 +2351,35 @@ Assume Router 200 announces these networks:
 
 -   10.10.0.0/19 (its aggregate)
 
- 
-
 Router 100 wishes to receive only the aggregate network, 10.10.0.0/19, and to filter out all specific networks.
 
 A standard access list, such as access-list 1 permit 10.10.0.0 0.0.31.255, will not work because it permits more networks than desired.
-
- 
 
 The standard access list looks at the network address only and can not check the length of the network mask. That standard access-list will permit the /19 aggregate as well as the more specific /24 networks.
 
 To permit only the supernet 10.10.0.0/19, use an extended access list, such as access-list 101 permit ip 10.10.0.0 0.0.0.0 255.255.224.0 0.0.0.0
 
- 
-
 This allows the extended access-list command to permit an exact match of source network number 10.10.0.0 with mask 255.255.224.0 (and thus, 10.10.0.0/19). The other more specific /24 networks will be filtered out.
-
- 
 
 **Configure Extended ACL**
 
+```
 Router100(config)# ip access-list 199 permit ip 10.10.0.0 0.0.0.0 255.255.224.0 0.0.0.0
-
- 
+```
 
 **Apply Distribute-List**
 
-Router100(config)# router bgp 100\
+```
+Router100(config)# router bgp 100
 Router100(config-router)# neighbor 172.16.1.2 remote-as 200
-
 Router100(config-router)# neighbor 172.16.1.2 distribute-list 1 in
-
- 
+```
 
 **Troubleshoot/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table, can be used to verify distribute-list operation.
 
@@ -2488,28 +2389,17 @@ Router# show ip bgp
 
 Prefix lists are more sophisticated forms that Cisco provides for filtering BGP route advertisements. They filter on IP address just as distribute-lists do, however they are easier to read, and require fewer commands to configure. The other advantage to a distribute list is that it is easier to add, remove and organize the statements in the manner you chose.
 
- 
-
 While this configuration requires the same number of statements as the distribute list example, you have the option of adding **ge**, or **le** to make statements more flexible as to how you will permit blocks in that range.
 
 For example:
 
- 
-
+```
 Router(config)# prefix-list 100 seq 10 permit 63.1.0.0/16 ge 18
+```
 
- 
+The statement above allows any route announcement in the range of 63.1.0.0 - 63.1.255.255 but that announcement must have a length greater than 18 bits in the mask. This permits you to allow announcements in the range, but not an announcement equaling the entire range (/16), or even announcements of half the range (/17). Only announcements with a length "greater than or equal to" /18 will be permitted.
 
-The statement above allows any route announcement in the range of 63.1.0.0 - 63.1.255.255 but that announcement must have a length greater than 18 bits in the mask. This permits you to allow announcements in the range, but not an announcement equaling the entire range (/16), or even announcements of half the range (/17). Only announcements with a length \"greater than or equal to\" /18 will be permitted.
-
- 
-
-![Machine generated alternative text:
-.1 172.16.1.0124
-so/o \_\_\_\_\_\_\_
-Router 100 Router 200](''/media/image16.png){width="5.5in" height="0.8645833333333334in"}
-
- 
+![prefixlists.png](/Images/BGP/prefixlists.png)
 
 **Scenario**
 
@@ -2521,8 +2411,6 @@ Router 200 announces these networks to its peer Router 100:
 
 -   10.10.0.0/19
 
- 
-
 **Prefix-List Configuration**
 
 The configuration shown below using a prefix-list performs the following actions.
@@ -2531,45 +2419,43 @@ The configuration shown below using a prefix-list performs the following actions
 
 -   Deny all network updates with a network mask length greater than 19.
 
- 
-
 **Syntax**
 
-Router(config)# ip prefix-list *\<prefix-name* sequence *\<number* permit \| deny *\[IP prefix \<network/\<length, e.g., 35.0.0.0/8\]*
+```
+Router(config)# ip prefix-list *prefix-name* sequence *number* permit | deny *[IP prefix network/length, e.g., 35.0.0.0/8]*
+```
 
 -   Creates prefix-list
 
- 
-
-Router(config-router)# neighbor x.x.x.x prefix-list \<prefix-name\[in \| out\]
+```
+Router(config-router)# neighbor x.x.x.x prefix-list prefix-name[in | out]
+```
 
 -   Apply filtering inbound or outbound.
-
- 
 
 **Example**
 
 **Define Prefix-List**
 
+```
 Router100(config)# ip prefix-list CISCO seq 10 permit 0.0.0.0/0 le 19
+```
 
 -   Performs the actions denoted above, recall the explicit deny all at the end of the prefix-list, similar to an ACL.
 
- 
-
 **Apply Prefix-List**
 
+```
 Router100(config)# router bgp 100
-
 Router100(config-router)# neighbor 172.16.1.2 remote-as 200
-
 Router100(config-router)# neighbor 172.16..1.2 prefix-list *CISCO* in
-
- 
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table, can be used to verify prefix-list operation.
 
@@ -2579,45 +2465,44 @@ Router# show ip bgp
 
 Used to deﬁne routing policy. A route map is a sophisticated access list that deﬁnes criteria upon which a router acts when a match is found for the stated criteria. It is used in BGP for setting the attributes that determine the basis for selecting the best path to a destination.
 
- 
-
 Due to the endless possible configuration solutions, only the route-map framework is shown and not any examples.
-
- 
 
 **Configure Route-Map**
 
 **Route-map Configuration**
 
-Router(config)# route-map *\<name*
-
-Router(config-route-map)# match *\<condition*
+```
+Router(config)# route-map *name*
+Router(config-route-map)# match *condition*
+```
 
 -   Prefixes, metric, as-path etc.
 
-Router(config-route-map)# set *\<value*
+```
+Router(config-route-map)# set *value*
+```
 
 -   Based on the match statement you can set various attributes such as weight, as-path etc.
 
- 
-
 **Apply route-map to neighbor**
 
-Router(config-router)# neighbor *\<ip-address* route-map *\<map-name* \[in \| out\]
+```
+Router(config-router)# neighbor *ip-address* route-map *map-name* [in | out]
+```
 
 -   This command applies a route-map to inbound or outbound BGP updates.
 
- 
-
 **Troubleshooting/Verification**
 
+```
 Router# show route-map
+```
 
 -   Displays route-map configuration
 
- 
-
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table to confirm route-map operation
 
@@ -2627,29 +2512,17 @@ Router# show ip bgp
 
 When dealing with BGP, routes are normally advertised "unconditionally". In other words, if a peering session with a neighbor is up, we'll send them our routes. There may be times, however, when we want to refrain from advertising a prefix (or prefixes) to a neighbor. The conditional advertisement feature, says cisco.com, "is useful for multihomed networks, in which some prefixes are advertised to one of the providers only if information from the other provider is not present (this indicates a failure in the peering session or partial reachability)".
 
- 
-
 To explain this a little better, take a look at the following topology and let's go through a hypothetical scenario:
 
- 
-
-![](''/media/image17.png){width="4.822916666666667in" height="3.21875in"}
-
- 
+![conditionaladvertisement.png](/Images/BGP/conditionaladvertisement.png)
 
 **Scenario**
 
 In this scenario, R4 (in AS 65100) represent us. We are multi-homed to R2 (AS 65002) and R5 (AS 65005), our service providers. Our connection to R5 is at 1544 Kbps ("T-1″), our connection to R2 is 128 Kbps over a frame-relay circuit, and both SPs will be sending us a default route via BGP. Normally, we would simply advertise all of our prefixes (we'll have two) to both providers. With a little bit of AS prepending, it may even be possible to get most of our inbound traffic to flow over the R4-R5 link.
 
- 
-
 For our hypothetical situation, we'll advertise 203.0.113.0/24, which represents the subnet our client PCs are on, to both providers and not attempt to do any manipulation of inbound traffic. Inbound traffic may come over either link. We want to ensure that traffic inbound to our server subnet (198.51.100.0/24), however, always take the faster (R4-R5) link. Even with a bit of manipulation (e.g. AS prepending), it may not be possible to ensure that 100% of inbound traffic comes over the faster link. Enter conditional advertisements.
 
- 
-
 How we're going to handle this is to only advertise 198.51.100.0/24 to R5. R2 won't be receiving an advertisement for that network directly from us, so it will send inbound traffic through its other connections, eventually transiting R5 and entering our network there. But, you might ask, what happens if our R4-R5 link goes down for whatever reason? At that point, there will be no routes for 198.51.100.0/24 advertised and inbound traffic won't have any way to reach us. Within about 60 seconds, however, the BGP process on our router will notice that we have no longer have reachability to R5 and will begin advertising the 198.51.100.0/24 network to R2. At that point, inbound traffic will begin flowing again.
-
- 
 
 As mentioned, we'll advertise 203.0.113.0/24 (our "clients" network) to both providers, all the time. We'll advertise 198.51.100.0/24 to R5 (and only R5), as long as that link is up. If, for some reason, it goes down, then we'll begin advertising 198.51.100.0/24 to R2, providing inbound traffic with an alternate, albeit slower, way of reaching us.
 
@@ -2657,184 +2530,166 @@ As mentioned, we'll advertise 203.0.113.0/24 (our "clients" network) to both pro
 
 Assume basic configuration has been completed. Make sure you can ping both R2 and R5 from R4. Now, let's configure two loopback interfaces on R4 to represent our "servers" and "clients" subnets:
 
- 
-
-**R4**(config-if)# interface loopback 198\
-**R4**(config-if)# ip address 198.51.100.1 255.255.255.0\
-**R4**(config-if)# interface loopback 203\
+```
+**R4**(config-if)# interface loopback 198
+**R4**(config-if)# ip address 198.51.100.1 255.255.255.0
+**R4**(config-if)# interface loopback 203
 **R4**(config-if)# ip address 203.0.113.1 255.255.255.0
-
- 
+```
 
 Configure the basic BGP session on our peers, R2 and R5. On both of these peers, we'll send R4 a default route over BGP:
 
-**R2**(config-subif)# router bgp 65002\
-**R2**(config-router)# neighbor 172.16.24.2 remote-as 65100\
+```
+**R2**(config-subif)# router bgp 65002
+**R2**(config-router)# neighbor 172.16.24.2 remote-as 65100
 **R2**(config-router)# neighbor 172.16.24.2 default-originate
-
 !
-
-**R5**(config-if)# router bgp 65005\
-**R5**(config-router)# neighbor 172.16.14.2 remote-as 65100\
+**R5**(config-if)# router bgp 65005
+**R5**(config-router)# neighbor 172.16.14.2 remote-as 65100
 **R5**(config-router)# neighbor 172.16.14.2 default-originate
-
- 
+```
 
 On R4, we'll do the same, with some other stuff added in. First, we need to ensure that we don't act as a transit AS between our two providers. We'll prevent this by creating an access list restricting what prefixes we advertise to our neighbors, and apply an outbound distribute-list to those peers. Let's go ahead and begin advertising our two networks (to both peers, for now) as well:
 
- 
-
-**R4**(config)# access-list 25 permit 198.51.100.0\
-**R4**(config)# access-list 25 permit 203.0.113.0\
-**R4**(config)# router bgp 65100\
-**R4**(config-router)# neighbor 172.16.24.1 remote-as 65002\
-**R4**(config-router)# neighbor 172.16.24.1 distribute-list 25 out\
-**R4**(config-router)# neighbor 172.16.14.1 remote-as 65005\
-**R4**(config-router)# neighbor 172.16.14.1 distribute-list 25 out\
-**R4**(config-router)# network 198.51.100.0 mask 255.255.255.0\
+```
+**R4**(config)# access-list 25 permit 198.51.100.0
+**R4**(config)# access-list 25 permit 203.0.113.0
+**R4**(config)# router bgp 65100
+**R4**(config-router)# neighbor 172.16.24.1 remote-as 65002
+**R4**(config-router)# neighbor 172.16.24.1 distribute-list 25 out
+**R4**(config-router)# neighbor 172.16.14.1 remote-as 65005
+**R4**(config-router)# neighbor 172.16.14.1 distribute-list 25 out
+**R4**(config-router)# network 198.51.100.0 mask 255.255.255.0
 **R4**(config-router)# network 203.0.113.0 mask 255.255.255.0
-
- 
+```
 
 On R4, we should now see routes for 172.16.24.1/30 and 172.16.14.1/30 (as well as our locally originated routes) in our BGP table:
 
- 
-
-**R4**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-Network Next Hop Metric LocPrf Weight Path\
-\* 0.0.0.0 172.16.14.1 0 0 65005 i\
-\*\172.16.24.1 0 0 65002 i\
-\*\198.51.100.0 0.0.0.0 0 32768 i\
-\*\203.0.113.0 0.0.0.0 0 32768 i
+```
+**R4**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+Network Next Hop Metric LocPrf Weight Path
+* 0.0.0.0 172.16.14.1 0 0 65005 i
+*172.16.24.1 0 0 65002 i
+*198.51.100.0 0.0.0.0 0 32768 i
+*203.0.113.0 0.0.0.0 0 32768 i
+```
 
 So far, so good.
 
- 
-
 Let's make an AS path access list that defines an AS path that came directly from AS 65005
 
- 
-
-**R4**(config-router)# ip as-path access-list 1 permit \^65005\$
+```
+**R4**(config-router)# ip as-path access-list 1 permit ^65005$
+```
 
 Now, we need to create two more access lists. One will match the default route we receive from R5, the other will match the route we want to conditionally advertise to R2 (198.51.100.0/24). Reference [regular expressions] for additional information regarding this syntax.
 
- 
-
-**R4**(config)# access-list 5 permit 0.0.0.0 255.255.255.255\
+```
+**R4**(config)# access-list 5 permit 0.0.0.0 255.255.255.255
 **R4**(config)# access-list 2 permit 198.51.100.0 0.0.0.255
+```
 
 Next up, we need to create two route maps (an "advertise-map" and a "non-exist-map") and apply that config to our neighbor R2.
-
  
-
-**R4**(config)# route-map ADVERTISE permit 10\
-**R4**(config-route-map)# match ip address 2\
-**R4**(config-route-map)# route-map NON-EXIST permit 10\
-**R4**(config-route-map)# match ip address 5\
+```
+**R4**(config)# route-map ADVERTISE permit 10
+**R4**(config-route-map)# match ip address 2
+**R4**(config-route-map)# route-map NON-EXIST permit 10
+**R4**(config-route-map)# match ip address 5
 **R4**(config-route-map)# match as-path 1
-
- 
+```
 
 Let's go ahead and apply this to our neighbor R2 and clear the BGP process, then I'll explain how it works.
 
- 
-
-**R4**(config-route-map)# router bgp 65100\
-**R4**(config-router)# neighbor 172.16.24.1 advertise-map ADVERTISE non-exist-map NON-EXIST\
-**R4**(config-router)# do clear ip bgp \*
-
- 
+```
+**R4**(config-route-map)# router bgp 65100
+**R4**(config-router)# neighbor 172.16.24.1 advertise-map ADVERTISE non-exist-map NON-EXIST
+**R4**(config-router)# do clear ip bgp *
+```
 
 What we've done is told our BGP process that for our neighbor 172.16.24.1 (R2), advertise the routes described by the ADVERTISE route-map (thus, routes matching ACL 2) when the routes described by the NON-EXIST route-map (thus, routes matching ACL 5 with an AS Path as described by ACL 1). It seems like a lot to digest all at once, but if you break it down into its various parts, it becomes quite clear.
 
- 
-
 Let's take a look at our BGP tables. On R4, we should see exactly what we saw earlier: the default routes from R2 and R5 and our two locally originated routes:
 
- 
-
-**R4**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-\* 0.0.0.0 172.16.14.1 0 0 65005 i\
-\*\172.16.24.1 0 0 65002 i\
-\*\198.51.100.0 0.0.0.0 0 32768 i\
-\*\203.0.113.0 0.0.0.0 0 32768 i
+```
+**R4**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+* 0.0.0.0 172.16.14.1 0 0 65005 i
+*172.16.24.1 0 0 65002 i
+*198.51.100.0 0.0.0.0 0 32768 i
+*203.0.113.0 0.0.0.0 0 32768 i
+```
 
 On R5, we should see routes to both of our networks 198.51.100.0/24 and 203.0.113.0/24:
-
  
-
-**R5**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-\*\198.51.100.0 172.16.14.2 0 0 65100 i\
-\*\203.0.113.0 172.16.14.2 0 0 65100 i
+```
+**R5**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+*198.51.100.0 172.16.14.2 0 0 65100 i
+*203.0.113.0 172.16.14.2 0 0 65100 i
+```
 
 Last, on R2, we should only see a route to 203.0.113.0/24, since the R4-R5 link is up:
 
- 
-
-**R2**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-\*\203.0.113.0 172.16.24.2 0 0 65100 i
+```
+**R2**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+*203.0.113.0 172.16.24.2 0 0 65100 i
+```
 
 Still, so far so good. Now, we test!
 
- 
-
 Let's go to R5 and shut down the serial 0/1 interface that's connected to R4. This will cause the BGP session to drop, which R4 will notice and, after a moment, begin advertising the 198.51.100.0/24 network to R2.
 
- 
-
-**R5**(config-router)# interface serial 0/1\
+```
+**R5**(config-router)# interface serial 0/1
 **R5**(config-if)# shutdown
+```
 
 Wait a moment, then look at R2′s BGP table again:
 
- 
-
-**R2**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-Network Next Hop Metric LocPrf Weight Path\
-\*\198.51.100.0 172.16.24.2 0 0 65100 i\
-\*\203.0.113.0 172.16.24.2 0 0 65100 i
+```
+**R2**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+Network Next Hop Metric LocPrf Weight Path
+*198.51.100.0 172.16.24.2 0 0 65100 i
+*203.0.113.0 172.16.24.2 0 0 65100 i
+```
 
 There's te route to 198.51.100.0/24 from AS 65100, exactly what we wanted! Now, what happens when the connection between R4 and R5 comes back up?
 
- 
-
+```
 **R5**(config-if)# no shutdown
+```
 
 The BGP session between R4 and R5 will come back up, R4 will receive the default route from R5, the BGP process will notice, and the route for 198.51.100.0/24 that is being advertised to R2 will be withdrawn:
 
+```
+**R2**(config-router)# do show ip bgp | begin Network
+Network Next Hop Metric LocPrf Weight Path
+*203.0.113.0 172.16.24.2 0 0 65100 I
+```
  
-
-**R2**(config-router)# do show ip bgp \| begin Network\
-Network Next Hop Metric LocPrf Weight Path\
-\*\203.0.113.0 172.16.24.2 0 0 65100 I
-
- 
-
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table, useful for verification purposes.
 
- 
-
+```
 Router# show route-map
+```
 
 -   Displays route-map configuration
-
  
-
+```
 Router# show ip route
+```
 
 -   Displays IP routing table, i.e. where what routes are currently active.
-
- 
 
 *Source: [Evil Routers - Conditional Advertisement](http://evilrouters.net/2010/03/05/bgp-conditional-advertisements/)*
 
@@ -2844,118 +2699,85 @@ Router# show ip route
 
 With conditional route injection we can insert more specific routes into a BGP table based on the existence of another route. Most of the routes in the current internet BGP table consists of aggregate routes. This is used to minimize the size and number of routes in global BGP routing table. The aggregation of routes can sometimes obscure more specific and accurate routing information. Wouldn't it be cool if we could control and "un-aggregate" those routes on demand? Well that's kinda what BGP conditional route injection does. It allows us to originate a more specific prefix into the BGP routing table based on an existing aggregated route.
 
- 
+![conditionalrouteinjection1.png](/Images/BGP/conditionalrouteinjection1.png)
 
-![BGP Inject Map Topology Diagram](''/media/image18.gif){width="5.770833333333333in" height="2.3020833333333335in"}
-
-**\
-Initial Setup**
+**Initial Setup**
 
 Let's set up the basic topology above. We will advertise the 1.1.1.0/25 and 1.1.1.128/25 loopbacks on R1 as an aggregate address 1.1.1.0/24 into the bgp routing table. R2, and R3 will not be able to see the specific routes but only the aggregate route.
 
- 
-
 **R1 Initial Configuration**
 
+```
 R1(config)# router bgp 1
-
 R1(config-router)# network 1.1.1.0 mask 255.255.255.128
-
 R1(config-router)# network 1.1.1.128 mask 255.255.255.128
-
 R1(config-router)# aggregate-address 1.1.1.0 255.255.255.0 summary-only
-
--   Reference [Aggregation](onenote:BGP.one#Aggregation&section-id={7EEBE7CF-ED0E-4A70-9E27-7E989F5D98F7}&page-id={647A3AFA-863C-43BC-A521-D75F1F37EF6B}&base-path=https://c9vv1o.docs.live.net/c20373bdc89c25ef/Documents/CCIE) for additional information
-
 R1(config-router)# neighbor 192.168.12.2 remote-as 2
-
- 
+```
 
 Pretty simple. R1, R2, and R3 are in BGP AS 1, 2, and 3 respectively. Let's verify the BGP tables on R1 and R2.
 
- 
-
-R1#show ip bgp\
-BGP table version is 6, local router ID is 1.1.1.129\
-Status codes: s suppressed, d damped, h history, \* valid, \best, i - internal,\
-r RIB-failure, S Stale\
+```
+R1#show ip bgp
+BGP table version is 6, local router ID is 1.1.1.129
+Status codes: s suppressed, d damped, h history, * valid, best, i - internal,
+r RIB-failure, S Stale
 Origin codes: i - IGP, e - EGP, ? - incomplete
 
-Network Next Hop Metric LocPrf Weight Path\
-s1.1.1.0/25 0.0.0.0 0 32768 i\
-\*\1.1.1.0/24 0.0.0.0 32768 i\
+Network Next Hop Metric LocPrf Weight Path
+s1.1.1.0/25 0.0.0.0 0 32768 i
+*1.1.1.0/24 0.0.0.0 32768 i
 s1.1.1.128/25 0.0.0.0 0 32768 i
-
- 
+```
 
 You can see above that R1 has the more specific routes and the aggregate in its BGP table. The more specific routes are being suppressed, so the only route that R2 and R3 should see is that aggregate route (1.1.1.0/24).
 
- 
+![conditionalrouteinjection2.png](/Images/BGP/conditionalrouteinjection2.png)
 
-![Machine generated alternative text:
-BGP AS 3
-R3](''/media/image19.png){width="5.770833333333333in" height="2.3020833333333335in"}
-
-**\
-BGP Inject-Map**
+**BGP Inject-Map**
 
 We will be using the *bgp inject-map* command to originate some routes. We will set up R2, so that if the 1.1.1.0/24 aggregate routes exist in its BGP table it will "un-aggregate" those routes. R2 will test if it is receiving the aggregate address from R1, before it originates the more specific routes.
 
- 
-
 **Identify Route, Route-Source and Learned Route for Conditional Route Injection**
 
-R2(config)# ip prefix-list ROUTE seq 5 permit 1.1.1.0/24\
-!\
-R2(config)# ip prefix-list ROUTE_SOURCE seq 5 permit 192.168.12.1/32\
-!\
-R2(config)# route-map LEARNED_ROUTE permit 10\
-R2(config-route-map)# match ip address prefix-list ROUTE\
+```
+R2(config)# ip prefix-list ROUTE seq 5 permit 1.1.1.0/24
+!
+R2(config)# ip prefix-list ROUTE_SOURCE seq 5 permit 192.168.12.1/32
+!
+R2(config)# route-map LEARNED_ROUTE permit 10
+R2(config-route-map)# match ip address prefix-list ROUTE
 R2(config-route-map)# match ip route-source prefix-list ROUTE_SOURCE
-
- 
+```
 
 Firstly we have defined the route that we want to match using a prefix list (ROUTE), and source of that prefix using another prefix list (ROUTE_SOURCE). The route prefix list must match prefix we are looking for in the BGP table exactly, and the route source prefix list MUST be a /32 source. We have tied the two together in a route-map. The route map is matching both the route and where we learned it from.
 
- 
-
 So that's the first part. We will be using that route-map later on in the BGP inject-map to specify the condition that must exist.
-
- 
 
 **Define what to originate if condition exists**
 
-R2(config)# ip prefix-list UNAGGREGATED_ROUTES seq 5 permit 1.1.1.0/25\
-R2(config)# ip prefix-list UNAGGREGATED_ROUTES seq 10 permit 1.1.1.128/25\
-!\
-R2(config)# route-map ORIGINATE permit 10\
+```
+R2(config)# ip prefix-list UNAGGREGATED_ROUTES seq 5 permit 1.1.1.0/25
+R2(config)# ip prefix-list UNAGGREGATED_ROUTES seq 10 permit 1.1.1.128/25
+!
+R2(config)# route-map ORIGINATE permit 10
 R2(config-route-map)# set ip address prefix-list UNAGGREGATED_ROUTES
-
- 
+```
 
 We have created a single prefix list called UNAGGREGATED_ROUTES that defines the more specific routes we want to originate. We can originate any route that is a subnet of the aggregate address (so I could have just as easily originated three routes 1.1.1.0/26, 1.1.1.64/26, 1.1.1.128/25), however they must be a subnet of the aggregate address.
 
- 
-
 We have tied this together with another route-map called ORIGINATE. This will set the ip prefixes we want to originate based on the UNAGGREGATED_ROUTES prefix list. ie ORIGINATE those UNAGGREGATED_ROUTES. :)
-
- 
 
 So we have two route-maps. ORIGINATE is the route-map containing prefixes we want to originate. LEARNED_ROUTE is the condition we want to match.
 
- 
-
 **Applying R2 Inject-Map**
 
+```
 R2(config)# router bgp 2
-
 R2(config-router)# bgp inject-map ORIGINATE exist-map LEARNED_ROUTE
-
- 
+```
 
 Finally, we have our BGP inject-map statement. The inject-map command takes two arguments. The first is a route-map containing prefixes we want to originate. The second is a route-map that contains the conditions that must be met before we originate the prefixes defined in the first route-map.
-
- 
 
 **Summary:**
 
@@ -2965,33 +2787,27 @@ Finally, we have our BGP inject-map statement. The inject-map command takes two 
 
 -   We can only originate more specific subnets of an existing aggregate prefix
 
- 
-
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table; can be used to verify aggregated routes.
 
 -   If they unaggregated routes don't show up check whether you have defined a /32 route source and that you are matching a prefix correctly.
 
- 
-
+```
 Router# show ip bgp injected-paths
+```
 
 -   Verify what BGP paths are injected
-
- 
-
-*Source: [Arden Packeer - Conditional Route Injection](http://ardenpackeer.com/routing-protocols/tutorial-bgp-conditional-route-injection-with-inject-map/)*
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Clearing BGP Sessions
 
 There are a couple ways, some more recommended than others, to reset or clear a BGP session between two neighbors.
-
- 
 
 The Cisco IOS Software Command Summary lists the following circumstances under which you must reset a BGP connection, for changes to take effect:
 
@@ -3007,8 +2823,6 @@ The Cisco IOS Software Command Summary lists the following circumstances under w
 
 -   Changes to BGP-related route maps
 
- 
-
 **Traditional Clearing of BGP Session (Hard Reset)**
 
 -   Tears down the BGP session  with all Neighbors, a specific neighbor or peer group.
@@ -3019,15 +2833,13 @@ The Cisco IOS Software Command Summary lists the following circumstances under w
 
 -   This is almost NEVER recommended on production networks, due the disruptive behavior.
 
- 
-
 **Initiate Hard Reset**
 
-Router# clear ip bgp {\* \| neighbor ip \| peer-group}
+```
+Router# clear ip bgp {* | neighbor ip | peer-group}
+```
 
--   \* clears all sessions, or a more specific neighbor or peer group can be reset.
-
- 
+-   * clears all sessions, or a more specific neighbor or peer group can be reset.
 
 **Soft Reconfiguration**
 
@@ -3035,15 +2847,13 @@ Router# clear ip bgp {\* \| neighbor ip \| peer-group}
 
 -   Re-sends your complete BGP Table,
 
--   Is not configurable and is enabled by default.\
-     
+-   Is not configurable and is enabled by default.
 
 **Initiate Outbound Soft Reconfiguration**
 
-Router# clear ip bgp *\<neighbor-ip* soft out
+Router# clear ip bgp *neighbor-ip* soft out
 
--   This will resend your BGP table to the neighbor, soft reconfig outbound.\
-     
+-   This will resend your BGP table to the neighbor, soft reconfig outbound.
 
 **Inbound Soft Reconfiguration**
 
@@ -3057,25 +2867,22 @@ Router# clear ip bgp *\<neighbor-ip* soft out
 
 -   Handy for testing purpose, but recommended only for testing.
 
- 
-
 **Enable Soft Reconfiguration**
 
+```
 Router(config-router)# router bgp 12345
-
-Router(config-router)# neighbor *\<neighbor-ip* soft-reconfig \[inbound\]
+Router(config-router)# neighbor *neighbor-ip* soft-reconfig [inbound]
+```
 
 -   This will enable soft-reconfiguration inbound for the neighbor, stores neighbor routes in memory.
 
- 
-
 **Initiate Inbound Soft Reconfiguration**
 
-Router# clear ip bgp *\<neighbor-ip* soft in
+```
+Router# clear ip bgp *neighbor-ip* soft in
+```
 
 -   This takes all the routes in memory and re-applies your filters on those routes.
-
- 
 
 **Route Refresh (Soft Reset)**
 
@@ -3091,13 +2898,13 @@ Router# clear ip bgp *\<neighbor-ip* soft in
 
 -   This is the PREFERRED way to have your updates applied.
 
- 
-
 **Initiate Route Refresh**
 
-Router# clear ip bgp {\* \| neighbor ip \| peer-group} in
+```
+Router# clear ip bgp {* | neighbor ip | peer-group} in
+```
 
--   \* clears all sessions, or a more specific neighbor or peer group can be reset.
+-   * clears all sessions, or a more specific neighbor or peer group can be reset.
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3105,59 +2912,47 @@ Router# clear ip bgp {\* \| neighbor ip \| peer-group} in
 
 The BGP Prefix-Based Outbound Route Filtering feature uses Border Gateway Protocol (BGP) outbound route filter (ORF) send and receive capabilities to minimize the number of BGP updates that are sent between BGP peers. Configuring this feature can help reduce the amount of system resources required for generating and processing routing updates by filtering out unwanted routing updates at the source. For example, this feature can be used to reduce the amount of processing required on a router that is not accepting full routes from a service provider network.
 
- 
-
 Generally eBGP speakers filter advertisement separately, the sender applies its outbound filter and the receiver applies its inbound filters to received updates.
 
 The obvious goal of filtering at the receiver is to deny certain prefixes, sent by eBGP peer, according to its own policy... So why send them at all?
 
 ORF (Outbound Route Filtering) is a step further in the cooperation between the two autonomous systems, where the receiver send  its inbound filter to the sender to be used as outbound filter, thus avoiding unnecessary updates in the link and CPU resources related to update generation and inbound filtering.
 
- 
-
-![Machine generated alternative text:
-AS 65500 AS 65501
-Rl \-\-\-\--e8GP\-\-\--\_,. R2
-lO 10.10.0124 -, \_\_\_ 2020.10.0124
-10 10.20.0124 \_\_\_\_ \-----' ' \_\_\_\_ 2020,20.0124](''/media/image20.png){width="6.0in" height="1.5in"}
+![outboundroutefilteringorf.png](/Images/BGP/outboundroutefilteringorf.png)
 
 **Scenario**
 
 R1 is configured with a inbound filter to only allow 20.20.10.0/24. Because R2 is unaware of this it sends all prefixes and R1 simply filters out the sent routes. The configuration shown below enables both routers to communicate and R2 is now aware that it only needs to send the routes that are allowed to pass through R1.
 
- 
-
 **Outbound Route Filtering (ORF) Configuration**
 
+```
 R1(config)# ip prefix-list only_202010 seq 5 permit 20.20.10.0/24
-
 R1(config)# router bgp 65500
-
 R1(config-router)# neighbor 2.2.2.2 prefix list only_202010 in
+R1(config-router)# neighbor 2.2.2.2 capability orf prefix-list {**send** | receive | both}
+```
 
-R1(config-router)# neighbor 2.2.2.2 capability orf prefix-list {**send** \| receive \| both}
+-   The ORF capability can be enabled in send or receive mode with the corresponding keywords. ORF capabilities can also be enabled in send and receive mode with the **both** keyword. Remember that ORF "sends" its inbound filter to its neighbor.
 
--   The ORF capability can be enabled in send or receive mode with the corresponding keywords. ORF capabilities can also be enabled in send and receive mode with the **both** keyword. Remember that ORF \"sends\" its inbound filter to its neighbor.
-
-!
-
+```
 R2(config)# router bgp 65501
+R2(config-router)# neighbor 1.1.1.1 capability orf prefix-list {send | **receive** | both}
+```
 
-R2(config-router)# neighbor 1.1.1.1 capability orf prefix-list {send \| **receive** \| both}
-
--   Since R2 has no need to filter routes, it doesn\'t need to \"send\" its inbound filter. Instead it simply receives all routes and this command is simply configured to enable ORF between both neighbors.
-
- 
+-   Since R2 has no need to filter routes, it doesn't need to "send" its inbound filter. Instead it simply receives all routes and this command is simply configured to enable ORF between both neighbors.
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table
 
- 
-
-Router# debug ip bgp updates *\[in \| out\]*
+```
+Router# debug ip bgp updates *[in | out]*
+```
 
 -   Enables debugging for incoming BGP updates, keyword can be defined to designate packets *in* or *out*.
 
@@ -3167,31 +2962,19 @@ Router# debug ip bgp updates *\[in \| out\]*
 
 The local-AS feature allows a router to appear to be a member of a second autonomous system (AS), in addition to its real AS. This feature can only be used for true eBGP peers. You cannot use this feature for two peers that are members of different confederation sub-ASs.
 
- 
-
-The local-AS feature is useful if ISP-A purchases ISP-B, but ISP-B\'s customers do not want to modify any peering arrangements or configurations. The local-AS feature allows routers in ISP-B to become members of ISP-A\'s AS. At the same time, these routers appear to their customers to retain their ISP-B AS number.
-
- 
+The local-AS feature is useful if ISP-A purchases ISP-B, but ISP-B's customers do not want to modify any peering arrangements or configurations. The local-AS feature allows routers in ISP-B to become members of ISP-A's AS. At the same time, these routers appear to their customers to retain their ISP-B AS number.
 
 **Figure 1**
 
 -   ISP-A has not yet purchased ISP-B. In Figure 2, ISP-A has purchased ISP-B, and ISP-B uses the local-AS feature.
 
- 
-
-![](''/media/image21.gif){width="5.989583333333333in" height="4.333333333333333in"}
-
- 
+![localas1.png](/Images/BGP/localas1.png)
 
 **Figure 2**
 
--   ISP-B belongs to AS 100, and ISP-C to AS 300. When peering with ISP-C, ISP-B uses AS 200 as its AS number with the use of the **neighbor** *ISP-C* **local-as 200** command. In updates sent from ISP-B to ISP-C, the AS_SEQUENCE in the AS_PATH attribute contains \"200 100\". The \"200\" is prepended by ISP-B due to the **local-as 200** command configured for ISP-C.
+-   ISP-B belongs to AS 100, and ISP-C to AS 300. When peering with ISP-C, ISP-B uses AS 200 as its AS number with the use of the **neighbor** *ISP-C* **local-as 200** command. In updates sent from ISP-B to ISP-C, the AS_SEQUENCE in the AS_PATH attribute contains "200 100". The "200" is prepended by ISP-B due to the **local-as 200** command configured for ISP-C.
 
- 
-
-![](''/media/image22.gif){width="6.0625in" height="3.8645833333333335in"}
-
- 
+![localas2.png](/Images/BGP/localas2.png)
 
 **Local-AS Configuration**
 
@@ -3207,34 +2990,34 @@ ISP-B(config-router)# neighbor 192.168.1.2 remote-as 300
 
 ISP-B(config-router)# neighbor 192.168.1.2 local-as 200
 
--   This command makes the remote router in ISP-C to see this router as belonging to AS 200 instead of AS 100. This also makes this router prepend AS200 in all updates to ISP-C.\
-     
+-   This command makes the remote router in ISP-C to see this router as belonging to AS 200 instead of AS 100. This also makes this router prepend AS200 in all updates to ISP-C.  
 
 **ISP-C**
 
+```
 ISP-C(config)# router bgp 300
-
 ISP-C(config-router)# neighbor 192.168.1.1 remote-as 200
+```
 
 -   Defines the eBGP connect to ISP-B, note AS is 200 not AS 100.
 
- 
-
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp summary
+```
 
 -   Displays basic information regarding BGP, including neighbors and their AS number.
 
- 
-
+```
 Router# show ip bgp
+```
 
 -   Displays BGP route table
 
- 
-
-Router# show ip bgp neighbor *\<neighbor-ip*
+```
+Router# show ip bgp neighbor *neighbor-ip*
+```
 
 -   Displays neighbor details, including real and local AS number.
 
@@ -3243,8 +3026,6 @@ Router# show ip bgp neighbor *\<neighbor-ip*
 ## Route Dampening
 
 Route dampening is a BGP feature designed to minimize the propagation of flapping routes across an internetwork. A route is considered to be flapping when its availability alternates repeatedly. Since BGP routing tables are huge, you don't want that many routing updates to be traveling all over the place every time a route flaps.
-
- 
 
 **Terminology**
 
@@ -3264,20 +3045,16 @@ Route dampening is a BGP feature designed to minimize the propagation of flappin
 
 -   **Maximum suppress limit**---This value is the maximum amount of time a route can be suppressed. The default value is four times the half-life.
 
- 
-
 **Route Dampening Configuration**
 
-Router(config)# router bgp *\<asn*
+```
+Router(config)# router bgp *asn*
+Router(config-router)# route dampening *[half-life| reuse | suppress | max-suppress-time]*
+```
 
-Router(config-router)# route dampening *\[half-life\| reuse \| suppress \| max-suppress-time\]*
-
--   Default Values: 15 750 2000 60\
-     
+-   Default Values: 15 750 2000 60
 
 **NOTE:** Route Dampening can also be applied under an address family.
-
- 
 
 **Troubleshooting/Verification**
 
@@ -3291,25 +3068,23 @@ Router# show ip bgp dampening parameters
 
 Regular expressions are strings of special characters that can be used to search and find character patterns. Within the scope of BGP in Cisco IOS regular expressions can be used in show commands and AS-Path access-lists to match BGP prefixes based on the information contained in their AS-Path.
 
- 
-
 **Character Definitions**
 
-**\*** all character, mean when you use this it can be any character.
+***** all character, mean when you use this it can be any character.
 
-\^ start here, for example \^5 means any thing that starts with 5 so it could be 5 or 500 or 54 or 5000000
+^ start here, for example ^5 means any thing that starts with 5 so it could be 5 or 500 or 54 or 5000000
 
-\$ end here, for example 5\$ means any string that ends with 5 so it could be 455 or 45 or 5 or 3005
+$ end here, for example 5$ means any string that ends with 5 so it could be 455 or 45 or 5 or 3005
 
-\_ start or end or space, you can either start a string or end a string or use it as a simple space. For example \_5\_ only means 5,
+_ start or end or space, you can either start a string or end a string or use it as a simple space. For example _5_ only means 5,
 
-but \_5 can mean 5 or 500 or 54 or 5000000 and 5\_ can mean 455 or 45 or 5 or 3005.
+but _5 can mean 5 or 500 or 54 or 5000000 and 5_ can mean 455 or 45 or 5 or 3005.
 
-\[\] defines useable values/options, for example 5\[1234\] means it could be 51, 52, 53 or 54. You could also specify range 5\[5-8\] could mean 54, 56, 57 or 58.
+[] defines useable values/options, for example 5[1234] means it could be 51, 52, 53 or 54. You could also specify range 5[5-8] could mean 54, 56, 57 or 58.
 
 ? true or false, for example 5? means its either 5 or nothing.
 
-() group, arithmetic\'s you have logical grouping, for example \^50(\_\[1-9\]43)?\$ and will output something like
+() group, arithmetic's you have logical grouping, for example ^50(_[1-9]43)?$ and will output something like
 
 50
 
@@ -3325,53 +3100,44 @@ or
 
 .
 
-\+ plus sign, means that at least one character should be present for example 4+ means it can match 4 or 44 or 444 or 44444
-
- 
++ plus sign, means that at least one character should be present for example 4+ means it can match 4 or 44 or 444 or 44444
 
 **Testing Regular Expressions**
 
 Regular Expressions can be confusing, before implementing them or for lab purposes you can test an expression with a current BGP table and see the results.
 
- 
-
-Router# show ip bgp regex *\[expression\]*
-
- 
+```
+Router# show ip bgp regex *[expression]*
+```
 
 **Common Regular Expressions**
 
 Recall that as each BGP peer sends an update, it prepends its own AS number onto the AS path. This means that the AS path builds from right to left, such that the originating AS is on the rightmost end of the AS path string. The last peer to send an update has its AS on the leftmost end of the path.
 
- 
+  .* - Matches any path information
 
-  -----------------------------------------------------------------------
-  .\*                Matches any path information
-  ------------------ ----------------------------------------------------
-  \^\$               Matches locally originated routes
+  ^$ - Matches locally originated routes
 
-  \^100\_            Learned from AS 100
+  ^100_ - Learned from AS 100
 
-  \_100\$            Originated from AS 100
+  _100$ - Originated from AS 100
 
-  \_100\_            Any instance of AS 100
+  _100_ - Any instance of AS 100
 
-  ^\[0-9\]+\$       Directly connected ASes
-  -----------------------------------------------------------------------
-
- 
+  ^[0-9]+$ - Directly connected ASes
 
 **Create an AS path access list to perform AS path filtering**
 
-Router(config)# ip as-path access-list *as-path-list-number {permit \| deny} \[regular-expression\]*
-
- 
+```
+Router(config)# ip as-path access-list *as-path-list-number {permit | deny} [regular-expression]*
+```
 
 **Apply the AS path access list for filtering**
 
-Router(config)# router bgp *\<asn*
-
-Router(config-router)# neighbor {ip-address \| peer-group} filter-list *as-path-list-number* {in \| out}
+```
+Router(config)# router bgp *asn*
+Router(config-router)# neighbor {ip-address | peer-group} filter-list *as-path-list-number* {in | out}
+```
 
 **NOTE:** The AS path access list filters the AS paths in routing updates to or from a specific neighbor. You can use the in and out keywords to specify the filter direction. Only one in and one out AS path filter can be configured.
 
@@ -3381,15 +3147,11 @@ Router(config-router)# neighbor {ip-address \| peer-group} filter-list *as-path-
 
 This command is enabled by default on Cisco IOS. The command terminates external BGP sessions of any directly adjacent peer if the link used to reach the peer goes down; without waiting for the hold-down timer to expire. Although this feature improves the BGP conversion time, it may lead to great instability in your BGP table due to a flapping interface.
 
- 
-
 This feature is applicable for only directly connected EBGP peering sessions (not for multihop eBGP). It can be configured either under the BGP process or on a per-interface basis. Refer to Fast Peering Session Deactivation for iBGP or multihop neighbor loss detection.
-
- 
 
 **Disabling Fast External Fallover**
 
-Router(config)# router bgp *\<asn*
+Router(config)# router bgp *asn*
 
 Router(config-router)# *no* bgp fast-external-fallover
 
@@ -3399,15 +3161,13 @@ Router(config-router)# *no* bgp fast-external-fallover
 
 BGP fast peering session deactivation improves BGP convergence and response time to adjacency changes with BGP neighbors. This feature is event driven and configured on a per-neighbor basis. When this feature is enabled, BGP will monitor the peering session with the specified neighbor. Adjacency changes are detected and terminated peering sessions are deactivated in between the default or configured BGP scanning interval.
 
- 
-
 Unlike Fast External Fallover, FPSD is able to monitor a peer session adjacency over iBGP or multihop and does *not* need to be directly connected.
-
- 
 
 **Fast Peering Session Deactivation Configuration**
 
-Router(config-router)# neighbor *\<ip-address* fall-over
+```
+Router(config-router)# neighbor *ip-address* fall-over
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3417,33 +3177,27 @@ For each route installed in the BGP table a next hop address must exist and this
 
 One of the major functions of the BGP scanner is to check the reachability of the next-hops for the routes existing in the BGP table.
 
- 
-
 The BGP scanner runs every 60 seconds by default to make this housekeeping, however during  this 60 seconds routing black holes may occur if the next hop changed before the BGP scanner timer expires. In the worst case you may have a black hole for 60 seconds.
-
- 
 
 The Next-hop address tracking feature was created to avoid black holing problems, provide faster convergence and stability. This feature is event driven and its role is  to walk the routing table as soon as the IGP change is detected to adjust the BGP table information. The delay interval between routing table walks is 5 seconds by default, this is optimal for fast tuned IGP. This value can be changed to match the IGP convergence timers for optimum performance.
 
- 
-
 **Adjusting BGP Next-Hop Address Tracking Interval**
 
-Router(config)# router bgp *\<asn*
-
-R1(config-router)#bgp nexthop trigger delay *\<seconds*
+```
+Router(config)# router bgp *asn*
+R1(config-router)#bgp nexthop trigger delay *seconds*
+```
 
 -   Delay value range: 1-100 seconds
-
- 
 
 **Disabling BGP Next-Hop Address Tracking**
 
 The feature is enabled by default in almost all new IOS releases, but still can be disabled by using the command
 
-Router(config)# router bgp *\<asn*
-
+```
+Router(config)# router bgp *asn*
 Router(config-router)# *no* bgp next-hop triggered enable
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -3451,39 +3205,35 @@ Router(config-router)# *no* bgp next-hop triggered enable
 
 The *"maximum-prefix"* feature of BGP lets us dictate how many prefixes a neighbor will allow from another neighbor.
 
- 
-
-![](''/media/image23.png){width="3.25in" height="0.71875in"}
+![maximumprefix.png](/Images/BGP/maximumprefix.png)
 
 **Scenario**
 
-Imagine the above scenario where you have a private peering session between two BGP neighbors. You\'ve been told by R7 that you should only receive at most 6 routes or *prefixes*. In this case we could implement a maximum-prefix to limit the number of routes R5 will allow.
-
- 
+Imagine the above scenario where you have a private peering session between two BGP neighbors. You've been told by R7 that you should only receive at most 6 routes or *prefixes*. In this case we could implement a maximum-prefix to limit the number of routes R5 will allow.
 
 **Maximum-Prefix Configuration**
 
 Assume BGP neighbor relationship has been brought up between R5 and R7 and several networks exist behind R7 (6 to be exact).
 
- 
-
 **Syntax**
 
-Router(config-router)# neighbor {*ip-address* \| *peer-group-name*} {maximum-prefix *maximum* \[*threshold*\]} \[restart restart-interval\] \[warning-only\]
-
- 
+```
+Router(config-router)# neighbor {*ip-address* | *peer-group-name*} {maximum-prefix *maximum* [*threshold*]} [restart restart-interval] [warning-only]
+```
 
 **Example**
 
+```
 R5(config-router)# neighbor 172.16.57.7 maximum-prefix 10 7 restart 5
+```
 
 -   This will tell the BGP process that we will accept, at most, 10 prefixes from 172.16.57.7. When 70% of that threshold is reached (7 prefixes), a log message will be generated. Once we have received 10 prefixes from R7, any more will cause the router to kill the peering session (if we specify *"warning-only"* the session will not be dropped). After the specified *"restart-interval"* (5 minutes, in our case) the peering session will be re-established.
 
- 
-
 **Troubleshooting/Verification**
 
-Router(config-router)# do show ip bgp summary \| begin Neighbor
+```
+Router(config-router)# do show ip bgp summary | begin Neighbor
+```
 
 -   Displays neighbor statistics; including the number of prefixes being sent by a neighbor.
 
@@ -3499,7 +3249,7 @@ BGP Policy Accounting relies on community-lists and route-maps, reference [*comm
 
 **BGP Policy Accounting**
 
-In this scenario let\'s assume you want set a specific \"traffic-index\" described above to different areas in your network that have been defined by the community attribute.
+In this scenario let's assume you want set a specific "traffic-index" described above to different areas in your network that have been defined by the community attribute.
 
 **Specify communities in community-lists (or define AS-path lists) that classify traffic for accounting.**
 
@@ -3515,7 +3265,6 @@ Router(config)# ip community-list 70 permit 100:201
 
 BGP policy accounting (BPA) is another BGP feature that takes advantage of the FIB policy parameters. In this case, the parameter is traffic index. Traffic index is a router internal counter within a FIB leaf with values between 1 and 8. Think of the traffic index as a table of eight independent buckets. Each can account for one type of traffic matching certain criteria. The number of packets and bytes in each bucket of an interface is recorded.
 
- 
 ```
 Router(config)# route-map set_bucket permit 10
 Router(config-route-map)# match community 30
@@ -3564,18 +3313,17 @@ The configuration of BGP PA Output Interface Accounting is very similar to BGP P
 Router(config)# interface serial0/0
 Router(config-if)# bgp-policy accounting *output source*
 ```
- 
 
 **Troubleshooting/Verification**
 
 ```
-Router# show ip cef *\<ip-address* detail
+Router# show ip cef *ip-address* detail
 ```
 
 -   Displays what bucket (traffic index) is assigned to a specific prefix.
 
 ```
-Router# show ip bgp *\<ip-address*
+Router# show ip bgp *ip-address*
 ```
 
 -   Displays what community (or communities) are assigned to a specific prefix.
