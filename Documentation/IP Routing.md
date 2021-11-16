@@ -211,7 +211,7 @@ BR and MC routers maintain communication using keepalives. If keepalives from th
 **Passive Mode**: PfR uses NetFlow information based on traffic classes to make decisions. 
  
 Performance Routing (PfR) Configuration 
-![performanceroutingconfiguration.png](/Images/performanceroutingconfiguration.jpg)
+![performanceroutingconfiguration.png](/Images/IP Routing/performanceroutingconfiguration.jpg)
  
 **Create key chain on the Master Controller (MC) - R1**
 The key is used for communications between the MC and BR. 
