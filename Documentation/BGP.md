@@ -16,7 +16,7 @@
 - [Internal Border Gateway Protocol iBGP](#internal-border-gateway-protocol-ibgp)
     - [Update Source](#update-source)
     - [Route Reflection](#route-reflection)
-    - [iBGP Synchronization](#ibgp-syncronization)
+    - [iBGP Synchronization](#ibgp-synchronization)
 - [Best Path Selection Process](#best-path-selection-process)
     - [Weight](#weight)
     - [Local Preference](#local-preference)
