@@ -42,7 +42,7 @@
 - [Local AS](#local-as)
 - [Route Dampening](#route-dampening)
 - [Regular Expressions](#regular-expressions)
-- [Fast External Fallover](#fast-external-fallover)
+- [Fast External Fallover FEA](#fast-external-fallover-fea)
 - [Fast Peering Session Deactivation FPSD](#fast-peering-session-deactivation-fpsd)
 - [Next Hop Address Tracking](#next-hop-address-tracking)
 - [Maximum Prefix](#maximum-prefix)
