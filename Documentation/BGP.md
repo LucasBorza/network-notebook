@@ -71,33 +71,33 @@ BGP is an advanced path vector protocol and includes the following:
 **BGP Tables**
 
 ```
-**Neighbor Table:** Connected BGP routers (statically defined).
-**BGP Table:** A list of *all* BGP routes
-**Routing Table:** A list of the *best* routes
+Neighbor Table: Connected BGP routers (statically defined)
+BGP Table: A list of *all* BGP routes
+Routing Table: A list of the *best* routes
 ```
 
 **Terminology**
 
 ```
-**Autonomous System (AS)** - A logical domain under the control of a single entity
-**External BGP (eBGP)** - BGP adjacencies which span autonomous system boundaries
-**Internal BGP (iBGP)** - BGP adjacencies formed within a single AS
-**Synchronization Requirement -** A route must be known by an IGP before it may be advertised to BGP peers
+Autonomous System (AS) - A logical domain under the control of a single entity
+External BGP (eBGP) - BGP adjacencies which span autonomous system boundaries
+Internal BGP (iBGP) - BGP adjacencies formed within a single AS
+Synchronization Requirement - A route must be known by an IGP before it may be advertised to BGP peers
 ```
 
 **Protocol Specifications**
 
 ```
-**Protocol Type -** Path vector
-**Peering mechanism -** Manual peering between neighbors
-**eBGP AD -** 20
-**iBGP AD -** 200
-**Rights -** Open standard
-**Supported protocols -** IPv4, IPv6
-**Transport -** TCP/179
-**Update mode -** Only triggered
-**Timers -** Hello (60 sec)
-**Authentication -** None, MD5
+Protocol Type - Path vector
+**Peering mechanism - Manual peering between neighbors
+eBGP AD - 20
+iBGP AD - 200
+Rights - Open standard
+Supported protocols - IPv4, IPv6
+Transport - TCP/179
+Update mode - Only triggered
+Timers - Hello (60 sec)
+Authentication - None, MD5
 ```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
