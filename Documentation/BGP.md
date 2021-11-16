@@ -319,7 +319,9 @@ Router(config-router)# neighbor 1.1.1.1 peer-group *<group-name>*
 
 Troubleshooting/Verification
 
+```
 Router# show ip bgp peer-group [*peer-group-name] [summary]*
+```
 
 -   Displays peer group configuration
 
@@ -429,16 +431,20 @@ Router(config-router)#neighbor 10.0.1.1 inherit peer-session Internal-Session
 ```
 
 **Apply Peer Policy**
-Router(config-router)# address-family ipv4
 
+```
+Router(config-router)# address-family ipv4
 Router(config-router-af)# no synchronization
 Router(config-router-af)# neighbor 10.0.1.1 activate
 Router(config-router-af)# neighbor 10.0.1.1 inherit peer-policy Internal-Policy
 Router(config-router-af)# no auto-summary
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp template peer-session
+```
 
 -   Displays peer-session configuration
 
@@ -500,11 +506,13 @@ weight
 
 You can configure MD5 authentication between two BGP peers, meaning that each segment sent on the TCP connection between the peers is verified. MD5 authentication must be configured with the same password on both BGP peers; otherwise, the connection between them will not be made. Configuring MD5 authentication causes the Cisco IOS software to generate and check the MD5 digest of every segment sent on the TCP connection.
 
-![](''/media/image3.png)
+![authentication.png](/Images/BGP/authentication.png)
 
 **MD5 Authentication Configuration**
 
+```
 Router(config-router)# neighbor *[ip-address | peer-group-name]* password *string*
+```
 
 -   Enables MD5 authentication, must be configured on both neighbors with the same password string.
 
@@ -516,28 +524,38 @@ External Border Gateway Protocol, a routing protocol that allows multiple antony
 
 **EBGP Neighbor Relationship Configuration**
 
+```
 Router(config)# router bgp 6500**1**
-
 Router(config-router)# neighbor 10.0.0.2 remote-as 6500**2**
+```
 
 -   Defines 10.0.0.2 as peer IP address within the autonomous system 6500**2**. Making this an **E**BGP neighbor relationship, other side must have a mirrored configuration.
 
 **Adjusting Timers**
 
+```
 Router(config-router)# bgp timers *keepaliveholdtime*
+```
 
 -   Used to adjust keepalive and holdtime values globally, 60 and 180 seconds respectively by default.
 
+```
 Router(config-router)# neighbor *[peer address | peer-group-name]* timers *keepaliveholdtime*
+```
 
 -   Used to adjust keepalive and holdtime values per neighbor relationship
 
 **Troubleshooting/Verification**
+
+```
 Router# show ip bgp summary
+```
 
 -   Displays neighbor relationship status and statistics
 
+```
 Router(config)# debug ip routing
+```
 
 -   Displays routing changes and notifications
 
@@ -547,17 +565,15 @@ Router(config)# debug ip routing
 
 EBGP exchanges routing information between adjacent autonomous systems, whether they are peers (equal standing), upstreams (providers/carriers), or downstreams (customers/subscribers). This exchange occurs via network announcements, and the corresponding routes are referred to as prefixes or aggregates.
 
- 
-
 The routing software decides based on the ASN following the remote-as statement whether it is a remote AS (EBGP) or a local (IBGP) connection. EBGP neighbors need to be adjacent (directly connected); for IBGP, this is left to the underlying IGP. If the EBGP neighbor is several hops away, the ebgp-multihop neighbor command can satisfy this requirement. This is rather common because EBGP peering sessions are often configured loopback to loopback (recommended), which often results in at least a three-hop distance and improved availability. The ebgp-multihop statement is required on both neighbors.
-
- 
 
 **EBGP Multihop Configuration**
 
 EBGP packets by default have a TTL (time to live) of 1, requiring neighbors to be directly attached. This can be administratively overridden.
 
+```
 Router(config-router)# neighbor *IP address* ebgp-multihop *hop count*
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -630,25 +646,17 @@ Router(config-router)# neighbor 23.23.23.2 remote-as 200
 
 Administrative distance is a dependability rating for the source of routing information. Higher distance values imply lower trust ratings. BGP uses three different administrative distances: internal, external, and local. Routes learned through internal BGP are given the internal distance, routes learned through external BGP are given the external distance, and routes that are part of this autonomous system are given the local distance.
 
- 
-
 **External**
 
 -   Administrative distance for BGP external routes. External routes are the best path learned from a neighbor that is external to the autonomous system. Valid values are 1 to 255. Default is 20.
-
- 
 
 **Internal**
 
 -   Administrative distance for BGP internal routes. Internal routes are the best path learned from another BGP speaker within the same autonomous system. Valid values are 1 to 255. Default is 200.
 
- 
-
 **Local**
 
 -   Administrative distance for BGP local routes. Local routes are networks configured with the network command. Valid values are 1 to 255. Default is 200.
-
- 
 
 **Distance Configuration**
 Router(config-router)# distance bgp *external-distance internal-distance local-distance*
@@ -659,54 +667,34 @@ Router(config-router)# distance bgp *external-distance internal-distance local-d
 
 You can use the **maximum-paths** command to specify the number of equal-cost paths to the same destination that BGP can submit to the IP routing table. If you set the value to 1, the system installs the single best route in the IP routing table. If you set the value greater than 1, the system installs that number of parallel routes.
 
- 
-
 For multiple paths to the same destination to be considered as multipaths, the following criteria must be met:
 
 -   All attributes must be the same. The attributes include weight, local preference, autonomous system path (entire attribute and not just length), origin code, Multi Exit Discriminator (MED), and Interior Gateway Protocol (IGP) distance. 
 
-```{=html}
-<!-- --
-```
 -   The next hop router for each multipath must be different. 
 
- 
-
- 
-
-![Machine generated alternative text:
-160.20.2 0.0
-sO
-Router A
-150.10.10.0
-si
-Router C](''/media/image5.png){width="4.927083333333333in" height="2.1875in"}
-
- 
+![maximumpaths.png](/Images/BGP/maximumpaths.png)
 
 **Scenario**
 
 Consider the scenario above, you wish to equal cost load balance between serial0 and serial1 between autonomous systems. By default only one link will be utilized.
 
- 
-
 **eBGP Maximum-paths Configuration**
 
+```
 Router(config)# router bgp 11
-
 Router(config-router)# maximum-paths 2
+```
 
 -   Range between 1-6, default 1 (no load balancing)
-
- 
 
 **iBGP Maximum-paths Configuration**
 
 The maximum number applies only to routes learned from external peers unless you use the **ibgp** keyword, in which case the maximum number applies only to routes received from internal peers.
 
- 
-
+```
 Router(config-router)# maximum-paths *ibgp* [1-6]
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -714,25 +702,11 @@ Router(config-router)# maximum-paths *ibgp* [1-6]
 
 When deploying BGP multipath (using Maximum-Paths explained previously), generally the decision of using multiple paths to deliver the traffic is performed inside the autonomous system by iBGP according to multiple criteria excluding the eBGP link bandwidth. The BGP Link Bandwidth feature is used to advertise the bandwidth of an autonomous system exit link as an extended community allowing BGP to do an unequal cost path load-sharing when multiple eBGP links toward the same AS exist.
 
- 
-
-![Machine generated alternative text:
-Router A
-AS 100
-Router B
-Bandwidth In Bs per
-Second
-AS 200
-Router D
-Router C
-.
-Router E](''/media/image6.png){width="5.572916666666667in" height="4.0in"}
+![dmzlinkbw.png](/Images/BGP/dmzlinkbw.png)
 
 **Scenario**
 
 The above scenario three unequal cost links are present, using BGP Link Bandwidth feature data can be sent proportional to the available bandwidth of each link.
-
- 
 
 **BGP Link Bandwidth Configuration**
 
@@ -740,139 +714,92 @@ The above scenario three unequal cost links are present, using BGP Link Bandwidt
 
 In the following example, Router A is configured to support iBGP multipath load balancing and to exchange the BGP extended community attribute with iBGP neighbors:
 
- 
-
+```
 Router A(config)# router bgp 100
-
 Router A(config-router)# neighbor 10.10.10.2 remote-as 100
-
 Router A(config-router)# neighbor 10.10.10.2 update-source Loopback 0
-
 Router A(config-router)# neighbor 10.10.10.3 remote-as 100
-
 Router A(config-router)# neighbor 10.10.10.3 update-source Loopback 0
-
 Router A(config-router)# address-family ipv4
-
 Router A(config-router)# bgp dmzlink-bw
+```
 
 -   To configure BGP to advertise the bandwidth of links that are used to exit an autonomous system, use the neighbor dmzlink-bw command in address family configuration mode.
 
+```
 Router A(config-router-af)# neighbor 10.10.10.2 activate
+```
 
 -   Enables the exchange of information with a neighbor.
 
+```
 Router A(config-router-af)# neighbor 10.10.10.2 send-community both
-
 Router A(config-router-af)# neighbor 10.10.10.3 activate
-
 Router A(config-router-af)# neighbor 10.10.10.3 send-community both
-
 Router A(config-router-af)# maximum-paths ibgp 6
-
- 
+```
 
 **Router B Configuration**
 
 In the following example, Router B is configured to support multipath load balancing, to distribute Router D and Router E link traffic proportionally to the bandwidth of each link, and to advertise the bandwidth of these links to iBGP neighbors as an extended community:
 
- 
-
+```
 Router B(config)# router bgp 100
-
 Router B(config-router)# neighbor 10.10.10.1 remote-as 100
-
 Router B(config-router)# neighbor 10.10.10.1 update-source Loopback 0
-
 Router B(config-router)# neighbor 10.10.10.3 remote-as 100
-
 Router B(config-router)# neighbor 10.10.10.3 update-source Loopback 0
-
 Router B(config-router)# neighbor 172.16.1.1 remote-as 200
-
 Router B(config-router)# neighbor 172.16.1.1 ebgp-multihop 1
-
 Router B(config-router)# neighbor 172.16.2.2 remote-as 200
-
 Router B(config-router)# neighbor 172.16.2.2 ebgp-multihop 1
-
 Router B(config-router)# address-family ipv4
-
 Router B(config-router-af)# bgp dmzlink-bw
-
 Router B(config-router-af)# neighbor 10.10.10.1 activate
-
 Router B(config-router-af)# neighbor 10.10.10.1 next-hop-self
-
 Router B(config-router-af)# neighbor 10.10.10.1 send-community both
-
 Router B(config-router-af)# neighbor 10.10.10.3 activate
-
 Router B(config-router-af)# neighbor 10.10.10.3 next-hop-self
-
 Router B(config-router-af)# neighbor 10.10.10.3 send-community both
-
 Router B(config-router-af)# neighbor 172.16.1.1 activate
-
 Router B(config-router-af)# neighbor 172.16.1.1 dmzlink-bw
-
 Router B(config-router-af)# neighbor 172.16.2.2 activate
-
 Router B(config-router-af)# neighbor 172.16.2.2 dmzlink-bw
-
 Router B(config-router-af)# maximum-paths ibgp 6
-
 Router B(config-router-af)# maximum-paths 6
-
- 
+```
 
 **Router C Configuration**
 
 In the following example, Router C is configured to support multipath load balancing and to advertise the bandwidth of the link with Router E to iBGP neighbors as an extended community:
 
- 
-
+```
 Router C(config)# router bgp 100
-
 Router C(config-router)# neighbor 10.10.10.1 remote-as 100
-
 Router C(config-router)# neighbor 10.10.10.1 update-source Loopback 0
-
 Router C(config-router)# neighbor 10.10.10.2 remote-as 100
-
 Router C(config-router)# neighbor 10.10.10.2 update-source Loopback 0
-
 Router C(config-router)# neighbor 172.16.3.30 remote-as 200
-
 Router C(config-router)# neighbor 172.16.3.30 ebgp-multihop 1
-
 Router C(config-router)# address-family ipv4
-
 Router C(config-router-af)# bgp dmzlink-bw
-
 Router C(config-router-af)# neighbor 10.10.10.1 activate
-
 Router C(config-router-af)# neighbor 10.10.10.1 send-community both
-
 Router C(config-router-af)# neighbor 10.10.10.1 next-hop-self
-
 Router C(config-router-af)# neighbor 10.10.10.2 activate
-
 Router C(config-router-af)# neighbor 10.10.10.2 send-community both
-
 Router C(config-router-af)# neighbor 10.10.10.2 next-hop-self
-
 Router C(config-router-af)# neighbor 172.16.3.3 activate
-
 Router C(config-router-af)# neighbor 172.16.3.3 dmzlink-bw
-
 Router C(config-router-af)# maximum-paths ibgp 6
-
 Router C(config-router-af)# maximum-paths 6
+```
 
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp *ip-address*
+```
 
 -   Displays multipath information as well as the DMZ-Link bandwidth of each link.
 
@@ -888,49 +815,32 @@ For eBGP peers: change next hop address on advertised routes
 
 For iBGP peers: do not change next hop address on advertised routes
 
- 
-
-![Machine generated alternative text:
-10.1.13.1 10.1.13.2
-10.1.34.1 2OO.I.I-,O/2'1
-1101121
-10.1.43.2
-10.1.34.2
-10.1.12.2
-10.1.24.2
-10.1.43.1
-5500 10.1.24.1
-AS 6500](''/media/image7.png){width="7.333333333333333in" height="3.2708333333333335in"}
+![nexthopprocessing.png](/Images/BGP.nexthopprocessing.png)
 
 **Scenario**
 
 If R1 is to send routes to R4 it will send them using its next-hop-address of 1.1.1.1 (loopback address) that is not shown on the diagram. This address would be propagated throughout the entire iBGP domain and everyone would be able to reach this address, so the iBGP rule works correctly.
 
- 
-
 Now lets say R4 is to pass routes from R1 to R5 and because of the eBGP rule it would change the routes next-hop-address to 10.1.45.1. Which also works correctly, because R5 would traverse R4 which then knows how to reach R1.
 
 Now, here is where the problem comes in to play. R5 has several networks behind it and needs to advertise them to R1. R4 will receive the routes and then route them to R1, but here's the catch now that this is an iBGP relationship it will keep the same next-hop-address of R5 (10.1.45.2) which clearly can't be reached by R1, because this address is not in its routing table. Because of this the routes will not go into the IP routing table and will remain in the BGP route table.
-
- 
 
 **Next-Hop-Self Configuration**
 
 To resolve the last scenario described a single command can be added to the neighbor relationship.
 
- 
-
 **Syntax**
 
+```
 Router(config-router)# neighbor *neighbor-ip-address* [next-hop-self]
-
- 
+```
 
 **Example**
 
+```
 R4(config)# router bgp 5500
-
 R4(config-router)# neighbor 1.1.1.1 *next-hop-self*
+```
 
 -   This changes the way R4 processes routes to its neighbor 1.1.1.1 (R1) and now will adjust the next-hop-address for routes being sent to it's address of 4.4.4.4 (loopback address) that is not shown on the diagram. Because R1 can access this iBGP neighbor and the address of 4.4.4.4. routes will be processed correctly into the routing table an thus R1 will be able to reach the networks behind R5.
 
@@ -940,42 +850,42 @@ R4(config-router)# neighbor 1.1.1.1 *next-hop-self*
 
 Internal Border Gateway Protocol, iBGP is the protocol used between the routers in the same autonomous system (AS). IBGP is used to provide information to your internal routers. IBGP neighbor relationships can form over multiple hops or in other words they don't need to be directly attached neighbors.
 
- 
-
 **IBGP Neighbor Relationship Configuration**
 
+```
 Router(config)# router bgp 6500**1**
-
 Router(config-router)# neighbor 10.0.0.**2** remote-as 6500**1**
+```
 
 -   Defines 10.0.0.2 as peer IP address within the autonomous system 6500**1**. Making this an **I**BGP neighbor relationship, other side must have a mirrored configuration.
 
- 
-
 **NOTE:** It's advised to use loopback interfaces in order to create a IGBP neighbor relationship, view update-source subpage for additional details.
-
- 
 
 **Adjusting Timers**
 
+```
 Router(config-router)# bgp timers *keepaliveholdtime*
+```
 
 -   Used to adjust keepalive and holdtime values globally, 60 and 180 seconds respectively by default.
 
+```
 Router(config-router)# neighbor *[peer address | peer-group-name]* timers *keepaliveholdtime*
+```
 
 -   Used to adjust keepalive and holdtime values per neighbor relationship
 
- 
-
 **Troubleshooting/Verification**
+
+```
 Router# show ip bgp summary
+```
 
 -   Displays neighbor relationship status and statistics
 
- 
-
+```
 Router(config)# debug ip routing
+```
 
 -   Displays routing changes and notifications
 
@@ -987,46 +897,32 @@ Unlike typical routing protocols, BGP neighbors are statically defined. BGP neig
 
 **Update-Source Configuration**
 
+```
 Router(config)# interface loopback 0
-
 Router(config-if)# ip address 10.0.0.2 255.255.255.255
+```
 
 -   Using a /32 mask allows is used to conserve addresses and will only allocate a single address.
 
-!
-
+```
 Router(config-router)# bgp neighbor 10.0.0.2 update-source loopback 0
+```
 
 -   Defines loopback 0 as the update source and now a neighbor relationship will form because updates are coming from the proper routing source.
 
- 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Route Reflection
 
 BGP requires that all BGP peers in the same autonomous system form an iBGP session with all peers in the autonomous system. Because this is often too difficult in many networks, route reflectors can be utilized to essentially *disable* split-horizon and *reflect* routes received from one peer to another peer.
 
- 
-
-![Machine generated alternative text:
-to AS 5300
-10.13.1.1 /30
-10.14.1.1 130
-IBGP
-to AS 2300
-to AS 4300
-to AS 3300](''/media/image8.png){width="6.0in" height="3.7604166666666665in"}
-
- 
+![routereflection.png](/Images/BGP/routereflection.png)
 
 **Scenario**
 
 In the above topology R2 will advertise a route to AS 4300 to R1. R1 will not advertise this route to R3 and R4 because of the BGP split horizon rule. BGP assumes that all iBGP peers are fully meshed. This is done to prevent routing loops. To overcome the issue route reflection can be used.
 
- 
-
 In this case we are going to designate R1 as a route reflector. To do this we configure the neighbors as route reflector clients. There is not an explicit command to designate R1 as a route reflector.
-
- 
 
 **NOTE:** If the topology above was fully meshed and a route reflector was enabled, loops would occur in the network.
 
@@ -1042,41 +938,28 @@ To configure route reflectors, consider these initial tasks:
 
 -   Make sure that the iBGP neighbor is removed on both ends of the iBGP session
 
- 
-
 **Define Cluster-ID**
 
 Together, a route reflector and its clients form a *cluster*. When a single route reflector is deployed in a cluster, the cluster is identified by the router ID of the route reflector.
 
- 
-
 The **bgp cluster-id** command is used to assign a cluster ID to a route reflector when the cluster has one or more route reflectors. Multiple route reflectors are deployed in a cluster to increase redundancy and avoid a single point of failure. When multiple route reflectors are configured in a cluster, the same cluster ID is assigned to all route reflectors. This allows all route reflectors in the cluster to recognize updates from peers in the same cluster and reduces the number of updates that need to be stored in BGP routing tables.
 
- 
-
+```
 R1(config-router)# bgp cluster-id *[ip-address]*
-
- 
+```
 
 **Define Route Reflector Clients**
 
+```
 R1(config)# router bgp 6300
-
 R1(config-router)# neighbor 10.12.1.2 route-reflector-client
-
 R1(config-router)# neighbor 10.13.1.2 route-reflector-client
-
 R1(config-router)# neighbor 10.14.1.2 route-reflector-client
-
- 
+```
 
 Now that R1 is configured as a route reflector for the attached clients routes on R1 are considered "best" routes and should be installed in the routing table. Without route reflectors these would not be seen as "best" routes and therefore not propagated to other peers.
 
- 
-
 **NOTE:** Confirm that each router can reach the destinations that is now being advertised using route reflection. For example make sure that R4 has a route to reach R3 using an IGP.
-
- 
 
 **Troubleshooting/Verification**
 
@@ -1084,40 +967,19 @@ Router# show ip bgp
 
 -   Displays BGP route table
 
- 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-##Confederations
+## Confederations
 
 BGP confederations is a strategy to manage large BGP systems and more efficiently utilize resources on your routers. Confederations are another method of solving the iBGP full-mesh requirement. Confederations are smaller subautonomous systems created within the primary autonomous system to decrease the number of BGP peer connections.
 
- 
-
-![Machine generated alternative text:
-10.17.1.2/30
-1012.1,2/30
-Sub-AS 65500
-7.1.1 /30
-10.13.1.1
-10.14.1.1 /30
-to AS 4300
-to AS 2300
-, iu.is.i.riu
-Sub-AS 65501
-10.14.12/30
-40.0.0.0/8
-to AS 3300](''/media/image9.png){width="5.385416666666667in" height="4.0in"}
-
- 
+![confederations.png](/Images/BGP/confederations.png)
 
 **Scenario**
 
 In the above network AS 6300 has been divided into sub-AS 65500 and sub-AS 65501. These are called confederations. The range for private AS numbers is 64,512 to 65,535.
 
- 
-
 R3 and R1 will now act like eBGP neighbors instead of iBGP neighbors. R1 will now advertise routes from R2 to R3 without the need for route reflectors. R1 will still need route reflectors configured to advertise to routes from R2 to R4.
-
- 
 
 **Confederation Configuration**
 
@@ -1129,113 +991,96 @@ There are three major steps to configuring BGP confederations:
 
 3.  Configure routers that are connected to outside systems
 
- 
-
 **Configure all peers in their own confederation**
 
+```
 R1(config)# no router bgp 6300
+```
 
 -   Removes previous BGP configuration
 
+```
 R1(config)# router bgp 65500
+```
 
 -   Defines private AS value
 
+```
 R1(config-router)# neighbor 10.12.1.2 remote-as 65500
-
 R1(config-router)# neighbor 10.14.1.2 remote-as 65500
+```
 
 -   Defines neighbors, notice that the neighbors are within the new private AS.
 
- 
-
+```
 R2(config)# no router bgp 6300
-
 R2(config)# router bgp 65500
-
 R2(config-router)# neighbor 10.12.1.1 remote-as 65500
-
 R2(config-router)# neighbor 10.14.1.2 remote-as 65500
-
+```
  
-
+```
 R4(config)# no router bgp 6300
-
 R4(config)# router bgp 65500
-
 R4(config-router)# neighbor 10.12.1.1 remote-as 65500
-
 R4(config-router)# neighbor 10.12.1.2 remote-as 65500
-
+```
  
-
+```
 R3(config)# no router bgp 6300
-
 R3(config)# router bgp 65501
+```
 
 -   Within its own private AS/confederation
 
- 
-
 **Configure special eBGP peers between confederations**
 
+```
 R1(config)# router bgp 65500
-
 R1(config-router)# bgp confederation identifier 6300
+```
 
 -   Identified "real" public assigned AS number.
 
+```
 R1(config-router)# bgp confederation peers 65501
+```
 
 -   Identifies any confederation AS numbers that this router peers with, in this case R3.
 
- 
-
 Repeat on other two routers in this confederation.
 
- 
-
+```
 R2(config)# router bgp 65500
-
 R2(config-router)# bgp confederation identifier 6300
+```
 
 -   No confederation peer statements necessary
 
- 
-
+```
 R4(config)# router bgp 65500
-
 R4(config-router)# bgp confederation identifier 6300
-
- 
+```
 
 Recall that if a confederation is not a full mesh, a route reflector will need to be configured on R1 to allow routes to be passed between R2 and R4.
 
- 
-
+```
 R1(config)# router bgp 65500
-
 R1(config-router)# neighbor 10.12.1.2 route-reflector-client
-
 R1(config-router)# neighbor 10.14.1.2 route-reflector-client
-
- 
+```
 
 Now, since R3 is within its own confederation the relationship between R1 and R3 is no longer considered iBGP (between the same AS) but an eBGP relationship (between different AS). Because of this neighbor relationships need to be defined.
 
- 
-
+```
 R1(config)# router bgp 65500
-
 R1(config-router)# neighbor 10.13.1.2 remote-as 65501
+```
 
- 
-
+```
 R3(config)# router bgp 65501
-
 R3(config-router)# neighbor 10.13.1.2 remote-as 65500
-
- 
+```
 
 **Configure routers that are connected to outside systems**
 
@@ -1295,14 +1140,12 @@ Router(config-router)# neighbor *[ip-address | peer-group-name]* weight *weight*
 ```
 
 -   This approach assigns a weight value to all route updates **from** the neighbor this command is configured on. In other word any route this router sends to the neighbor defined will receive the configured weight value.
-
  
-
+```
 Router(config-router)# neighbor *[ip-address | peer-group-name]* filter-list *access-list*[in | out] weight *weight*
+```
 
 -   Configures the router so that all **incoming** routes that match an autonomous system filter receive the configured weight.
-
- 
 
 **NOTE:** The default weight value is 32,768 for locally originating networks (including those via redistributing) and is 0 for all other networks.
 
@@ -1311,8 +1154,6 @@ Router(config-router)# neighbor *[ip-address | peer-group-name]* filter-list *ac
 ## Local Preference
 
 Local preference can be used to influence route selection within the local autonomous system; in fact, this attribute is stripped from outgoing updates via eBGP. You should decide between the use of weight or local preference. The default local preference for iBGP and local routes is 100; all other are 0 by default.
-
- 
 
 You can apply local preference in the following ways:
 
@@ -1326,11 +1167,7 @@ You can apply local preference in the following ways:
 
 In networks where connections to multiple providers are required, it is difficult to specify a return path to be used for traffic returning to the autonomous system. One BGP mechanism you can use is autonomous system path prepending. Autonomous system path prepending potentially allows the customer to influence the route selection of its service providers.
 
- 
-
 You manipulate autonomous system paths by prepending autonomous system numbers to existing autonomous system paths. Typically, you perform autonomous system path prepending on outgoing eBGP updates over the undesired return path. Because the autonomous system paths sent over the undesired link become longer that the path sent over the preferred path. The undesired link is now less likely to be used as a return path. To avoid conflicts number, except that of the sending autonomous system, should be prepended to the autonomous system path attribute.
-
- 
 
 You can configure manual manipulation of the autonomous system path attribute (prepending) using a route map with the **set as-path prepend** set clause.
 
@@ -1340,23 +1177,13 @@ You can configure manual manipulation of the autonomous system path attribute (p
 
 You can apply the MED attribute on outgoing updates to a neighboring autonomous system to influence the route selection process in that autonomous system. The MED attribute is useful only when you have multiple entry points into an autonomous system.
 
- 
-
 The default value of the MED attribute is 0. A lower value of MED is more preferred. A router prefers a path with the smallest MED value but only if weight, local preference, autonomous system path, and origin code are equal.
-
- 
 
 MED is not a mandatory attribute; no MED attribute is attached to a route by default. The only exception is if the router is originating networks that have an exact match in the routing table (through the **network** command or through redistribution). In that case, the router uses the metric in the routing table as the MED attribute value.
 
- 
-
 Using the **default-metric** command in BGP configuration mode causes all redistributed networks to have the specific MED value.
 
- 
-
 You can use a route map to set MED on incoming or outgoing updates. Use the **set metric** command within route map configuration mode to set the MED attribute.
-
- 
 
 You must use the command **bgp bestpath med confed** when you use MED within a confederation to influence the route selection process. A router compares MED values for those routes that originate in the confederation.
 
@@ -1366,19 +1193,11 @@ You must use the command **bgp bestpath med confed** when you use MED within a c
 
 BGP communities are used to group routes (also referred to as color routes) that share common properties, regardless of network, autonomous system, or any physical boundaries. In large networks applying a common routing policy through prefix-lists or access-lists requires individual peer statements on each networking device. Using the BGP community attribute BGP speakers, with common routing policies, can implement inbound or outbound route filters based on the community tag rather than consult large lists of individual permit or deny statements.
 
- 
-
 Standard community lists are used to configure well-known communities and specific community numbers. Expanded community lists are used to filter communities using a regular expression. Regular expressions are used to configure patterns to match community attributes.
-
- 
 
 The community attribute is optional, which means that it will not be passed on by networking devices that do not understand communities. Networking devices that understand communities must be configured to handle the communities or they will be discarded.
 
- 
-
 You can use the BGP community attribute to create a AS-wide routing policy or to provide services to neighboring autonomous systems.
-
- 
 
 There are four predefined communities:
 
@@ -1391,8 +1210,6 @@ There are four predefined communities:
 -   **internet**---Advertise this route to the Internet community; all BGP-speaking networking devices belong to it.
 
 -   **None** --- Apply no community attribute when you want to clear the communities associated with a route.
-
- 
 
 **Defining Communities**
 
@@ -1408,93 +1225,74 @@ There are four predefined communities:
 
     -   [AS-number]:[low-order-16-bits]
 
- 
-
 **Specify New Format for Communities**
 
 A BGP community is displayed in a two-part format two bytes long in the **show ip bgp community** command output, as well as wherever communities are displayed in the router configuration, such as router maps and community lists. In the most recent version of the RFC for BGP, a community is of the form AA:NN, where the first part is the AS number and the second part is a 2 byte number.
 
 The Cisco default community format is in the format NNAA.
 
- 
-
 **Display BGP communities in the new format**
 
+```
 Router(config)# ip bgp-community new-format
+```
 
 -   Displays and parses BGP BGP communities in the format AA:NN.
-
- 
 
 **BGP Community Configuration Outline**
 
 It helps to logically break up community attribute configuration. Steps 1 matches specific routes based on various route criteria and then apply a community number attribute to those routes. Because community attributes are not propagated by default, Step 2 is used to send-community information to neighbors.
 
- 
-
 1.  Configure route tagging with BGP communities
 
 2.  Configure BGP community propagation
 
- 
+Now, after the specific routes have been tagged you can identify the communities the routes belong to by using community-lists and then use a route map to match based on the community-list and set BGP attributes accordingly. Finally, apply the route-maps to incoming or outgoing updates.
 
-Now, after the specific routes have been tagged you can (Step 4) identify the communities the routes belong to by using community-lists and then use a (Step 5) route map to match based on the community-list and set BGP attributes accordingly. Finally in Step 6, apply the route-maps to incoming or outgoing updates.
+3.  Define BGP community access-lists (community-lists) to match BGP communities.
 
- 
+4.  Configure route-maps that match on community-lists and filter routes or set other BGP attributes.
 
-4.  Define BGP community access-lists (community-lists) to match BGP communities.
-
-5.  Configure route-maps that match on community-lists and filter routes or set other BGP attributes.
-
-6.  Apply route-maps to incoming or outgoing updates.
-
- 
+5.  Apply route-maps to incoming or outgoing updates.
 
 **Configure route tagging with BGP communities**
 
 **Route-map Configuration**
 
+```
 Router(config)# route-map *name*
-
 Router(config-route-map)# match *condition*
+```
 
 -   Prefixes, metric, as-path etc.
 
+```
 Router(config-route-map)# set community *value* [additive]
+```
 
 -   Based on the match statement you can set a community to match the criteria.
 
 -   Communities specific in the *set* keyword overwrites existing communities unless you specify the *additive* option.
 
- 
-
 **Apply route-map to neighbor**
 
+```
 Router(config-router)# neighbor *ip-address* route-map *map-name* [in | out]
+```
 
 -   This command applies a route-map to inbound or outbound BGP updates.
 
 -   The route-map can set BGP communities or other BGP attributes.
 
- 
-
 **Apply route-map through redistribution**
 
+```
 Router(config-router)# redistribute *protocol* route-map *map-name*
+```
 
 -   This command applies a route-map to redistributed routes.
 
- 
-
-![Machine generated alternative text:
-AS 213
-Desired Traffic Flow
-router bgp 2i.
-neighbor 1.2 s.4 remote-as ,
-neighbor 1.2.3.4 route-map setcomrT
-neighbor 1.2.3.4 send-community
-route-map setcomm permi
-set community 387:17](''/media/image10.png){width="6.0in" height="3.8229166666666665in"}
+![communities1.png](/Images/BGP/communities1.png)
 
 **Configure BGP community propagation**
 
@@ -1508,20 +1306,7 @@ Router(config-router)# neighbor *ip-address* send-community
 
 -   BGP peer groups are ideal for configuring BGP community propagation toward a large number of neighbors (refer to BGP peer groups for additional information.)
 
- 
-
-![Machine generated alternative text:
-Desired Traffic Flow
-AS 213
-10.0.0.0/8
-router bgp 213
-neighbor 1.2.3.4 remote-as 387
-neighbor 1.2.3.4 route---map setcomm out
-neighbor 1.2.3.4 send-community
-route-map setcomm permit 10
-set community 387:17](''/media/image11.png){width="6.0in" height="3.9270833333333335in"}
-
- 
+![communities2.png](/Images/BGP/communities2.png)
 
 **Define BGP community access-lists (community-lists) to match BGP communities.**
 
@@ -1537,11 +1322,11 @@ Router(config)# ip community-list [**1 - 99** | 100 - 500] permit | deny *[value
 
 -   You can use the keyword *internet* to match ANY community.
 
- 
-
 **Extended Community-List Configuration**
 
+```
 Router(config)# ip community-list [1 - 99 | **100 - 500**] permit | deny *[regexp]*
+```
 
 -   This command defines a extended community-list (100-500)
 
@@ -1551,18 +1336,7 @@ Router(config)# ip community-list [1 - 99 | **100 - 500**] permit | deny *[regex
 
 -   Use ".*" to match any community value; exactly the same as the *internet* keyword within a standard community-list.
 
- 
-
-![Machine generated alternative text:
-Desired Traffic Flow
-AS 213
-10.0.0.0/8
-Default Traffic Flow
-! Hatch the community that signals
-! reduced local preference
-ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="3.4583333333333335in"}
-
- 
+![communities3.png](/Images/BGP/communities3.png)
 
 **BGP Named Community-List Configuration**
 
@@ -1572,8 +1346,6 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 
 -   No limitation on the number of community attributes that can be configured for a named community-list.
 
- 
-
 **BGP Cost Community**
 
 -   Allows you to customize the BGP best-path selection process for a local AS or confederation.
@@ -1581,8 +1353,6 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 -   Applied to internal routes by configuring the **set extcommunity cost** command in a route-map.
 
 -   Can be used as a "tie breaker" during the best-path selection process.
-
- 
 
 **BGP Link Bandwidth Feature**
 
@@ -1594,17 +1364,15 @@ ip community-list 7 permit 387:17 ](''/media/image12.png){width="6.0in" height="
 
 -   In other words, internal iBGP router can find a route based on unequal cost load balancing due to the bandwidth being propagated which is reliant on BGP community configuration.
 
- 
-
 **Configure route-maps that match on community-lists and filter routes or set other BGP attributes.**
 
 **Route-map Configuration**
 
+```
 Router(config)# route-map *map-name* permit | deny
-
 Router(config-route-map)# match community *commlist-number* [exact]
-
 Router(config-route-map)# set *attributes*
+```
 
 -   Community-lists are used in match conditions in route-maps to match on communities attached to BGP routes.
 
@@ -1614,27 +1382,7 @@ Router(config-route-map)# set *attributes*
 
 -   You can use route-maps to filter routes or set other BGP attributes on communities attached to routes.
 
- 
-
-![Machine generated alternative text:
-Desired Traffic Flow
-AS213 AS462
-2 Mbps _________
-______s--- -
-10.0.0.0/8 _____
-64 kbps
-Default Traffic Flow _______________________ R
-AS 387
-neighbor Customers per-o J
-router bgp 387
-neighbor Customers route---map setlocpref in
-route-map setlocpref permit 10
-match coerunity 7
-set local-preference 50
-route-map setloopref permit 9999
-ip coimeunity---list 7 permit 387:17](''/media/image13.png){width="5.197916666666667in" height="3.7604166666666665in"}
-
- 
+![communities4.png](/Images/BGP/communities4.png)
 
 **Route Selection**
 
@@ -1644,8 +1392,6 @@ ip coimeunity---list 7 permit 387:17](''/media/image13.png){width="5.19791666666
 
 -   Routes not accepted by route-maps are dropped.
 
- 
-
 **Default Filters**
 
 -   Routes tagged with community ***no-export*** are sent to iBGP peers and intra-confederation eBGP peers.
@@ -1654,25 +1400,25 @@ ip coimeunity---list 7 permit 387:17](''/media/image13.png){width="5.19791666666
 
 -   Routes tagged with ***no-advertise*** are not sent in any outgoing BGP updates.
 
- 
-
 **Troubleshooting/Verification**
 
+```
 Router# show ip bgp community
+```
 
 -   Displays all routes in a BGP table that have at least one community attached.
 
- 
-
+```
 Router# show ip bgp community *as:nn[exact]*
+```
 
 -   Displays all routes in a BGP table that have all the specified communities attached.
 
 -   The *exact* keyword can be used to match only exactly specified communities in the BGP table.
 
- 
-
+```
 Router# show ip bgp community-list *community-list*
+```
 
 -   Displays all routes in BGP table that match a specified community-list.
 
@@ -1682,75 +1428,63 @@ Router# show ip bgp community-list *community-list*
 
 Default Routes can be injected into BGP in one of three ways:
 
- 
-
 -   By injecting the default using the **network** command.
 
 -   By injecting the default using the **redistribute** command.
 
 -   By injecting a default route into BGP using the **neighbor** *neighbor-id* **default-information** [route-map *route-map-name*]
 
- 
-
 **Network**
 
 When injecting a default route into BGP using the **network** command, a route to 0.0.0.0/0 must exist in the local routing table, and the **network 0.0.0.0** command is required. The default IP route can be learned via any means, but if it is removed from the IP routing table, BGP removes the route from the BGP table.
 
- 
-
+```
 Router(config)# network 0.0.0.0
+```
 
 -   Injects default route into BGP, if a default route exists within the local routing table.
-
- 
 
 **Redistribution**
 
 Injecting a default route through redistribution requires an additional configuration command - **default-information originate**. The default route must first exist in the IP routing table; for instance, a static default route to null0 could be created. Then, the **redistribute static** command could be used to redistribute the static default route. However, in the special case of the default route, Cisco IOS also requires the **default-information originate** BGP subcommand.
 
- 
-
+```
 Router(config)# router bgp *asn*
-
 Router(config-router)# default-information originate
+```
 
 -   Enables default route to be distributed within BGP
 
-!
-
+```
 Router(config)# redistribute static
+```
 
 -   Redistributes statically defined default route
-
- 
 
 **Neighbor Default-Information**
 
 Injecting a default route into BGP by using the **neighbor** *neighbor-ip* **default-orginate** [route-map *route-map-name*] command does not add a default route to the local BGP table; instead, it causes the advertisement of a default to the specified neighbor. In fact, this method does not even check for the existence of a default route in the IP routing table by default, but it can. With the route-map option, the reference route map examines the entries in the IP routing table (not the BGP table); if a route map permit clause is matched, then the default route is advertised to the neighbor.
 
- 
-
 **Without verifying default route exists on local router**
 
+```
 Router(config)# router bgp *asn*
-
 Router(config-router)# neighbor neighbor-ipdefault-originate
-
- 
+```
 
 **With verifying default route exists on local router**
 
+```
 Router(config)# ip route 0.0.0.0 0.0.0.0 null0
+```
 
 -   Injects default route into the local IP routing table
 
-!
-
+```
 Router(config)# ip prefix-list def-route seq 5 permit 0.0.0.0/0
+```
 
 -   Works in conjunction with default-originate to verify 0.0.0.0/0 exists within the routing table.
-
-!
 
 ```
 Router(config)# route-map *check-default* permit 10
@@ -1782,17 +1516,12 @@ Unlike other routing protocols BGP has two independent configurations. First to 
 
 -   Identifies route status within the BGP routing table.
 
-**s** - suppressed
-
-**d** - damped
-
-**h** - history
-
-***** - Valid
-
-**** - Best
-
-**i** - internal
+s - suppressed
+d - damped
+h - history
+** - Valid
+* - Best
+i - internal
 
 **Origin Codes**
 
@@ -1810,25 +1539,18 @@ Unlike other routing protocols BGP has two independent configurations. First to 
 
 As it does with IGPs, BGP auto-summary causes a classful summary route to be created if any component subnet of that summary exists. However, unlike IGPs, the BGP auto-summary router subcommand causes BGP to summarize only those routes *injected due to redistribution o that router*. BGP auto-summary does not look at routes already in the BGP table. It simply looks for routes injected into BGP due to the ***redistribute*** or ***network*** commands on the local router.
 
- 
-
 The logic differs slightly based on whether the route is injected with the redistribute or network command.
-
- 
 
 **Redistribute:** If any subnets of the classful network would be redistributed, do not redistribute, but instead redistribute a route for the classful network.
 
- 
-
 **Network:** If a network command lists a classful network number, with the classful default mask or no mask, and any subnets of the classful network exist, inject a route for the classful network.
-
- 
 
 **Disable Auto-Summarization**
 
+```
 Router(config)# router bgp *asn*
-
 Router(config-router)# no auto-summary
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1836,18 +1558,18 @@ Router(config-router)# no auto-summary
 
 The network statement simply tells what networks to advertise, very straight forward and easy to configure.
 
- 
-
 **Network Statement Configuration**
 
+```
 Router(config)# router bgp 65001
-
 Router(config-router)# network *ip-address* mask *subnet*
-
- 
+```
 
 **Example:**
+
+```
 Router(config-router)# network 10.10.0.0 mask 255.255.0.0
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1855,17 +1577,14 @@ Router(config-router)# network 10.10.0.0 mask 255.255.0.0
 
 Redistribution can be used to redistribute routes from another routing protocols or from connected/static routes on a router into the BGP to be advertised. Refer back to redistribution section to learn about redistributing BGP routes into IGPs. This section focuses on redistribution *into* BGP.
 
- 
-
 **Redistribution Configuration**
 
+```
 Router(config)# router bgp 65001
-
 Router(config-router)# redistribute *[eigrp | ospf | rip | ospf | isis | egp || connected | static]*
+```
 
 -   Provides redistribution with no filtering, all routes within the specified protocol will be advertised.
-
- 
 
 **NOTE:** Advanced filtering can be accomplished with access-lists and route maps after the redistribution command. As well as adjusting the metric and weight for the redistributed routes.
 
