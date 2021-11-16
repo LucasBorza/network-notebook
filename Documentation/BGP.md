@@ -21,7 +21,7 @@
     - [Weight](#weight)
     - [Local Preference](#local-preference)
     - [AS Path Prepending](#as-path-prepending)
-    - [Multi Exit Discriminator MED](#multi-exit-descriminator-med)
+    - [Multi Exit Discriminator MED](#multi-exit-discriminator-med)
 - [Communities](#communities)
 - [Default Originate](#default-originate)
 - [Originating Prefixes](#originating-prefixes)
