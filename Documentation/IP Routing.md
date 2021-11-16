@@ -58,16 +58,19 @@ For instance, if the router is a host in the IP world, you can use this command 
  
 This example defines the router on IP address 172.16.15.4 as the default route: 
 
-```Router(config)# ip default-gateway 172.16.15.4```
- 
+```
+Router(config)# ip default-gateway 172.16.15.4
+```
+
 ## Method 2: ip default-network 
 
 Unlike the ip default-gateway command, you can use ip default-network when ip routing is enabled on the Cisco router. When you configure ip default-network the router considers routes to that network for installation as the gateway of last resort on the router.  
  
 This example defines the router on IP address 172.16.24.0 as the default route: 
 
-```Router(config)# ip default-network 171.70.24.0 ```
- 
+```
+Router(config)# ip default-network 171.70.24.0 
+``` 
 ## Method 3: ip route 0.0.0.0/0
 
 Creating a static route to network 0.0.0.0 0.0.0.0 is another way to set the gateway of last resort on a router. As with the ip default-network command, using the static route to 0.0.0.0 is not dependent on any routing protocols. However, ip routing must be enabled on the router.  
@@ -76,8 +79,9 @@ Creating a static route to network 0.0.0.0 0.0.0.0 is another way to set the gat
  
 This is an example of configuring a gateway of last resort using the ip route 0.0.0.0 0.0.0.0 command and designating 170.170.3.4 as the default route:  
 
-```Router(config)#ip route 0.0.0.0 0.0.0.0 170.170.3.4```
-
+```
+Router(config)#ip route 0.0.0.0 0.0.0.0 170.170.3.4
+```
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Switching Paths
@@ -96,31 +100,39 @@ When packets are fast switched, the first packet is copied to packet memory and 
  
 Enable Fast Switching 
 
-```Router(config)# ip route-cache``` 
- 
+```
+Router(config)# ip route-cache 
+``` 
+
 ## CEF Switching
 
 When CEF mode is enabled, the CEF FIB and adjacency tables reside on the RP, and the RP performs the express forwarding. You can use CEF mode when line cards are not available for CEF switching or when you need to use features not compatible with dCEF switching.  Further CEF configuration options can be found here. 
  
 Enable CEF Switching 
 
-```Router(config)# ip cef```
- 
+```
+Router(config)# ip cef
+```
+
 ## dCEF Switching
 In distributed switching, the switching process occurs on VIP and other interface cards that support switching. When dCEF is enabled, line cards, such as VIP line cards or GSR line cards, maintain an identical copy of the FIB and adjacency tables. The line cards perform the express forwarding between port adapters, relieving the RSP of involvement in the switching operation. dCEF uses an Inter Process Communication (IPC) mechanism to ensure synchronization of FIBs and adjacency tables on the RP and line cards.  
   
 Enable dCEF Switching 
 
-```Router(config)# ip cef distributed``` 
- 
+```
+Router(config)# ip cef distributed 
+```
+
 ## Netflow Switching
 
 NetFlow evolved as a caching technique. To speed up network flows (source IP, source port, destination IP, destination port) and Layer 3 switching in the presence of access lists, the Cisco router and switch caches were re-organized based on the flow information. As this code became more efficient, a side benefit was the collection of useful flow statistics, without too severe a performance penalty. Even with CEF (Cisco Express Forwarding) for rapid Layer 3 switching, NetFlow caching can apparently still enhance performance of longer access lists (more than 10 to 25 entries or so), Policy Routing, and perhaps other features ("NetFlow feature acceleration"). But there is also real benefit to the reporting data it provides. Two reasons you might be using NetFlow: to speed certain access list uses up, or to collect data. 
  
 Enable Netflow Switching 
 
-```Router(config)# ip route-cache flow```
- 
+```
+Router(config)# ip route-cache flow
+```
+
 *NOTE: NetFlow Switching in this section is purely for speed purposes, data collection is covered in-depth under "IP Services".*
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -134,11 +146,15 @@ Reverse ARP (RARP) which can be used by a host to discover its IP address. In th
  
 Display ARP Mappings 
 
-```Router# show ip arp```
+```
+Router# show ip arp
+```
 
 Displays entire ARP table, including the IP to MAC address mapping, age, and outgoing interface. 
 
-```Router# show ip arp [ip-address] [host-name] [mac-address] [interface type/number]```
+```
+Router# show ip arp [ip-address] [host-name] [mac-address] [interface type/number]
+```
 
 Using operators you can specify what host you are searching for within the ARP table. 
 
@@ -149,6 +165,7 @@ Using operators you can specify what host you are searching for within the ARP t
 Optimized Edge Routing was created to extend the capability of routers to more optimal route traffic than routing protocols can provide on their own.   
  
 OER uses the following information in order to better calculate the best path 
+
  - Packet loss 
  - Response time 
  - Path availability 
@@ -157,6 +174,7 @@ OER uses the following information in order to better calculate the best path
 By adding this information into the routing decision process, OER can influence routing to avoid links with unacceptable latency, packet loss, or network problems serve enough to cause serious application performance problems, but not severe enough to trigger routing changes by the routing protocols in use.  Furthermore, taking into account that many modern networks use multiple service provider circuits and typically do little  or no load balancing between them. OER performs these functions automatically, but also allows for network administrators to manually configure them in a highly granular way if desired.  
  
 Five-phase OER operational model 
+
 **Profile** - Learn the flows of traffic that have high latency or high throughput. 
 **Measure** - Passively/actively collect traffic performance metrics. 
 **Apply Policy** - Create low and high thresholds to define in-policy and out-of-policy (OOP) performance categories. 
@@ -172,6 +190,7 @@ OER and PfR influence traffic by collecting information and then injecting new r
 PfR official standards for performance routing, but it's also known as protocol-independent routing optimization, or PIRO.  PfR learns about network performance using IP SLA (Service Level Agreement) and Netflow features (one or both).
 
 PfR Requirements 
+
  - CEF (Cisco Express Forwarding) must be enabled. 
  - IGP/BGP routing must be configured and working. 
  - PfR does not support Multiprotocol Label Switching Provider Edge - Customer (MPLS PE-CE) or any traffic within the MPLS network, because PfR does not recognize MPLS headers. 
@@ -181,6 +200,7 @@ Background Information
 PfR extends beyond OER's original capability by providing  routing optimization based on traffic type, through application awareness. PfR lets a router select the best path across a network based on the application traffic requirements. For example, voice traffic requires low latency, low jitter, and low error rates. 
  
 Attributes of PfR 
+
  - Optimizes traffic path based on application type, performance requirements, and network performance. 
  - Can perform passive monitoring using the Cisco IOS NetFlow feature. 
  - Can perform active monitoring using the Cisco IP IOS IP SLA feature. 
@@ -211,10 +231,13 @@ BR and MC routers maintain communication using keepalives. If keepalives from th
 **Passive Mode**: PfR uses NetFlow information based on traffic classes to make decisions. 
  
 Performance Routing (PfR) Configuration 
-![performanceroutingconfiguration.png](/Images/IP Routing/performanceroutingconfiguration.jpg)
+
+![performanceroutingconfiguration.jpg](/Images/IP_Routing/performanceroutingconfiguration.jpg)
  
 **Create key chain on the Master Controller (MC) - R1**
+
 The key is used for communications between the MC and BR. 
+
 ```
 R1(config)# key chain cisco 
 R1(config-keychain)# key 1 
@@ -222,6 +245,7 @@ R1(config-keychain-key)# key-string cisco
 ```
  
 **Master Controller (MC) Initial Configuration** 
+
 ```
 R1(config)#oer master 
 Enables device as Master Controller (MC) 
@@ -231,14 +255,20 @@ R1(config-oer-mc)#border 136.1.12.2 key-chain cisco
 Specifies IP address of BR with a key-chain for authentication 
 R1(config-oer-mc-br)#interface Tunnel1 external 
 R1(config-oer-mc-br-if)#interface Tunnel2 external 
+
+```
 Tunnel 1 and 2 are specified as the possible external paths on the BR. 
+```
+
 R1(config-oer-mc-br-if)#interface FastEthernet0/0 internal 
 Interface connecting the MC and the BR (internal) 
 R1(config-oer-mc-learn)# exit
  ```
 
 **Master Controller (MC) Learning Configuration**  
+
 Specifies for the controller to learn prefixes based on throughput and delay.  Time periods are set regarding learning and specify the prefix lengths to learn. In this case /32 routes will be learned and monitored. 
+
 ```
 R1(config-oer-mc)#learn 
 R1(config-oer-mc-learn)#throughput 
@@ -252,6 +282,7 @@ R1(config-oer-mc-learn)# exit
 ```
 
 **Master Controller (MC) Additional Properties**
+
 ```
 R1(config-oer-mc)#backoff 180 360 
 Specifies how often to make prefix decisions 
@@ -270,6 +301,7 @@ Specifies item policy importance regarding making policy decisions.  (Highest 1 
 
 **Border Router (BR) Configuration** 
 Define key chain for authentication and specify the outgoing interface and IP address to reach the MC.  Additionally an interface can be specified to use for when sending an active probe, in the event the MC requests one.  Active probes are one method (from many available in PfR) to determine delay. 
+
 ``` 
 R2(config)# key chain cisco 
 R2(config-keychain)#  key 1 
@@ -285,15 +317,21 @@ R2(config-oer-br)#active-probe address source interface Loopback0
  
 Troubleshooting/Verification 
 
-```Router# show oer master```
+```
+Router# show oer master
+```
 
 Displays output to confirm configuration on MC and connectivity to BRs. 
- 
-```Router# show oer border```
+
+``` 
+Router# show oer border
+```
 
 Displays MC/BR border address and state as well as exit points (internal & external) depending on what's configured on the MC. 
  
-```Router# show ip route```
+``` 
+Router# show ip route
+```
 
 Displays routing table, any redistributed routes will be shown as static.  
 
@@ -303,7 +341,8 @@ Displays routing table, any redistributed routes will be shown as static.
 
 Optimized Edge Routing was created to extend the capability of routers to more optimal route traffic than routing protocols can provide on their own.  
 
-OER uses the following information in order to better calculate the best path  
+OER uses the following information in order to better calculate the best path 
+
 	• Packet loss  
 	• Response time  
 	• Path availability  
@@ -331,13 +370,20 @@ Cisco IOS supports multiple IP addresses on a single interface.  There will be a
 The IP addresses can be from different subnets or from entirely different networks.
 
 **Secondary IP Configuration**
+
 ```   
 Router(config)# interface fa0/0  
 Router(config-if)# ip address 10.10.10.1 255.255.255.0  
-	• Defines Primary IP Address  
-Router(config-if)# ip address 10.10.20.1 255.255.255.0 [secondary]  
-	• Defines the Secondary IP address by the keyword secondary  
 ```
+
+• Defines Primary IP Address  
+
+```
+Router(config-if)# ip address 10.10.20.1 255.255.255.0 [secondary]  
+```
+
+• Defines the Secondary IP address by the keyword secondary  
+
 Now host's will be able to access the same physical interface and be assigned to different networks.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -356,7 +402,7 @@ Commonly static routes are used for floating routes and a default route which is
 **Static Routing Configuration**
 Shown below is a logical topology of the network you will be building in this lab. Check out the overall lab topology to view the physical topology. However; looking down on this network you’ll see the topology is built upon the operational function of each network device as shown below:
 
-![staticrouting.png](/Images/staticrouting.png)
+![staticrouting.png](/Images/IP_Routing/staticrouting.png)
 
 In this lab the Loopback0 interface on R1, R2 and R3 will simulate their connected networks which you will be configuring static routing for.
 
@@ -626,7 +672,7 @@ IP-Unnumbered allows for enabling of IP processing on a serial interface without
 **IP-Unnumbered Configuration**
 Consider the network shown below. Router A has a serial interface S0 and an Ethernet interface E0.  
 
-![ipunnumbered.gif](/Images/ipunnumbered.gif)
+![ipunnumbered.gif](/Images/IP_Routing/ipunnumbered.gif)
 
 **Configure interface as IP-Unnumbered**
 
