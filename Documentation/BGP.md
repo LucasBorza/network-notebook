@@ -627,23 +627,20 @@ Router2(config-router)# neighbor 23.23.23.3 remote-as 300
 
 **R3 Configuration**
 
+```
 Router1(config)# router ospf 1
-
 Router1(config-router)# network 3.3.3.3 0.0.0.0 area 3
-
 Router1(config-router)# network 13.13.13.3 0.0.0.0 area 0
-
-!
-
 Router(config)# router bgp 300
-
 Router(config-router)# network 1.1.1.1 mask 255.255.255.255 backdoor
+```
 
 -   Specifies network as backdoor, setting the eBGP AD to 200 and therefore making the OSPF path more preferable to reach the 1.1.1.1 network on R1.
 
+```
 Router(config-router)# network 3.3.3.3 mask 255.255.255.255
-
 Router(config-router)# neighbor 23.23.23.2 remote-as 200
+```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
