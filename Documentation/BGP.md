@@ -89,7 +89,7 @@ Synchronization Requirement - A route must be known by an IGP before it may be a
 
 ```
 Protocol Type - Path vector
-**Peering mechanism - Manual peering between neighbors
+Peering mechanism - Manual peering between neighbors
 eBGP AD - 20
 iBGP AD - 200
 Rights - Open standard
