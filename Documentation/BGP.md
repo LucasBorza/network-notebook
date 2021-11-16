@@ -565,65 +565,47 @@ Router(config-router)# neighbor *IP address* ebgp-multihop *hop count*
 
 A backdoor network is assigned an administrative distance of 200. The objective is to make Interior Gateway Protocol (IGP) learned routes preferred. A backdoor network is treated as a local network, except that it is not advertised. A network that is marked as a back door is not sourced by the local router, but should be learned from external neighbors. The BGP best path selection algorithm does not change when a network is configured as a back door.
 
- 
-
 **Scenario**
 
 Suppose the link between AS100 & AS300 is 10Gbps link and the remainder of the links to AS200 are 1Gbps. The traffic sent from AS100 and AS300 will by default go to AS200, then to AS100 or AS300. This is because eBGP has an AD of 20, so the routers will trust this route over any IGP by default.
 
- 
-
-![](''/media/image4.png){width="5.4375in" height="3.9375in"}
-
- 
-
- 
-
- 
+![backdoor.png](/Images/BGP/backdoor.png)
 
 **BGP Backdoor Configuration**
 
 Instead of globally adjusting eBGP or IGPs administrative distance, BGP backdoor allows to change the AD for eBGP on a per route basis.
 
- 
-
 **Syntax**
 
+```
 Router(config-router)# *network ip-address* mask *subnet* backdoor
-
- 
+```
 
 **R1 Configuration**
 
+```
 Router1(config)# router ospf 1
-
 Router1(config-router)# network 1.1.1.1 0.0.0.0 area 1
-
 Router1(config-router)# network 13.13.13.1 0.0.0.0 area 0
-
 !
-
 Router(config)# router bgp 100
-
 Router(config-router)# network 1.1.1.1 mask 255.255.255.255
-
 Router(config-router)# network 3.3.3.3 mask 255.255.255.255 backdoor
+```
 
 -   Specifies network as backdoor, setting the eBGP AD to 200 and therefore making the OSPF path more preferable to reach the 3.3.3.3 network on R3.
 
+```
 Router(config-router)# neighbor 12.12.12.2 remote-as 200
-
- 
+```
 
 **R2 Configuration**
 
+```
 Router2(config)# router bgp 200
-
 Router2(config-router)# neighbor 12.12.12.1 remote-as 100
-
 Router2(config-router)# neighbor 23.23.23.3 remote-as 300
-
- 
+```
 
 **R3 Configuration**
 
