@@ -968,7 +968,7 @@ Reflexive ACLs can be defined only with extended named IP ACLs. They cannot be d
 
 A typical approach to network perimeter security is to allow outbound traffic not explicitly denied, and to deny inbound traffic unless it is explicitly allowed. Although simple in concept, this approach requires significant considerations regarding the return path of internally initiated sessions. Consider the following scenario:
 
-![reflexiveaccesslist1.png](/Images/reflexiveaccesslist1.png)
+![reflexiveaccesslist1.png](/Images/Security/reflexiveaccesslist1.png)
 
 **Scenario**
 
@@ -998,13 +998,15 @@ Router(config-if)# ip access-group out *Egress*
 
 Any packet matched by Egress will be reflected into our reflexive ACL, named Mirror. Since Egress matches all IP traffic, we reflect entries for TCP, UDP, and ICMP. If we wanted, we could have specified only TCP, for example, to only match TCP traffic. While TCP sessions are relatively simple to track, IOS can also roughly track UDP and ICMP \"sessions,\" even though these aren\'t true session-oriented protocols.
 
-![reflexiveaccesslist2.png](/Images/reflexiveaccesslist2.png)
+![reflexiveaccesslist2.png](/Images/Security/reflexiveaccesslist2.png)
 
 Now when a client in 192.168.0.0/24 initiates a TCP session to a server on the Internet we can see a reflected entry is created in Mirror:
 
+```
 Router# show ip access-lists *Mirror*\
 *Reflexive IP access list Mirror\
 permit tcp host 209.20.64.81 eq www host 192.168.0.123 eq 62839 (7 matches) (time left 294*)
+```
 
 **Create an inbound ACL**
 
@@ -1017,7 +1019,7 @@ Router(config-ext-nacl)# interface f0/1\
 Router(config-if)# ip access-group in Ingress
 ```
 
-![reflexiveaccesslist3.png](/Images/reflexiveaccesslist3.png)
+![reflexiveaccesslist3.png](/Images/Security/reflexiveaccesslist3.png)
 
 Now packets inbound on FastEthernet0/1 are only allowed in if they are permitted by Ingress, which is essentially just a reference to Mirror. Note, however, that we are free to add normal entries to Ingress both before and after the evaluate statement if we want. With all three components in place, we can see the static outbound entries (Egress), the static inbound entries (Ingress), and the dynamic inbound entries (Mirror):
 
@@ -1061,7 +1063,7 @@ The Context-Based Access Control (CBAC) feature of the Cisco IOS® Firewall Feat
 
 **Context-Based Access Control Configuration**
 
-![contextbasedaccesscontrol.png](/Images/contextbasedaccesscontrol.png)
+![contextbasedaccesscontrol.png](/Images/Security/contextbasedaccesscontrol.png)
 
 **Identify traffic you want to let out**
 
@@ -1158,7 +1160,7 @@ ZBF allows the inspection and control of multiple protocols, including the follo
 
 **Zone-Based Firewall Configuration**
 
-![zonebasedfirewall.png](/Images/zonebasedfirewall.png)
+![zonebasedfirewall.png](/Images/Security/zonebasedfirewall.png)
 
 For this example, we will pretend the R1 device is in the Inside, private, protected network. R3 represents a device in the Outside, public, unprotected Internet. R2 in the middle will be our IOS Zone-Based Firewall. We want to inspect HTTP, HTTPS and FTP traffic sourced from the Inside network traveling to the Outside network, and we want to dynamically permit return traffic back in from the Outside based on session information.
 
@@ -1230,7 +1232,7 @@ Cisco\'s solution is IP traffic export (sometimes referred to as Router IP Traff
 
 **RITE Configuration**
 
-![iptrafficexport.png](/Images/iptrafficexport.png)
+![iptrafficexport.png](/Images/Security/iptrafficexport.png)
 
 Consider a scenario in which we need a sniffer or IDS to capture IP traffic traversing a PPP serial link between two routers.
 
@@ -1409,7 +1411,7 @@ Remote access VPNs extend almost any data, voice, or video application to the re
 
 **Remote Access (VPN) Configuration**
 
-![remoteaccess.png](/Images/remoteaccess.png)
+![remoteaccess.png](/Images/Security/remoteaccess.png)
 
 **Configure ISAKMP Policy (IKE Phase 1)**
 
@@ -1610,7 +1612,7 @@ Site-to-site VPNs provide an Internet-based WAN infrastructure to extend network
 
 **Site-to-Site VPN Configuration**
 
-![remoteaccess.png](/Images/remoteaccess.png)
+![remoteaccess.png](/Images/Security/remoteaccess.png)
 
 **Configure ISAKMP Policy (IKE Phase 1)**
 
@@ -1770,7 +1772,7 @@ What we are trying to cover in this section is IPsec over GRE tunnels (as a tran
 
 **GRE over IPsec Configuration**
 
-![remoteaccess.png](/Images/remoteaccess.png)
+![remoteaccess.png](/Images/Security/remoteaccess.png)
 
 **Create the GRE Tunnel**
 
