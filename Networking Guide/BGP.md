@@ -807,7 +807,7 @@ For eBGP peers: change next hop address on advertised routes
 
 For iBGP peers: do not change next hop address on advertised routes
 
-![nexthopprocessing.png](/Images/BGP.nexthopprocessing.png)
+![nexthopprocessing.png](/Images/BGP/nexthopprocessing.png)
 
 **Scenario**
 
